@@ -110,4 +110,6 @@ docker compose -f docker-compose.yml up -d
 - **Không tự ý cài packages lạ**: Khi cần bổ sung thư viện, giải thích lý do và xác nhận tính cần thiết.
 - **Bảo mật tuyệt đối**: Không bao giờ commit file bí mật (`.env`, private keys trong `certs/`). Đã có cấu hình an toàn tại `.gitignore`.
 - **Commit theo Atomic Task**: Mỗi khi hoàn thành một chức năng hoặc sửa một lỗi đã qua kiểm thử, commit với thông điệp rõ ràng theo chuẩn Conventional Commits (ví dụ: `feat(card): add drag-and-drop spring animation`).
-- **Quy tắc Clean Workspace**: Mọi file mới phát sinh không thuộc module cố định sẵn có bắt buộc được đưa vào thư mục gom riêng (ví dụ: `misc/` hoặc `others/`), tuyệt đối không thả tự do tại thư mục gốc để tránh gây rối cây thư mục.
+- **Quy tắc Clean Workspace & Thư mục gốc**: 
+  - Thư mục gốc chỉ chứa đúng 2 file hướng dẫn AI: `AGENTS.md` và `CLAUDE.md` (cùng các file config bắt buộc của công cụ).
+  - Tuân thủ tuyệt đối 2 rules: `.claude/rules/docs-placement.md` (mọi file `.md` vào 8 nhóm chuẩn trong `docs/`) và `.claude/rules/asset-placement.md` (mọi file phi-markdown vào đúng thư mục tài nguyên, không thả rác ra root).

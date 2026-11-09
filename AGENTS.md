@@ -2,15 +2,17 @@
 
 Chào mừng AI Agent (Claude Code, Codex, Antigravity, Gemini). Đây là tài liệu quy chuẩn tối cao định hình phương pháp làm việc, kiến trúc và chất lượng phần mềm trong dự án **Net108Khai (Trello Clone Ecosystem)**.
 
-**Định tuyến phạm vi:** Khi làm việc về **AI native Commerce**, đọc và thực hiện [checklist Commerce](docs/AI-COMMERCE-EXECUTION-CHECKLIST.md) cùng [đặc tả Commerce](docs/AI-NATIVE-COMMERCE.md). Các mục Trello Clone bên dưới áp dụng cho yêu cầu Trello Clone; không coi chúng là bằng chứng về hệ thống Commerce đang chạy. Khi yêu cầu liên quan cả hai, ghi rõ phần nào thuộc từng phạm vi trước khi sửa.
+**Định tuyến phạm vi:** Khi làm việc về **AI native Commerce**, đọc và thực hiện [checklist Commerce](docs/05-mau/AI-COMMERCE-EXECUTION-CHECKLIST.md) cùng [đặc tả Commerce](docs/03-san-pham/AI-NATIVE-COMMERCE.md). Các mục Trello Clone bên dưới áp dụng cho yêu cầu Trello Clone; không coi chúng là bằng chứng về hệ thống Commerce đang chạy. Khi yêu cầu liên quan cả hai, ghi rõ phần nào thuộc từng phạm vi trước khi sửa.
 
-**Agent mới nhận việc Commerce hoặc Lab 1:** Đọc [bản bàn giao cho Codex và Antigravity](docs/AI-COMMERCE-AGENT-HANDOFF.md) để tìm nguồn trạng thái, phần sở hữu và bước tiếp theo; kiểm tra lại bằng bảng tick và code hiện tại.
+**Báo cáo Lab NET108:** Khi tạo hoặc sửa báo cáo Lab 2–8, dùng [chuẩn trình bày Lab](docs/labs/LAB-REPORT-STANDARD.md) và file Lab 1 tham chiếu trong tài liệu đó. Giữ đúng heading, bố cục, bìa, hình/bảng và kiểm tra bản render trước khi bàn giao; nội dung của mỗi Lab phải đối chiếu đề và repo hiện tại.
+
+**Agent mới nhận việc Commerce hoặc Lab 1:** Đọc [bản bàn giao cho Codex và Antigravity](docs/01-tong-quan/AI-COMMERCE-AGENT-HANDOFF.md) để tìm nguồn trạng thái, phần sở hữu và bước tiếp theo; kiểm tra lại bằng bảng tick và code hiện tại.
 
 **Phân công Commerce:** Antigravity sở hữu frontend (`F01–F08`); Codex sở hữu backend, AI service và Docker (`C00`, `C02–C15`, `C17`). Quyết định nghiệp vụ `C01` thuộc người phụ trách dự án; tích hợp và nghiệm thu `C16`, `C18` là việc chung. Dùng hợp đồng API trong checklist để bàn giao, không tự sửa phần sở hữu của agent còn lại.
 
-**Theo dõi tiến độ Commerce:** Cập nhật ô tick theo mã việc nhỏ (`Cxx.y`, `Fxx.y`) trong [bảng công việc AI](docs/AI-COMMERCE-TASK-BOARD.md) khi có bằng chứng nghiệm thu. Đây là nơi duy nhất ghi trạng thái hoàn thành; mã cha chỉ xong khi mọi mã con và điều kiện cấp chức năng đều đạt.
+**Theo dõi tiến độ Commerce:** Cập nhật ô tick theo mã việc nhỏ (`Cxx.y`, `Fxx.y`) trong [bảng công việc AI](docs/01-tong-quan/AI-COMMERCE-TASK-BOARD.md) khi có bằng chứng nghiệm thu. Đây là nơi duy nhất ghi trạng thái hoàn thành; mã cha chỉ xong khi mọi mã con và điều kiện cấp chức năng đều đạt.
 
-**Waterfall cho Commerce:** Trước khi nhận task Commerce mới hoặc chuyển sang tích hợp/kiểm thử/phát hành, đọc [cổng Waterfall](docs/AI-COMMERCE-WATERFALL.md). Đi theo `W01` yêu cầu → `W02` thiết kế → `W03` triển khai → `W04` kiểm thử hệ thống → `W05` nghiệm thu → `W06` triển khai vận hành. Công việc đã có là baseline cần đối chiếu, không tự coi là cổng đã được duyệt. Task nhỏ và review vẫn thực hiện bên trong giai đoạn phù hợp.
+**Waterfall cho Commerce:** Trước khi nhận task Commerce mới hoặc chuyển sang tích hợp/kiểm thử/phát hành, đọc [cổng Waterfall](docs/01-tong-quan/AI-COMMERCE-WATERFALL.md). Đi theo `W01` yêu cầu → `W02` thiết kế → `W03` triển khai → `W04` kiểm thử hệ thống → `W05` nghiệm thu → `W06` triển khai vận hành. Công việc đã có là baseline cần đối chiếu, không tự coi là cổng đã được duyệt. Task nhỏ và review vẫn thực hiện bên trong giai đoạn phù hợp.
 
 Mọi Agent hoạt động trong repository này **bắt buộc tuân thủ** các nguyên tắc dưới đây.
 
@@ -113,9 +115,29 @@ Các kỹ năng đã được tích hợp sẵn tại `.agent/skills/`, `.claude
 
 ---
 
-## 5. Quy Chuẩn Tổ Chức File Mới (Clean Workspace Policy)
+## 5. Quy Chuẩn Tổ Chức File & Thư Mục Gốc (Root Hygiene & Docs Placement)
 
-> **"Nguyên tắc giữ sạch thư mục gốc (Root Hygiene): Không để file phát sinh tự do ngoài root."**
+> **"Nguyên tắc cốt lõi: Thư mục gốc chỉ nên có 2 file hướng dẫn AI (AGENTS.md & CLAUDE.md). Đừng để kiến thức của bạn bị AI làm chủ bằng hàng trăm file rác rải rác."**
 
-- **Quy tắc**: Khi xuất hiện hoặc tạo bất kỳ file mới nào (tài liệu nháp, file dữ liệu, script phụ trợ, báo cáo, ghi chú...) mà **không thuộc về bất kỳ cây thư mục module có sẵn nào**, **bắt buộc tạo một thư mục riêng (ví dụ: `misc/` hoặc `others/`)** và đưa các file đó vào bên trong.
-- **Mục đích**: Bảo toàn cây thư mục gốc luôn gọn gàng, có trật tự, chỉ chứa các thư mục module cốt lõi và các file cấu hình hệ thống chuẩn (`.gitignore`, `README.md`, `AGENTS.md`, `CLAUDE.md`...).
+Mọi Agent hoạt động trong repository bắt buộc tuân thủ 2 bộ luật đã được chuẩn hóa tại `.claude/rules/` và `.agent/rules/`:
+
+### A. Luật Đặt File Tài Liệu (`docs-placement.md`)
+- Khi tạo bất kỳ file `.md` nào cho dự án (report, plan, spec, guide, note, analysis, design doc...), **PHẢI** đặt vào thư mục `docs/` ở gốc dự án, phân bổ đúng vào 8 nhóm con có tiền tố số:
+  - `docs/01-tong-quan/`: Mục tiêu, phạm vi, roadmap, handoff, SOP tổng quan.
+  - `docs/02-ky-thuat/`: Kiến trúc hệ thống, API OpenAPI v1, DB schema, auth/security.
+  - `docs/03-san-pham/`: PRD, đặc tả sàn thương mại, kịch bản mua sắm, use case.
+  - `docs/04-van-hanh/`: Docker deployment, runbook, CI/CD, backup, monitoring.
+  - `docs/05-mau/`: Checklist kiểm thử, ma trận nghiệm thu, task board, forms tái sử dụng.
+  - `docs/06-design/`: Design Tokens, UI/UX guidelines, Wireframes, sơ đồ StarUML.
+  - `docs/99-ghi-chu/`: Ghi chú nhanh, meeting notes, nháp chưa phân loại.
+  - `docs/README.md`: Index điều hướng danh mục tài liệu toàn dự án (luôn cập nhật).
+- **Cấm tuyệt đối**: Vứt file `.md` ra thư mục gốc hoặc rải rác cạnh mã nguồn code.
+
+### B. Luật Đặt File Tài Nguyên Không Phải Markdown (`asset-placement.md`)
+- Mọi file không phải `.md` (ảnh, script, fixture data json, certs, file Word/PDF) phải đưa về đúng vị trí:
+  - Ảnh & media dùng chung ➔ `assets/` hoặc `docs/06-design/assets/`.
+  - Script tooling, migration thủ công ➔ `scripts/`.
+  - Chứng chỉ, mTLS keys ➔ `certs/` (luôn .gitignore).
+  - Dữ liệu demo, seed, fixture lớn ➔ `data/`.
+  - Bài làm lab, đề tài mẫu của sinh viên ➔ `File Lab và Dự Án cuối/`.
+- Ngoại lệ duy nhất ở root: Các file cấu hình bắt buộc của công cụ (`.gitignore`, `.dockerignore`, `.env.example`, `compose.yaml`, `Dockerfile`, file solution `.slnx`).

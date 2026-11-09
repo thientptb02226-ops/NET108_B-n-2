@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="vi" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SDLC và ADLC — So Sánh & Kết Hợp Chuẩn Vibe Coding</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card: #111827;
+      --border: #1f2937;
+      --text: #f3f4f6;
+      --muted: #9ca3af;
+      --accent-emerald: #10b981;
+      --accent-blue: #3b82f6;
+      --accent-purple: #8b5cf6;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Be Vietnam Pro', -apple-system, sans-serif;
+      padding: 40px 20px;
+      line-height: 1.6;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    header { margin-bottom: 40px; border-bottom: 1px solid var(--border); padding-bottom: 24px; }
+    .badge {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--accent-emerald);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      margin-bottom: 12px;
+    }
+    h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.02em; }
+    h1 span.hl { color: var(--accent-emerald); }
+    .lead { color: var(--muted); font-size: 16px; max-width: 800px; }
+    .section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 32px;
+    }
+    h2 { font-size: 22px; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+    h2 .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      color: var(--accent-blue);
+      background: rgba(59, 130, 246, 0.1);
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+    p.sec-desc { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+    .diagram-box {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      overflow-x: auto;
+    }
+    .grid-phases {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .phase-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 16px;
+      transition: all 0.2s ease;
+    }
+    .phase-card:hover {
+      border-color: var(--accent-emerald);
+      transform: translateY(-2px);
+    }
+    .phase-card .step { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent-amber); margin-bottom: 4px; }
+    .phase-card .title { font-weight: 600; font-size: 15px; margin-bottom: 6px; }
+    .phase-card .artifact { font-size: 12px; font-family: 'JetBrains Mono', monospace; color: var(--accent-blue); background: rgba(59, 130, 246, 0.1); padding: 2px 6px; border-radius: 4px; display: inline-block; margin-bottom: 8px; }
+    .phase-card .desc { font-size: 13px; color: var(--muted); }
+    .legend {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .legend-item { display: inline-flex; align-items: center; gap: 8px; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <span class="badge">Sơ đồ quy trình • Vibe Coding Framework</span>
+      <h1>SDLC và <span class="hl">ADLC</span></h1>
+      <p class="lead">Phần mềm truyền thống đi theo một đường thẳng có cổng duyệt. AI agent chạy trong một vòng lặp không dừng, và cổng chuyển pha là bộ eval. Cách làm tốt nhất là kết hợp cả hai: <strong>con người định hình, agent thực thi</strong>.</p>
+    </header>
+
+    <!-- 01 - SDLC -->
+    <div class="section">
+      <h2><span class="num">01</span> SDLC — Software Development Life Cycle</h2>
+      <p class="sec-desc">Vòng đời phát triển phần mềm truyền thống: tuyến tính, tuần tự, mỗi pha xong mới sang pha sau. Lỗi phát hiện muộn thì chi phí sửa rất đắt.</p>
+      <div class="diagram-box">
+        <div class="mermaid">
+          flowchart LR
+            P["01. Lập kế hoạch\n(Plan)"] --> R["02. Yêu cầu\n(Requirements)"]
+            R --> D["03. Thiết kế\n(Design)"]
+            D --> B["04. Lập trình\n(Build)"]
+            B --> T["05. Kiểm thử\n(Test)"]
+            T --> DP["06. Triển khai\n(Deploy)"]
+            DP --> M["07. Bảo trì\n(Maintain)"]
+            M -.->|"Vòng mới"| P
+            
+            style P fill:#1e293b,stroke:#3b82f6,stroke-width:2px,color:#fff
+            style R fill:#1e293b,stroke:#3b82f6,stroke-width:2px,color:#fff
+            style D fill:#1e293b,stroke:#3b82f6,stroke-width:2px,color:#fff
+            style B fill:#1e293b,stroke:#10b981,stroke-width:2px,color:#fff
+            style T fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#fff
+            style DP fill:#1e293b,stroke:#8b5cf6,stroke-width:2px,color:#fff
+            style M fill:#1e293b,stroke:#64748b,stroke-width:2px,color:#fff
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 - ADLC -->
+    <div class="section">
+      <h2><span class="num">02</span> ADLC — Agent Development Life Cycle</h2>
+      <p class="sec-desc">Vòng đời phát triển AI Agent: đầu ra mang tính xác suất, nên chất lượng được đo bằng eval tự động và cải thiện liên tục từ dữ liệu vận hành.</p>
+      <div class="diagram-box">
+        <div class="mermaid">
+          flowchart TD
+            DEF["01. Xác định mục tiêu\n(Define)"] --> DES["02. Thiết kế Agent\n(Design Prompt & Tools)"]
+            DES --> BLD["03. Xây dựng & Tích hợp\n(Build)"]
+            BLD --> EV{"04. Đánh giá\n(Evals Gate)"}
+            
+            EV -- "Chưa đạt ngưỡng" --> BLD
+            EV -- "Đạt ngưỡng chuẩn" --> DEP["05. Triển khai có kiểm soát\n(Deploy)"]
+            
+            DEP --> OBS["06. Giám sát & Quan sát\n(Observe & Telemetry)"]
+            OBS --> IMP["07. Ca lỗi thật -> Học & Cải tiến\n(Improve)"]
+            IMP -.->|"Khởi động vòng lặp mới"| DES
+            
+            style DEF fill:#1e293b,stroke:#3b82f6,stroke-width:2px,color:#fff
+            style DES fill:#1e293b,stroke:#10b981,stroke-width:2px,color:#fff
+            style BLD fill:#1e293b,stroke:#10b981,stroke-width:2px,color:#fff
+            style EV fill:#312e81,stroke:#8b5cf6,stroke-width:2px,color:#fff
+            style DEP fill:#1e293b,stroke:#10b981,stroke-width:2px,color:#fff
+            style OBS fill:#1e293b,stroke:#64748b,stroke-width:2px,color:#fff
+            style IMP fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#fff
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 - KẾT HỢP -->
+    <div class="section">
+      <h2><span class="num">03</span> Kết Hợp: Con Người Định Hình, Agent Thực Thi</h2>
+      <p class="sec-desc">SDLC lo phần định hướng và cổng nghiệm thu do con người làm chủ; ADLC lo phần thực thi và vòng lặp tự sửa lỗi của Agent. Mọi bước đều để lại Artifact để truy vết.</p>
+      <div class="diagram-box">
+        <div class="mermaid">
+          flowchart TD
+            subgraph HUMAN["TẦNG CON NGƯỜI (SDLC GỐC - ĐỊNH HÌNH & DUYỆT)"]
+              H1["1. Vạch ý tưởng\n(NGƯỜI - INTENT)"]
+              H2["2. Duyệt spec\n(NGƯỜI - REVIEW)"]
+              H3["5. Cổng nghiệm thu\n(NGƯỜI - GATE UAT)"]
+            end
+
+            subgraph AGENT["TẦNG AI AGENT (ADLC - THỰC THI & TỰ ĐỘNG LẶP)"]
+              A1["Soạn intent & spec\n(AGENT - SPEC.MD)"]
+              A2["Thực thi code\n(AGENT - BUILD)"]
+              A3{"Eval liên tục\n(AGENT - EVALS)"}
+              A4["Deploy & Giám sát\n(AGENT - TELEMETRY)"]
+            end
+
+            H1 --> A1
+            A1 --> H2
+            H2 -- "Đã duyệt" --> A2
+            A2 --> A3
+            A3 -- "Eval trượt (tự sửa lỗi)" --> A2
+            A3 -- "Đạt ngưỡng eval" --> H3
+            H3 -- "Chấp thuận phát hành" --> A4
+            A4 -.->|"Log lỗi / Feedback thực tế"| A1
+
+            style HUMAN fill:rgba(59, 130, 246, 0.08),stroke:#3b82f6,stroke-width:1px
+            style AGENT fill:rgba(16, 185, 129, 0.08),stroke:#10b981,stroke-width:1px
+            style H1 fill:#1e293b,stroke:#3b82f6,color:#fff
+            style H2 fill:#1e293b,stroke:#3b82f6,color:#fff
+            style H3 fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#fff
+            style A1 fill:#1e293b,stroke:#10b981,color:#fff
+            style A2 fill:#1e293b,stroke:#10b981,color:#fff
+            style A3 fill:#312e81,stroke:#8b5cf6,color:#fff
+            style A4 fill:#1e293b,stroke:#10b981,color:#fff
+        </div>
+      </div>
+
+      <div class="grid-phases">
+        <div class="phase-card">
+          <div class="step">01 • PLAN</div>
+          <div class="title">Lập Kế Hoạch</div>
+          <span class="artifact">intent.md</span>
+          <p class="desc">Project Manager Agent: Gom pain points thực tế, phác thảo phạm vi.</p>
+        </div>
+        <div class="phase-card">
+          <div class="step">02 • DESIGN</div>
+          <div class="title">Thiết Kế Kiến Trúc</div>
+          <span class="artifact">spec.md</span>
+          <p class="desc">Architect / Designer: Gộp yêu cầu, chốt OpenAPI contract & DB schema.</p>
+        </div>
+        <div class="phase-card">
+          <div class="step">03 • BUILD</div>
+          <div class="title">Xây Dựng Code</div>
+          <span class="artifact">plan.md -> code</span>
+          <p class="desc">Software Engineer Agent: Lập plan atomic steps trước khi code, clean code.</p>
+        </div>
+        <div class="phase-card">
+          <div class="step">04 • TEST</div>
+          <div class="title">Kiểm Thử & Eval</div>
+          <span class="artifact">evals • CI</span>
+          <p class="desc">QA Engineer Agent: Chạy unit test, test biên, eval tự động và tự sửa lỗi.</p>
+        </div>
+        <div class="phase-card">
+          <div class="step">05 • DEPLOY</div>
+          <div class="title">Triển Khai An Toàn</div>
+          <span class="artifact">PR review • Tag</span>
+          <p class="desc">DevOps Engineer Agent: Deploy theo phiên bản, kiểm tra health check & rollback.</p>
+        </div>
+        <div class="phase-card">
+          <div class="step">06 • MAINTAIN</div>
+          <div class="title">Vận Hành & Giám Sát</div>
+          <span class="artifact">→ intent.md</span>
+          <p class="desc">SRE Engineer Agent: Telemetry, quan sát lỗi để khởi động vòng lặp mới.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      flowchart: { curve: 'basis' }
+    });
+  </script>
+</body>
+</html>
