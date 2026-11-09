@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Net108Khai.Api/Net108Khai.Api.csproj" />
+  </Folder>
+</Solution>

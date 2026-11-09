@@ -1,0 +1,64 @@
+services:
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "127.0.0.1:8025:8025"
+      - "127.0.0.1:1025:1025"
+  db:
+    image: postgres:17-alpine
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_DB: net108khai
+      POSTGRES_USER: net108khai
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local-dev-only}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U net108khai -d net108khai"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+  migrate:
+    build: .
+    image: net108khai-api:local
+    command: ["--migrate"]
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Commerce: Host=db;Port=5432;Database=net108khai;Username=net108khai;Password=${POSTGRES_PASSWORD:-local-dev-only}
+      Demo__SeedProducts: "true"
+    depends_on:
+      db:
+        condition: service_healthy
+  api:
+    image: net108khai-api:local
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Commerce: Host=db;Port=5432;Database=net108khai;Username=net108khai;Password=${POSTGRES_PASSWORD:-local-dev-only}
+      Cors__Origins__0: ${FRONTEND_ORIGIN:-http://localhost:3000}
+      Frontend__AuthCallbackUrl: ${AUTH_CALLBACK_URL:-http://localhost:3000/auth/callback}
+      Smtp__Host: mailpit
+      Smtp__Port: "1025"
+      Smtp__From: no-reply@net108khai.local
+      Smtp__EnableSsl: "false"
+      DataProtection__KeyPath: /app/keys
+      OAuth__Google__ClientId: ${GOOGLE_CLIENT_ID:-}
+      OAuth__Google__ClientSecret: ${GOOGLE_CLIENT_SECRET:-}
+      OAuth__Facebook__ClientId: ${FACEBOOK_APP_ID:-}
+      OAuth__Facebook__ClientSecret: ${FACEBOOK_APP_SECRET:-}
+      Ai__Endpoint: ${AI_ENDPOINT:-}
+      Ai__Model: ${AI_MODEL:-}
+      Ai__ApiKey: ${AI_API_KEY:-}
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      mailpit:
+        condition: service_started
+    volumes:
+      - protection_keys:/app/keys
+
+volumes:
+  postgres_data:
+  protection_keys:
