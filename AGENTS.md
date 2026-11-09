@@ -4,6 +4,8 @@ Chào mừng AI Agent (Claude Code, Codex, Antigravity, Gemini). Đây là tài 
 
 **Định tuyến phạm vi:** Khi làm việc về **AI native Commerce**, đọc và thực hiện [checklist Commerce](docs/AI-COMMERCE-EXECUTION-CHECKLIST.md) cùng [đặc tả Commerce](docs/AI-NATIVE-COMMERCE.md). Các mục Trello Clone bên dưới áp dụng cho yêu cầu Trello Clone; không coi chúng là bằng chứng về hệ thống Commerce đang chạy. Khi yêu cầu liên quan cả hai, ghi rõ phần nào thuộc từng phạm vi trước khi sửa.
 
+**Agent mới nhận việc Commerce hoặc Lab 1:** Đọc [bản bàn giao cho Codex và Antigravity](docs/AI-COMMERCE-AGENT-HANDOFF.md) để tìm nguồn trạng thái, phần sở hữu và bước tiếp theo; kiểm tra lại bằng bảng tick và code hiện tại.
+
 **Phân công Commerce:** Antigravity sở hữu frontend (`F01–F08`); Codex sở hữu backend, AI service và Docker (`C00`, `C02–C15`, `C17`). Quyết định nghiệp vụ `C01` thuộc người phụ trách dự án; tích hợp và nghiệm thu `C16`, `C18` là việc chung. Dùng hợp đồng API trong checklist để bàn giao, không tự sửa phần sở hữu của agent còn lại.
 
 **Theo dõi tiến độ Commerce:** Cập nhật ô tick theo mã việc nhỏ (`Cxx.y`, `Fxx.y`) trong [bảng công việc AI](docs/AI-COMMERCE-TASK-BOARD.md) khi có bằng chứng nghiệm thu. Đây là nơi duy nhất ghi trạng thái hoàn thành; mã cha chỉ xong khi mọi mã con và điều kiện cấp chức năng đều đạt.
