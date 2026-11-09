@@ -41,16 +41,17 @@ Tuyệt đối không áp dụng tư duy "one-prompt làm cả app". Mọi tính
 
 | Module | Vai Trò & Trách Nhiệm | Tech Stack Mục Tiêu |
 |---|---|---|
-| **`Trello-Clone-Backend`** | Core API, nghiệp vụ Boards/Lists/Cards, Auth, RBAC, WebSockets realtime | Node.js / NestJS / ASP.NET Core / PostgreSQL |
-| **`Trello-Clone-Frontend`** | Web app chính, trải nghiệm kéo thả Kanban trực quan, responsive | React / Next.js / TailwindCSS / Motion |
-| **`Trello-Clone-AI-RAG`** | Dịch vụ AI & RAG: Vector search, embedding, tóm tắt thẻ, hỏi đáp dự án | Python (FastAPI, LangChain/LlamaIndex, Qdrant/pgvector) |
-| **`Trello-Clone-MCP`** | Model Context Protocol Server cung cấp Tools, Resources, Prompts cho Agent | TypeScript / Python MCP SDK |
-| **`Chatbot-Frontend`** | Giao diện hội thoại thông minh hỗ trợ người dùng tương tác với AI Agent | React / TailwindCSS / WebSocket |
-| **`Trello-Clone-Desktop`** | Ứng dụng Desktop đa nền tảng | Electron / Tauri / .NET MAUI |
-| **`Trello-Clone-Mobile`** | Ứng dụng di động iOS/Android | Flutter / React Native |
-| **`Trello-Clone-Infra`** | Hạ tầng, Docker Compose, CI/CD, Nginx reverse proxy, Certbot SSL | Docker, K8s, Terraform, GitHub Actions |
+| **`src/`** | Core API Commerce, Product Catalog, Carts, Orders, Auth, AI Provider | C# / .NET 10 / PostgreSQL |
+| **`Chatbot-Frontend/`** | Web app chính Commerce & Trợ lý mua sắm AI (React, Tailwind, Motion) | React 19 / TypeScript / Vite / TailwindCSS |
+| **`trello-clone/Backend`** | (Dự phòng) Core API Kanban, Boards/Lists/Cards, Realtime WebSockets | Node.js / NestJS / ASP.NET Core / PostgreSQL |
+| **`trello-clone/Frontend`** | (Dự phòng) Web app Kanban, trải nghiệm kéo thả trực quan | React / Next.js / TailwindCSS / Motion |
+| **`trello-clone/AI-RAG`** | Dịch vụ AI & RAG: Vector search, embedding, tóm tắt thẻ, hỏi đáp dự án | Python (FastAPI, LangChain/LlamaIndex, Qdrant) |
+| **`trello-clone/MCP`** | Model Context Protocol Server cung cấp Tools, Resources, Prompts | TypeScript / Python MCP SDK |
+| **`trello-clone/Desktop`** | Ứng dụng Desktop đa nền tảng | Electron / Tauri / .NET MAUI |
+| **`trello-clone/Mobile`** | Ứng dụng di động iOS/Android | Flutter / React Native |
+| **`trello-clone/Infra`** | Hạ tầng mở rộng, Docker Compose, CI/CD, Nginx reverse proxy | Docker, K8s, Terraform, GitHub Actions |
 | **`certs/`** | Chứng chỉ bảo mật nội bộ và mTLS (được mã hóa/ignore bởi git) | OpenSSL, Let's Encrypt |
-| **`docs/`** | Toàn bộ tài liệu đặc tả kiến trúc, spec, hướng dẫn quy trình | Markdown |
+| **`docs/`** | Toàn bộ tài liệu đặc tả kiến trúc, spec, checklist và bài tập lab (`docs/labs`) | Markdown / Office Docs |
 
 ---
 
@@ -107,3 +108,12 @@ Các kỹ năng đã được tích hợp sẵn tại `.agent/skills/`, `.claude
    - Bảo toàn comment hiện có không liên quan.
    - Luôn kiểm tra build/test sau khi sửa code.
 4. **Báo cáo**: Nêu rõ file đã thay đổi, kết quả kiểm thử, và hướng dẫn bước tiếp theo cho lập trình viên.
+
+---
+
+## 5. Quy Chuẩn Tổ Chức File Mới (Clean Workspace Policy)
+
+> **"Nguyên tắc giữ sạch thư mục gốc (Root Hygiene): Không để file phát sinh tự do ngoài root."**
+
+- **Quy tắc**: Khi xuất hiện hoặc tạo bất kỳ file mới nào (tài liệu nháp, file dữ liệu, script phụ trợ, báo cáo, ghi chú...) mà **không thuộc về bất kỳ cây thư mục module có sẵn nào**, **bắt buộc tạo một thư mục riêng (ví dụ: `misc/` hoặc `others/`)** và đưa các file đó vào bên trong.
+- **Mục đích**: Bảo toàn cây thư mục gốc luôn gọn gàng, có trật tự, chỉ chứa các thư mục module cốt lõi và các file cấu hình hệ thống chuẩn (`.gitignore`, `README.md`, `AGENTS.md`, `CLAUDE.md`...).
