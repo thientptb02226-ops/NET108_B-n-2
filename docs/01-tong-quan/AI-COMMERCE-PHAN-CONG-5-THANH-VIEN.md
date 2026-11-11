@@ -85,7 +85,7 @@ Ngày lập: 11/11/2026. Tài liệu này chia **công việc ngoài frontend** 
 
 ## 5. Cách dùng Git branch cho từng người
 
-**Mỗi người dùng một clone riêng** của repository, không cùng đổi branch trong `C:\Net108Khai`. Thư mục hiện tại có thay đổi chưa commit của frontend/tài liệu; đừng `git switch`, `reset`, `clean` hoặc stash thay người khác trong thư mục này. `main` chỉ nhận code qua pull request (PR) đã review; mỗi **mã việc nhỏ** có một branch ngắn hạn. Tên branch: `feat/tvN-Cxx-y-ten-ngan` hoặc `docs/tvN-Cxx-y-ten-ngan`; không giữ một branch lớn cho cả người suốt dự án.
+**Mỗi người dùng một clone riêng** của repository, không cùng đổi branch trong `C:\Net108Khai`. Trước khi đổi branch, kiểm `git status` và xử lý thay đổi của chính mình; không `git switch`, `reset`, `clean` hoặc stash thay người khác trong thư mục dùng chung. `main` chỉ nhận code qua pull request (PR) đã review; mỗi **mã việc nhỏ** có một branch ngắn hạn. Tên branch: `feat/tvN-Cxx-y-ten-ngan` hoặc `docs/tvN-Cxx-y-ten-ngan`; không giữ một branch lớn cho cả người suốt dự án. TV3 xem [hướng dẫn riêng](TV3-HUONG-DAN-LAM-VIEC-VOI-AI-VA-GIT.md) trước khi giao task cho AI.
 
 | Người | Branch ví dụ ở giai đoạn thiết kế/triển khai | Review chính |
 | --- | --- | --- |
