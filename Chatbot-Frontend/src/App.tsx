@@ -70,8 +70,18 @@ export const App: React.FC = () => {
   const [cartLines, setCartLines] = useState<CartLine[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-  // Runway 3D Lookbook state
-  const [activeRunwayLook, setActiveRunwayLook] = useState<number | null>(null);
+  // Runway 3D Lookbook state (supports query param ?look=0..5 or ?runway=0..5)
+  const [activeRunwayLook, setActiveRunwayLook] = useState<number | null>(() => {
+    try {
+      const pms = new URLSearchParams(window.location.search);
+      const look = pms.get('look') ?? pms.get('runway');
+      if (look !== null) {
+        const parsed = parseInt(look, 10);
+        return isNaN(parsed) ? 0 : parsed;
+      }
+    } catch (_) {}
+    return null;
+  });
 
   // Modals state
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -84,20 +94,38 @@ export const App: React.FC = () => {
         setActiveRunwayLook(null);
       }
       if (e.data?.type === 'RUNWAY_ADD_TO_CART') {
-        const { name, price } = e.data;
+        const { name, option, size, price, quantity = 1, buyNow } = e.data;
         const numPrice = parseInt(String(price).replace(/[^0-9]/g, ''), 10) || 1000;
         const priceVnd = numPrice * 25400; // ~$1 = 25,400 VND
-        setCartLines((prev) => [
-          ...prev,
-          {
-            variantId: `mv-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-            sku: `MV-${String(name).toUpperCase().replace(/\s+/g, '-')}`,
-            name: `Maison Vell — ${name}`,
-            priceVnd,
-            quantity: 1,
-          },
-        ]);
-        setIsCartOpen(true);
+        const titleSuffix = [option, size ? `Size ${size}` : null].filter(Boolean).join(' • ');
+        const fullTitle = titleSuffix ? `${name} (${titleSuffix})` : `Maison Vell — ${name}`;
+        const qty = Math.max(1, parseInt(String(quantity), 10) || 1);
+        const sku = `MV-${String(name).toUpperCase().replace(/\s+/g, '-')}-${String(option || 'DEFAULT').toUpperCase().replace(/\s+/g, '-')}-${String(size || 'S')}`;
+
+        setCartLines((prev) => {
+          const existing = prev.find((l) => l.sku === sku);
+          if (existing) {
+            return prev.map((l) =>
+              l.sku === sku ? { ...l, quantity: l.quantity + qty } : l
+            );
+          }
+          return [
+            ...prev,
+            {
+              variantId: `mv-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+              sku,
+              name: fullTitle,
+              priceVnd,
+              quantity: qty,
+            },
+          ];
+        });
+
+        if (buyNow) {
+          setIsCheckoutOpen(true);
+        } else {
+          setIsCartOpen(true);
+        }
       }
     };
     window.addEventListener('message', handleMessage);
@@ -557,7 +585,12 @@ export const App: React.FC = () => {
                   return (
                     <div
                       key={p.id}
-                      onClick={() => setSelectedProduct(p)}
+                      onClick={() => {
+                        const lookIdx = p.runwayLookIndex !== undefined
+                          ? p.runwayLookIndex
+                          : (flashSaleProducts.indexOf(p) % 6);
+                        setActiveRunwayLook(lookIdx >= 0 ? lookIdx : 0);
+                      }}
                       className="cursor-pointer group flex flex-col justify-between p-2 rounded-2xl bg-white hover:bg-white border border-black/10 hover:border-[#1F3FB0]/50 transition-all shadow-xs"
                     >
                       <div className="relative aspect-square rounded-xl overflow-hidden bg-[#E8E6E1] mb-2">
@@ -774,11 +807,10 @@ export const App: React.FC = () => {
                     key={product.id}
                     product={product}
                     onSelect={(p) => {
-                      if (p.runwayLookIndex !== undefined) {
-                        setActiveRunwayLook(p.runwayLookIndex);
-                      } else {
-                        setSelectedProduct(p);
-                      }
+                      const lookIdx = p.runwayLookIndex !== undefined
+                        ? p.runwayLookIndex
+                        : (filteredProducts.indexOf(p) % 6);
+                      setActiveRunwayLook(lookIdx >= 0 ? lookIdx : 0);
                     }}
                     onReadSample={(slug) => navigateTo(`/read/${slug}`)}
                     onOpenRunway={(p) => setActiveRunwayLook(p.runwayLookIndex ?? 0)}

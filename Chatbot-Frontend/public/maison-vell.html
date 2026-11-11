@@ -31,7 +31,6 @@ body{
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .wide{font-family:Michroma,sans-serif;text-transform:uppercase}
 
-/* Main Layout: Full Stage + Accessories Rail (No header bar) */
 .page{
   height:100vh;
   width:100%;
@@ -71,7 +70,7 @@ main{
 /* Floating Prev / Next Navigation Arrows on Stage */
 .stage-nav{
   position:absolute;
-  top:50%;
+  top:42%;
   transform:translateY(-50%);
   z-index:20;
   width:calc(46*var(--u));
@@ -96,39 +95,41 @@ main{
 .stage-nav.prev{left:calc(18*var(--u))}
 .stage-nav.next{right:calc(18*var(--u))}
 
-/* 2. Floating Bottom Variant Selector Dock (STABLE & NEVER JUMPS) */
+/* 2. Variant Selector & Product Options Dock */
 .dock{
   position:absolute;
-  bottom:calc(24*var(--u));
+  bottom:calc(16*var(--u));
   left:50%;
   transform:translateX(-50%);
-  z-index:25;
+  z-index:150;
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:calc(10*var(--u));
-  width:auto;
-  max-width:calc(760*var(--u));
+  gap:calc(8*var(--u));
+  width:calc(100% - calc(32*var(--u)));
+  max-width:calc(820*var(--u));
   pointer-events:none;
 }
+
+/* Look Chips (Row 1) */
 .chips-wrap{
   pointer-events:auto;
   display:flex;
   align-items:center;
   justify-content:center;
   gap:calc(6*var(--u));
-  padding:calc(5*var(--u)) calc(8*var(--u));
+  padding:calc(4*var(--u)) calc(8*var(--u));
   background:#ffffff;
   border:1px solid #d1d5db;
   border-radius:99px;
-  box-shadow:0 10px 24px -4px rgba(0,0,0,.14);
+  box-shadow:0 8px 20px -4px rgba(0,0,0,.12);
   width:fit-content;
   max-width:100%;
 }
 .chip{
-  padding:calc(6*var(--u)) calc(12*var(--u));
+  padding:calc(5*var(--u)) calc(12*var(--u));
   border-radius:99px;
-  font-size:calc(11.5*var(--u));
+  font-size:calc(11*var(--u));
   font-weight:600;
   color:var(--mid);
   background:transparent;
@@ -145,81 +146,241 @@ main{
   background:var(--ink);
   color:#fff;
   border-color:var(--ink);
-  box-shadow:0 3px 10px rgba(22,25,31,.25);
+  box-shadow:0 2px 8px rgba(22,25,31,.25);
   font-weight:700;
 }
 .chip-num{
   font-family:Michroma,sans-serif;
-  font-size:calc(10*var(--u));
+  font-size:calc(9.5*var(--u));
   opacity:.9;
 }
 
-/* Action Bar inside Dock */
-.action-bar{
+/* Detailed Options & Purchase Card (Row 2) */
+.options-card{
   pointer-events:auto;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
   width:100%;
-  min-width:calc(500*var(--u));
-  padding:calc(10*var(--u)) calc(18*var(--u));
   background:#ffffff;
   border:1px solid #d1d5db;
   border-radius:calc(18*var(--u));
-  box-shadow:0 12px 28px -6px rgba(0,0,0,.16);
-}
-.action-info{
+  box-shadow:0 14px 32px -6px rgba(0,0,0,.18);
+  padding:calc(12*var(--u)) calc(18*var(--u));
   display:flex;
   flex-direction:column;
-  gap:calc(2*var(--u));
+  gap:calc(10*var(--u));
 }
-.action-tagline{
-  font-size:calc(11*var(--u));
-  color:var(--dim);
-  text-transform:uppercase;
+
+/* Header line inside Card */
+.card-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid #f1f5fa;
+  padding-bottom:calc(8*var(--u));
+  gap:calc(12*var(--u));
+}
+.card-title-group{
+  display:flex;
+  align-items:center;
+  gap:calc(8*var(--u));
+  min-width:0;
+}
+.look-badge{
+  font-family:Michroma,sans-serif;
+  font-size:calc(10.5*var(--u));
+  background:var(--ink);
+  color:#fff;
+  padding:calc(3*var(--u)) calc(8*var(--u));
+  border-radius:4px;
   letter-spacing:.06em;
-  font-weight:600;
   white-space:nowrap;
 }
-.action-pricing{
+.look-title{
+  font-size:calc(13*var(--u));
+  font-weight:700;
+  color:var(--ink);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.card-price-group{
   display:flex;
   align-items:baseline;
-  gap:calc(8*var(--u));
+  gap:calc(6*var(--u));
   white-space:nowrap;
+  flex-shrink:0;
 }
-.action-usd{
-  font-size:calc(18*var(--u));
+.card-usd{
+  font-size:calc(16.5*var(--u));
   font-weight:700;
   color:var(--ink);
 }
-.action-vnd{
+.card-vnd{
   font-size:calc(12*var(--u));
   font-weight:500;
   color:var(--mid);
 }
-.action-btn{
-  display:inline-flex;
+
+/* Options Selector Rows */
+.selector-body{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:calc(10*var(--u));
+}
+.selector-group{
+  display:flex;
   align-items:center;
   gap:calc(8*var(--u));
-  height:calc(42*var(--u));
-  padding:0 calc(20*var(--u));
-  border-radius:calc(12*var(--u));
-  background:var(--accent);
-  color:#fff;
-  font-size:calc(13*var(--u));
+}
+.group-label{
+  font-size:calc(11.5*var(--u));
   font-weight:600;
-  box-shadow:0 4px 14px rgba(8,72,45,.3);
+  color:var(--dim);
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  white-space:nowrap;
+}
+.pills-list{
+  display:flex;
+  align-items:center;
+  gap:calc(6*var(--u));
+}
+.pill-btn{
+  padding:calc(5*var(--u)) calc(10*var(--u));
+  border-radius:calc(8*var(--u));
+  font-size:calc(11.5*var(--u));
+  font-weight:600;
+  color:var(--mid);
+  background:#f3f4f6;
+  border:1px solid #e5e7eb;
+  transition:all .15s ease;
+  white-space:nowrap;
+  cursor:pointer;
+}
+.pill-btn:hover{
+  background:#e5e7eb;
+  color:var(--ink);
+}
+.pill-btn.active{
+  background:#08482d;
+  color:#fff;
+  border-color:#08482d;
+  box-shadow:0 2px 6px rgba(8,72,45,.25);
+}
+
+/* Quantity Counter */
+.qty-counter{
+  display:inline-flex;
+  align-items:center;
+  border:1px solid #d1d5db;
+  border-radius:calc(8*var(--u));
+  background:#f9fafb;
+  overflow:hidden;
+}
+.qty-btn{
+  width:calc(28*var(--u));
+  height:calc(28*var(--u));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:calc(14*var(--u));
+  font-weight:700;
+  color:var(--ink);
+  background:#ffffff;
+  transition:background .15s;
+  cursor:pointer;
+}
+.qty-btn:hover{background:#f3f4f6}
+.qty-btn:active{background:#e5e7eb}
+.qty-btn:disabled{opacity:.4;cursor:not-allowed}
+.qty-val{
+  min-width:calc(32*var(--u));
+  text-align:center;
+  font-size:calc(12*var(--u));
+  font-weight:700;
+  color:var(--ink);
+}
+.stock-tag{
+  font-size:calc(11*var(--u));
+  color:#059669;
+  font-weight:600;
+  margin-left:calc(4*var(--u));
+  white-space:nowrap;
+}
+
+/* Action Buttons Row */
+.card-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:calc(12*var(--u));
+  padding-top:calc(4*var(--u));
+  border-top:1px solid #f1f5fa;
+}
+.total-summary{
+  display:flex;
+  align-items:baseline;
+  gap:calc(6*var(--u));
+}
+.total-label{
+  font-size:calc(11.5*var(--u));
+  color:var(--dim);
+}
+.total-amount{
+  font-size:calc(16*var(--u));
+  font-weight:800;
+  color:var(--ink);
+}
+.buttons-group{
+  display:flex;
+  align-items:center;
+  gap:calc(8*var(--u));
+}
+.btn-cart{
+  display:inline-flex;
+  align-items:center;
+  gap:calc(6*var(--u));
+  height:calc(38*var(--u));
+  padding:0 calc(16*var(--u));
+  border-radius:calc(10*var(--u));
+  background:#eef6ee;
+  color:#08482d;
+  border:1px solid #cce5cc;
+  font-size:calc(12.5*var(--u));
+  font-weight:700;
   transition:all .2s ease;
   cursor:pointer;
   white-space:nowrap;
-  flex-shrink:0;
 }
-.action-btn:hover{
+.btn-cart:hover{
+  background:#dae7c7;
+  transform:scale(1.02);
+}
+.btn-cart svg{width:calc(15*var(--u));height:calc(15*var(--u));stroke:currentColor;stroke-width:2;fill:none}
+
+.btn-buy{
+  display:inline-flex;
+  align-items:center;
+  gap:calc(6*var(--u));
+  height:calc(38*var(--u));
+  padding:0 calc(20*var(--u));
+  border-radius:calc(10*var(--u));
+  background:#08482d;
+  color:#fff;
+  border:1px solid #08482d;
+  font-size:calc(12.5*var(--u));
+  font-weight:700;
+  box-shadow:0 4px 12px rgba(8,72,45,.28);
+  transition:all .2s ease;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.btn-buy:hover{
   background:#0b5c39;
   transform:scale(1.02);
 }
-.action-btn:active{transform:scale(.98)}
-.action-btn svg{width:calc(16*var(--u));height:calc(16*var(--u));stroke:currentColor;stroke-width:2;fill:none}
+.btn-buy:active,.btn-cart:active{transform:scale(.98)}
 
 /* 3. Product Accessories Rail (Scrollable & Draggable Up/Down) */
 .rail{
@@ -292,22 +453,38 @@ main{
 }
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* Mobile responsive layout */
+/* Mobile Responsive */
 @media (max-width:820px){
   :root{--u:1px}
-  main{grid-template-columns:1fr;grid-template-rows:1fr 165px}
+  main{grid-template-columns:1fr;grid-template-rows:1fr 140px}
   .rail{border-left:0;border-top:1px solid var(--line)}
-  .card{width:135px;height:100%;padding:8px}
-  .dock{bottom:10px;width:calc(100% - 16px);gap:6px}
-  .chips-wrap{padding:3px 6px;gap:4px;overflow-x:auto;justify-content:flex-start;scrollbar-width:none;-ms-overflow-style:none}
+  .card{width:125px;height:100%;padding:6px}
+  .dock{bottom:8px;width:calc(100% - 14px);gap:5px}
+  .chips-wrap{padding:2px 6px;gap:4px;overflow-x:auto;justify-content:flex-start;scrollbar-width:none;-ms-overflow-style:none}
   .chips-wrap::-webkit-scrollbar{display:none}
-  .chip{padding:4px 8px;font-size:10.5px}
-  .action-bar{min-width:0;padding:6px 12px}
-  .action-tagline{display:none}
-  .action-usd{font-size:15px}
-  .action-vnd{display:none}
-  .action-btn{height:34px;padding:0 12px;font-size:11.5px}
-  .stage-nav{width:34px;height:34px}
+  .chip{padding:4px 8px;font-size:10px}
+  .options-card{padding:8px 10px;gap:6px;border-radius:12px;background:rgba(255,255,255,0.96);backdrop-filter:blur(10px)}
+  .card-top{padding-bottom:4px}
+  .look-title{font-size:11.5px}
+  .card-usd{font-size:14px}
+  .card-vnd{display:none}
+  .selector-body{gap:4px;overflow-x:auto;max-width:100%;white-space:nowrap;scrollbar-width:none}
+  .selector-body::-webkit-scrollbar{display:none}
+  .pills-list{overflow-x:auto;scrollbar-width:none}
+  .pills-list::-webkit-scrollbar{display:none}
+  .group-label{font-size:9.5px}
+  .pill-btn{padding:3px 6px;font-size:10px}
+  .qty-btn{width:22px;height:22px;font-size:12px}
+  .qty-val{min-width:20px;font-size:11px}
+  .stock-tag{display:none}
+  .card-bottom{padding-top:4px;flex-direction:column;align-items:stretch;gap:4px}
+  .total-summary{display:flex;justify-content:space-between;align-items:baseline;width:100%}
+  .total-label{font-size:10px}
+  .total-amount{font-size:13px}
+  .buttons-group{display:flex;width:100%;gap:6px;margin-left:0}
+  .btn-cart{flex:1;justify-content:center;height:32px;padding:0 6px;font-size:10.5px}
+  .btn-buy{flex:1;justify-content:center;height:32px;padding:0 6px;font-size:10.5px}
+  .stage-nav{width:32px;height:32px}
   .stage-nav.prev{left:6px}
   .stage-nav.next{right:6px}
   .ring{display:none}
@@ -329,24 +506,71 @@ main{
         <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
       </button>
 
-      <!-- Variant Selector Dock (Chips + Quick Select Button) -->
+      <!-- Bottom Dock: Looks Chips + Product Options & Quantity Card -->
       <div class="dock">
-        <div class="chips-wrap" id="chipsWrap" aria-label="Danh sách các mẫu mã">
-          <!-- Dynamically populated chips for Looks 15 to 20 -->
-        </div>
+        <!-- Row 1: Looks Chips -->
+        <div class="chips-wrap" id="chipsWrap" aria-label="Danh sách các mẫu mã"></div>
 
-        <div class="action-bar">
-          <div class="action-info">
-            <span class="action-tagline" id="dockTagline">Mẫu trang phục đang chọn</span>
-            <div class="action-pricing">
-              <span class="action-usd" id="dockPrice">$2,900</span>
-              <span class="action-vnd" id="dockPriceVnd">(~73.660.000 ₫)</span>
+        <!-- Row 2: Comprehensive Options & Order Card -->
+        <div class="options-card">
+          <!-- Top: Name & Price -->
+          <div class="card-top">
+            <div class="card-title-group">
+              <span class="look-badge" id="cardLookBadge">LOOK 15</span>
+              <h2 class="look-title" id="cardLookTitle">Feather Jacket & Satin Trousers</h2>
+            </div>
+            <div class="card-price-group">
+              <span class="card-usd" id="cardPriceUsd">$2,900</span>
+              <span class="card-vnd" id="cardPriceVnd">(~73.660.000 ₫)</span>
             </div>
           </div>
-          <button class="action-btn" id="selectLookBtn" aria-label="Chọn mẫu mã này vào giỏ hàng">
-            <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-            <span>Chọn Mẫu Này</span>
-          </button>
+
+          <!-- Middle: Variant Options, Sizes & Quantity Counter -->
+          <div class="selector-body">
+            <!-- 1. Loại hàng / Phân loại (Options) -->
+            <div class="selector-group">
+              <span class="group-label">Phân loại:</span>
+              <div class="pills-list" id="optionPills"></div>
+            </div>
+
+            <!-- 2. Kích cỡ (Sizes) -->
+            <div class="selector-group">
+              <span class="group-label">Kích cỡ:</span>
+              <div class="pills-list" id="sizePills">
+                <button type="button" class="pill-btn active" data-size="S">S</button>
+                <button type="button" class="pill-btn" data-size="M">M</button>
+                <button type="button" class="pill-btn" data-size="L">L</button>
+              </div>
+            </div>
+
+            <!-- 3. Số lượng mua -->
+            <div class="selector-group">
+              <span class="group-label">Số lượng:</span>
+              <div class="qty-counter">
+                <button type="button" id="qtyMinus" class="qty-btn" aria-label="Giảm số lượng">−</button>
+                <span id="qtyVal" class="qty-val">1</span>
+                <button type="button" id="qtyPlus" class="qty-btn" aria-label="Tăng số lượng">+</button>
+              </div>
+              <span class="stock-tag" id="stockTag">✓ Còn 18 sản phẩm</span>
+            </div>
+          </div>
+
+          <!-- Bottom: Dynamic Total & Action Buttons -->
+          <div class="card-bottom">
+            <div class="total-summary">
+              <span class="total-label">Tổng tạm tính:</span>
+              <span class="total-amount" id="totalAmount">73.660.000 ₫</span>
+            </div>
+            <div class="buttons-group">
+              <button type="button" class="btn-cart" id="addToCartBtn" aria-label="Thêm sản phẩm vào giỏ hàng">
+                <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                <span>Thêm vào giỏ</span>
+              </button>
+              <button type="button" class="btn-buy" id="buyNowBtn" aria-label="Mua ngay và thanh toán">
+                <span>Mua ngay</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -369,12 +593,78 @@ const PIECES='https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd
 const LOOKS=[[12,176],[178,330],[331,470],[476,633],[634,767],[767,956]],Y0=48,Y1=496,FIRST=15;
 
 const LOOK_METAS=[
-  { num: 15, short: 'Feather & Satin', full: 'Feather Jacket & Satin Trousers', price: '$2,900', priceVnd: '73.660.000 ₫' },
-  { num: 16, short: 'Pleated Sage', full: 'Pleated Dress & Gold Waist Belt', price: '$2,200', priceVnd: '55.880.000 ₫' },
-  { num: 17, short: 'Satin Trench', full: 'Satin Trench Dress & Bag', price: '$2,350', priceVnd: '59.690.000 ₫' },
-  { num: 18, short: 'Billow Blouse', full: 'Billow Sleeve Blouse & Trousers', price: '$860', priceVnd: '21.844.000 ₫' },
-  { num: 19, short: 'Powder Coat', full: 'Powder Long Coat & Ivory Pants', price: '$1,980', priceVnd: '50.292.000 ₫' },
-  { num: 20, short: 'Ruffle Gown', full: 'Sculpted Ruffle Top & Maxi Skirt', price: '$1,340', priceVnd: '34.036.000 ₫' },
+  {
+    num: 15,
+    short: 'Feather & Satin',
+    full: 'Look 15: Áo Khoác Lông Vũ & Quần Lụa Satin',
+    price: '$2,900',
+    priceVnd: '73.660.000 ₫',
+    options: [
+      { name: 'Trọn bộ Look 15', price: '$2,900', priceNum: 2900, priceVnd: '73.660.000 ₫' },
+      { name: 'Áo Khoác Feather Jacket', price: '$2,900', priceNum: 2900, priceVnd: '73.660.000 ₫' },
+      { name: 'Quần Satin Wide Leg', price: '$1,450', priceNum: 1450, priceVnd: '36.830.000 ₫' }
+    ]
+  },
+  {
+    num: 16,
+    short: 'Pleated Sage',
+    full: 'Look 16: Váy Xếp Ly Sage & Thắt Lưng Vàng',
+    price: '$2,200',
+    priceVnd: '55.880.000 ₫',
+    options: [
+      { name: 'Trọn bộ Look 16', price: '$2,200', priceNum: 2200, priceVnd: '55.880.000 ₫' },
+      { name: 'Váy Pleated Dress', price: '$2,200', priceNum: 2200, priceVnd: '55.880.000 ₫' },
+      { name: 'Thắt lưng Gold Waist Belt', price: '$420', priceNum: 420, priceVnd: '10.668.000 ₫' }
+    ]
+  },
+  {
+    num: 17,
+    short: 'Satin Trench',
+    full: 'Look 17: Váy Măng Tô Lụa & Túi Xách Da',
+    price: '$2,350',
+    priceVnd: '59.690.000 ₫',
+    options: [
+      { name: 'Trọn bộ Look 17', price: '$2,350', priceNum: 2350, priceVnd: '59.690.000 ₫' },
+      { name: 'Váy Satin Trench Dress', price: '$2,350', priceNum: 2350, priceVnd: '59.690.000 ₫' },
+      { name: 'Túi Top Handle Bag', price: '$980', priceNum: 980, priceVnd: '24.892.000 ₫' }
+    ]
+  },
+  {
+    num: 18,
+    short: 'Billow Blouse',
+    full: 'Look 18: Áo Tay Bồng Blush & Quần Buộc Dây',
+    price: '$860',
+    priceVnd: '21.844.000 ₫',
+    options: [
+      { name: 'Trọn bộ Look 18', price: '$860', priceNum: 860, priceVnd: '21.844.000 ₫' },
+      { name: 'Áo Billow Sleeve Blouse', price: '$860', priceNum: 860, priceVnd: '21.844.000 ₫' },
+      { name: 'Quần Tie Waist Trousers', price: '$740', priceNum: 740, priceVnd: '18.796.000 ₫' }
+    ]
+  },
+  {
+    num: 19,
+    short: 'Powder Coat',
+    full: 'Look 19: Áo Dạ Dài Powder Blue & Quần Trắng',
+    price: '$1,980',
+    priceVnd: '50.292.000 ₫',
+    options: [
+      { name: 'Trọn bộ Look 19', price: '$1,980', priceNum: 1980, priceVnd: '50.292.000 ₫' },
+      { name: 'Áo Khoác Powder Long Coat', price: '$1,980', priceNum: 1980, priceVnd: '50.292.000 ₫' },
+      { name: 'Quần Ivory Straight Pants', price: '$690', priceNum: 690, priceVnd: '17.526.000 ₫' }
+    ]
+  },
+  {
+    num: 20,
+    short: 'Ruffle Gown',
+    full: 'Look 20: Áo Tạo Hình Bèo Nhún & Chân Váy Maxi',
+    price: '$1,340',
+    priceVnd: '34.036.000 ₫',
+    options: [
+      { name: 'Trọn bộ Look 20', price: '$1,340', priceNum: 1340, priceVnd: '34.036.000 ₫' },
+      { name: 'Áo Sculpted Ruffle Top', price: '$1,120', priceNum: 1120, priceVnd: '28.448.000 ₫' },
+      { name: 'Chân váy Pleated Maxi Skirt', price: '$1,340', priceNum: 1340, priceVnd: '34.036.000 ₫' }
+    ]
+  }
 ];
 
 // 12 Pieces measured on 960x720 sheet
@@ -392,7 +682,7 @@ const KX=[1.2,.744,.496,.346,.235,.15,.085],KF=[1.14,.89,.777,.704,.651,.616,.59
       KB=[0,0,1.5,4,8,12,17],KO=[1,1,1,1,.86,.5,0];
 
 const N=LOOKS.length, $=id=>document.getElementById(id), calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
-const stage=$('stage'), rail=$('rail'), ring=$('ring'), line=$('line'), chipsWrap=$('chipsWrap');
+const stage=$('stage'), rail=$('rail'), ring=$('ring'), line=$('line'), chipsWrap=$('chipsWrap'), optionPills=$('optionPills');
 const NS='http://www.w3.org/2000/svg', wrap=(x,n)=>((x%n)+n)%n;
 
 function crop(href,x0,y0,w,h,sheetW,sheetH){
@@ -414,7 +704,7 @@ const cards=ITEMS.map(([a,b,c,d,name,price],i)=>{
   e.querySelector('.shot').append(crop(PIECES,a,c,b-a,d-c,960,720));rail.append(e);return e;
 });
 
-// Render Chips for Looks
+// Render Chips for Looks (Row 1)
 const chips=[];
 LOOK_METAS.forEach((meta, idx)=>{
   const chip=document.createElement('button');
@@ -436,32 +726,124 @@ function showToast(msg){
   setTimeout(()=>{t.classList.remove('show')},2200);
 }
 
-// Initial look from query params (e.g. ?look=1)
-let initLook = 0;
+// State for user selection
+let currentLookIndex = 0;
+let currentOptionIndex = 0;
+let currentSize = 'S';
+let currentQty = 1;
+
+// Initial look from query params
 try {
   const pms = new URLSearchParams(window.location.search);
   const lookParam = pms.get('look');
   if (lookParam !== null) {
     const parsed = parseInt(lookParam, 10);
-    if (!isNaN(parsed) && parsed >= 0 && parsed < N) initLook = parsed;
+    if (!isNaN(parsed) && parsed >= 0 && parsed < N) currentLookIndex = parsed;
   }
 } catch(_){}
 
-let W=0,H=0,base=0,cardS=0,side=false,dirty=true,p=initLook,target=initLook,last=0;
-let currentLookIndex = initLook;
+let W=0,H=0,base=0,cardS=0,side=false,dirty=true,p=currentLookIndex,target=currentLookIndex,last=0;
+
+function formatMoneyVnd(amount){
+  return amount.toLocaleString('vi-VN') + ' ₫';
+}
 
 function updateLookUI(activeIdx){
   currentLookIndex = activeIdx;
   const meta = LOOK_METAS[activeIdx];
   if(!meta)return;
-  const tagEl = $('dockTagline');
-  if (tagEl) tagEl.textContent = `LOOK ${meta.num} • ${meta.full}`;
-  $('dockPrice').textContent = meta.price;
-  $('dockPriceVnd').textContent = `(~${meta.priceVnd})`;
+
+  // Header line
+  $('cardLookBadge').textContent = `LOOK ${meta.num}`;
+  $('cardLookTitle').textContent = meta.full;
+
+  // Populate options pills
+  optionPills.innerHTML = '';
+  meta.options.forEach((opt, optIdx)=>{
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'pill-btn' + (optIdx === currentOptionIndex ? ' active' : '');
+    btn.textContent = opt.name;
+    btn.addEventListener('click', ()=>{
+      currentOptionIndex = optIdx;
+      updateOptionAndTotal();
+      document.querySelectorAll('#optionPills .pill-btn').forEach((b, i)=>{
+        b.classList.toggle('active', i === optIdx);
+      });
+    });
+    optionPills.append(btn);
+  });
+
+  // Highlight look chips
   chips.forEach((c, i)=>{
     c.classList.toggle('active', i === activeIdx);
   });
+
+  updateOptionAndTotal();
 }
+
+function updateOptionAndTotal(){
+  const meta = LOOK_METAS[currentLookIndex];
+  if(!meta)return;
+  const opt = meta.options[currentOptionIndex] || meta.options[0];
+  
+  $('cardPriceUsd').textContent = opt.price;
+  $('cardPriceVnd').textContent = `(~${opt.priceVnd})`;
+
+  // Total = option.priceNum * 25400 * currentQty
+  const unitVnd = opt.priceNum * 25400;
+  const totalVnd = unitVnd * currentQty;
+  $('totalAmount').textContent = formatMoneyVnd(totalVnd);
+}
+
+// Quantity Counter listeners
+$('qtyMinus').addEventListener('click', ()=>{
+  if(currentQty > 1){
+    currentQty--;
+    $('qtyVal').textContent = currentQty;
+    updateOptionAndTotal();
+  }
+});
+$('qtyPlus').addEventListener('click', ()=>{
+  if(currentQty < 20){
+    currentQty++;
+    $('qtyVal').textContent = currentQty;
+    updateOptionAndTotal();
+  }
+});
+
+// Size Pills listeners
+document.querySelectorAll('#sizePills .pill-btn').forEach(btn => {
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#sizePills .pill-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentSize = btn.dataset.size || 'S';
+  });
+});
+
+// Add To Cart & Buy Now Handlers
+function sendCartAction(isBuyNow = false){
+  const meta = LOOK_METAS[currentLookIndex];
+  const opt = meta.options[currentOptionIndex] || meta.options[0];
+  const payload = {
+    type: 'RUNWAY_ADD_TO_CART',
+    name: meta.full,
+    option: opt.name,
+    size: currentSize,
+    price: opt.price,
+    quantity: currentQty,
+    buyNow: isBuyNow
+  };
+  try {
+    if(window.parent && window.parent !== window){
+      window.parent.postMessage(payload, '*');
+    }
+  } catch(_){}
+  showToast(`✓ Đã thêm ${currentQty}x ${opt.name} (Size ${currentSize}) vào giỏ!`);
+}
+
+$('addToCartBtn').addEventListener('click', () => sendCartAction(false));
+$('buyNowBtn').addEventListener('click', () => sendCartAction(true));
 
 function goToLook(idx){
   const currentInt = Math.round(target);
@@ -480,22 +862,11 @@ rail.addEventListener('click',e=>{
     const price=card.querySelector('span')?.textContent||'$1,000';
     try {
       if(window.parent && window.parent !== window){
-        window.parent.postMessage({ type: 'RUNWAY_ADD_TO_CART', name, price }, '*');
+        window.parent.postMessage({ type: 'RUNWAY_ADD_TO_CART', name, price, quantity: 1 }, '*');
       }
     } catch(_){}
     showToast(`✓ Đã thêm "${name}" vào giỏ hàng`);
   }
-});
-
-// Select current look button
-$('selectLookBtn').addEventListener('click', ()=>{
-  const meta = LOOK_METAS[currentLookIndex];
-  try {
-    if(window.parent && window.parent !== window){
-      window.parent.postMessage({ type: 'RUNWAY_ADD_TO_CART', name: meta.full, price: meta.price }, '*');
-    }
-  } catch(_){}
-  showToast(`✓ Đã thêm Look ${meta.num} (${meta.short}) vào giỏ hàng`);
 });
 
 // Arrow Navigation
@@ -509,7 +880,7 @@ $('nextBtn').addEventListener('click', ()=>{
 function size(){
   W=stage.clientWidth;H=stage.clientHeight;base=H*1.2;side=innerWidth<=820;
   people.forEach(m=>{m.e.style.width=base*m.r+'px';m.e.style.height=base+'px'});
-  cardS=side?140:rail.clientHeight/2.4;
+  cardS=side?125:rail.clientHeight/2.4;
   cards.forEach(c=>c.style.height=side?'100%':cardS+'px');
   dirty=true;
 }
@@ -532,7 +903,7 @@ function paint(){
     c.style.transform=side?`translate3d(${y.toFixed(1)}px,0,0)`:`translate3d(0,${y.toFixed(1)}px,0)`;
   });
 
-  // Update Look UI
+  // Update Look UI when p changes
   const activeIdx = wrap(Math.round(p), N);
   if(activeIdx !== currentLookIndex){
     updateLookUI(activeIdx);
