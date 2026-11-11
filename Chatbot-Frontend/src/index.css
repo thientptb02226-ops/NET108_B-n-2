@@ -9,6 +9,10 @@
     -webkit-tap-highlight-color: transparent;
   }
 
+  body {
+    background-color: #F4F7ED;
+  }
+
   /* Taste-skill: Custom Focus Ring */
   :focus-visible {
     @apply outline-none ring-2 ring-[#1F3FB0] ring-offset-2;

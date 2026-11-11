@@ -264,14 +264,14 @@ export const App: React.FC = () => {
     'Hộp bút canvas',
   ];
 
-  // ROUTE 2: COMMERCE STORE (TAOBAO ARCHITECTURE + KHOAVERSE ARCHIVAL HARMONIZED PALETTE)
+  // ROUTE 2: COMMERCE STORE (TAOBAO ARCHITECTURE + SOFT MINT STUDIO PALETTE #F4F7ED)
   return (
-    <div className="min-h-screen flex flex-col bg-[#EDEBE6] text-[#141414] font-sans selection:bg-[#1F3FB0]/20 selection:text-[#1F3FB0] relative overflow-x-hidden w-full max-w-full">
-      {/* KhoaVerse Paper Grain Texture Overlay */}
+    <div className="min-h-screen flex flex-col bg-[#F4F7ED] text-[#141414] font-sans selection:bg-[#08482D]/20 selection:text-[#08482D] relative overflow-x-hidden w-full max-w-full">
+      {/* Paper Grain Texture Overlay */}
       <div className="grain" aria-hidden="true" />
 
-      {/* 1. TOP UTILITY BAR (Taobao Style with KhoaVerse Archival Tones) */}
-      <div className="bg-[#E5E2DC] border-b border-black/10 text-[11px] text-[#6D6A63] py-1.5 px-4 sm:px-6 lg:px-8 relative z-10">
+      {/* 1. TOP UTILITY BAR (Soft Mint Harmonized Palette) */}
+      <div className="bg-[#E8EDE0] border-b border-black/10 text-[11px] text-[#6D6A63] py-1.5 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1 font-medium text-[#141414]">
@@ -308,8 +308,8 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {/* 2. MEGA SEARCH BAND (Taobao Style with KhoaVerse Deep Ink & Cobalt Accents) */}
-      <header className="bg-[#F4F2ED]/95 backdrop-blur-md sticky top-0 z-40 border-b border-black/10 shadow-[0_4px_20px_-8px_rgba(20,20,20,0.06)]">
+      {/* 2. MEGA SEARCH BAND */}
+      <header className="bg-[#F4F7ED]/95 backdrop-blur-md sticky top-0 z-40 border-b border-black/10 shadow-[0_4px_20px_-8px_rgba(20,20,20,0.06)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col md:flex-row items-center justify-between gap-4">
           {/* Logo & Branding */}
           <div className="flex items-center justify-between w-full md:w-auto">
@@ -945,8 +945,8 @@ export const App: React.FC = () => {
         </div>
       )}
 
-      {/* 8. FOOTER (KhoaVerse Harmonized E-Commerce Style) */}
-      <footer className="border-t border-black/10 bg-[#E5E2DC] py-10 mt-auto">
+      {/* 8. FOOTER (Soft Mint Harmonized E-Commerce Style) */}
+      <footer className="border-t border-black/10 bg-[#E8EDE0] py-10 mt-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#6D6A63] font-medium">
           <div className="flex items-center gap-2">
             <span className="font-serif font-bold text-[#141414]">Net108Khai Mall</span>

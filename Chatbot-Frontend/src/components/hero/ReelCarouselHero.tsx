@@ -277,7 +277,7 @@ export const ReelCarouselHero: React.FC = () => {
   return (
     <section
       ref={containerRef}
-      className="w-full relative bg-[#F5F8EF] border-b border-black/10 overflow-hidden select-none pt-8 sm:pt-10 pb-6"
+      className="w-full relative bg-[#F4F7ED] border-b border-black/10 overflow-hidden select-none pt-8 sm:pt-10 pb-6"
       aria-label="Commerce Video Reel Showcase"
     >
       {/* Central Content Constraint */}
