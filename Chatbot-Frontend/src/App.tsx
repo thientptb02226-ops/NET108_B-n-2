@@ -31,6 +31,7 @@ import {
   User,
 } from 'lucide-react';
 import { KhoaverseLibraryView } from './components/reader/KhoaverseLibraryView';
+import { ReelCarouselHero } from './components/hero/ReelCarouselHero';
 
 export const App: React.FC = () => {
   // Path-based routing: '/' (Commerce) vs '/read' or '/read/:slug' (Reading Space)
@@ -190,19 +191,6 @@ export const App: React.FC = () => {
     );
   }
 
-  // ROUTE: REELMARK HERO (/reelmark)
-  if (currentPath === '/reelmark') {
-    return (
-      <div className="fixed inset-0 z-50 w-screen h-screen overflow-hidden bg-[#F5F8EF]">
-        <iframe
-          src="/reelmark/index.html"
-          className="w-full h-full border-0 block"
-          title="Reelmark Hero"
-        />
-      </div>
-    );
-  }
-
   // Hot Search Keywords (Taobao Trend Tags)
   const hotSearchKeywords = [
     'Bút pastel 12 cây',
@@ -220,19 +208,8 @@ export const App: React.FC = () => {
       {/* KhoaVerse Paper Grain Texture Overlay */}
       <div className="grain" aria-hidden="true" />
 
-      {/* 0. MẶT TIỀN: REELMARK HERO SHOWCASE SECTION */}
-      <section id="reelmark-facade" className="w-full max-w-full relative bg-[#F5F8EF] border-b border-black/10 overflow-hidden">
-        <div className="w-full max-w-full h-screen min-h-[660px] max-h-[1080px] relative overflow-hidden">
-          <iframe
-            src="/reelmark/index.html"
-            className="w-full h-full border-0 block"
-            title="Reelmark Hero Mặt Tiền"
-          />
-        </div>
-      </section>
-
       {/* 1. TOP UTILITY BAR (Taobao Style with KhoaVerse Archival Tones) */}
-      <div id="store-mall" className="bg-[#E5E2DC] border-b border-black/10 text-[11px] text-[#6D6A63] py-1.5 px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="bg-[#E5E2DC] border-b border-black/10 text-[11px] text-[#6D6A63] py-1.5 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1 font-medium text-[#141414]">
@@ -244,16 +221,6 @@ export const App: React.FC = () => {
             </span>
           </div>
           <div className="flex items-center gap-3.5 font-medium">
-            <button
-              onClick={() => {
-                const el = document.getElementById('reelmark-facade');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-                else window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className="hover:text-[#08482D] flex items-center gap-1 text-[#08482D] font-bold transition-colors"
-            >
-              🎬 Về Mặt Tiền Reelmark
-            </button>
             <button
               onClick={() => setActiveTab('orders')}
               className="hover:text-[#1F3FB0] flex items-center gap-1 transition-colors"
@@ -412,6 +379,9 @@ export const App: React.FC = () => {
           </div>
         </div>
       </header>
+
+      {/* 2.5. REEL CAROUSEL HERO SHOWCASE (NẰM DƯỚI MENU HEADER) */}
+      <ReelCarouselHero />
 
       {/* 3. CORE TRIANGLE HERO SECTION (Taobao 3-Column Standard Layout with KhoaVerse Style) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-6 w-full">
