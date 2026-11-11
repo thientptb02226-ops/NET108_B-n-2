@@ -27,6 +27,7 @@ docs/
 - [AI-COMMERCE-WATERFALL.md](01-tong-quan/AI-COMMERCE-WATERFALL.md): Quy trình 6 cổng Waterfall (`W01`–`W06`) nghiệm thu hệ thống AI-Native Commerce.
 - [AI-COMMERCE-TASK-BOARD.md](01-tong-quan/AI-COMMERCE-TASK-BOARD.md): Bảng tick việc nhỏ (Atomic Task Board) nguồn trạng thái duy nhất của dự án.
 - [AI-COMMERCE-AGENT-HANDOFF.md](01-tong-quan/AI-COMMERCE-AGENT-HANDOFF.md): Bản phân chia trách nhiệm và bàn giao giữa AI Codex & Antigravity.
+- [AI-COMMERCE-PHAN-CONG-5-THANH-VIEN.md](01-tong-quan/AI-COMMERCE-PHAN-CONG-5-THANH-VIEN.md): Phân công chức năng backend, AI và vận hành cho 5 thành viên, không gồm frontend.
 - [SDLC-VS-ADLC.md](01-tong-quan/SDLC-VS-ADLC.md): So sánh vòng đời SDLC truyền thống và ADLC của AI Agent; mô hình phối hợp "Con người định hình, Agent thực thi".
 - [VIBE_CODING_SOP.md](01-tong-quan/VIBE_CODING_SOP.md): Quy trình chuẩn 10 bước Vibe Coding (Human Architect, AI Accelerator).
 - [GLOSSARY.md](01-tong-quan/GLOSSARY.md): Thuật ngữ chuẩn trong toàn bộ domain Commerce & Kanban.

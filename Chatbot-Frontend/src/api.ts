@@ -1,4 +1,5 @@
-import { Product, Cart, Order, RecommendationResponse, ProblemDetails } from './types';
+import { Product, Cart, Order, RecommendationResponse, ProblemDetails, SampleBook } from './types';
+import { SAMPLE_BOOKS_FIXTURE } from './data/sampleBooksData';
 
 const API_BASE = '/api/v1';
 
@@ -39,49 +40,217 @@ async function handleResponse<T>(res: Response): Promise<T> {
   return res.json();
 }
 
-// Fallback demo catalog to allow testing when Docker/PostgreSQL is offline (as noted in BACKEND-API-V1.md)
+// Net108Khai Catalog: Đồ dùng học tập và sách giấy có bản đọc thử mẫu
 const DEMO_PRODUCTS: Product[] = [
+  // --- NHÓM 1: SÁCH GIẤY (CÓ BẢN ĐỌC THỬ MẪU) ---
   {
-    id: 'prod-001',
-    name: 'Áo Thun Cotton Organic Kháng Khuẩn',
-    description: 'Chất liệu 100% cotton dệt kim thoáng mát, phù hợp với khí hậu nhiệt đới Việt Nam. Độ bền sợi cao.',
+    id: 'book-001',
+    name: 'Sách: Tôi Thấy Hoa Vàng Trên Cỏ Xanh (Bìa Cứng Kỷ Niệm)',
+    description: 'Ấn bản đặc biệt kỷ niệm với tranh minh họa màu, bìa cứng dập nổi sang trọng. Khổ 14x20.5cm, 378 trang giấy ngà vàng dịu mắt.',
     currency: 'VND',
-    imageUrl: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800&auto=format&fit=crop&q=80',
+    category: 'books',
+    isBook: true,
+    author: 'Nguyễn Nhật Ánh',
+    sampleReadSlug: 'toi-thay-hoa-vang-tren-co-xanh',
+    imageUrl: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=800&auto=format&fit=crop&q=80',
+    salesCount: 1420,
+    rating: 4.9,
+    tags: ['Freeship Extra', 'Bán chạy #1', 'Đọc thử 3D'],
+    originalPriceVnd: 155000,
+    isFlashSale: true,
     variants: [
-      { id: 'var-001-s', sku: 'AT-COTTON-S', name: 'Size S (Trắng)', priceVnd: 189000, stock: 15 },
-      { id: 'var-001-m', sku: 'AT-COTTON-M', name: 'Size M (Trắng)', priceVnd: 189000, stock: 25 },
-      { id: 'var-001-l', sku: 'AT-COTTON-L', name: 'Size L (Đen)', priceVnd: 199000, stock: 8 },
+      { id: 'var-b01-hard', sku: 'BOOK-HOAVANG-HC', name: 'Bìa Cứng Kỷ Niệm', priceVnd: 125000, stock: 35 },
+      { id: 'var-b01-soft', sku: 'BOOK-HOAVANG-SC', name: 'Bìa Mềm Tiêu Chuẩn', priceVnd: 95000, stock: 50 },
     ],
   },
   {
-    id: 'prod-002',
-    name: 'Bình Giữ Nhiệt Thép Không Gỉ 500ml',
-    description: 'Giữ nhiệt nóng 12 tiếng, giữ lạnh 24 tiếng. Nắp chống tràn tuyệt đối, lõi thép 316 an toàn thực phẩm.',
+    id: 'book-002',
+    name: 'Sách: Cho Tôi Xin Một Vé Đi Tuổi Thơ',
+    description: 'Tác phẩm đạt Giải thưởng Văn học ASEAN. Chuyến tàu đưa người đọc trở về những năm tháng ngây ngô trong trẻo nhất của tuổi thơ.',
     currency: 'VND',
-    imageUrl: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=800&auto=format&fit=crop&q=80',
+    category: 'books',
+    isBook: true,
+    author: 'Nguyễn Nhật Ánh',
+    sampleReadSlug: 'cho-toi-xin-mot-ve-di-tuoi-tho',
+    imageUrl: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=800&auto=format&fit=crop&q=80',
+    salesCount: 890,
+    rating: 4.8,
+    tags: ['Top deal', 'Tuổi thơ', 'Đọc thử 3D'],
+    originalPriceVnd: 135000,
     variants: [
-      { id: 'var-002-matte', sku: 'BGN-MATTE-BLK', name: 'Đen Nhám 500ml', priceVnd: 260000, stock: 12 },
-      { id: 'var-002-silver', sku: 'BGN-SLV-500', name: 'Bạc Tự Nhiên 500ml', priceVnd: 260000, stock: 0 },
+      { id: 'var-b02-std', sku: 'BOOK-VETUOITHO', name: 'Ấn Bản Bìa Mềm', priceVnd: 110000, stock: 28 },
     ],
   },
   {
-    id: 'prod-003',
-    name: 'Balo Chống Nước Công Sở Đa Năng',
-    description: 'Thiết kế ngăn chống sốc laptop 15.6 inch, cổng sạc USB tích hợp, đệm lưng công thái học giảm áp lực.',
+    id: 'book-003',
+    name: 'Sách: Mắt Biếc (Tái Bản Kèm Tranh Minh Họa)',
+    description: 'Tuyệt phẩm viết về tình yêu đầu đời thuần khiết và nỗi hoài niệm làng Đo Đo mùa hoa sim tím nở rộ.',
     currency: 'VND',
+    category: 'books',
+    isBook: true,
+    author: 'Nguyễn Nhật Ánh',
+    sampleReadSlug: 'mat-biec',
+    imageUrl: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=800&auto=format&fit=crop&q=80',
+    salesCount: 2150,
+    rating: 5.0,
+    tags: ['Freeship', 'Kèm tranh màu', 'Đọc thử 3D'],
+    originalPriceVnd: 145000,
+    isFlashSale: true,
+    variants: [
+      { id: 'var-b03-std', sku: 'BOOK-MATBIEC', name: 'Bìa Mềm Minh Họa', priceVnd: 115000, stock: 40 },
+    ],
+  },
+  {
+    id: 'book-004',
+    name: 'Sách: Dế Mèn Phiêu Lưu Ký (Tuyển Tập Kinh Điển)',
+    description: 'Tác phẩm văn học thiếu nhi kinh điển của Tô Hoài. Ấn bản minh họa độc quyền cho học sinh và độc giả trẻ.',
+    currency: 'VND',
+    category: 'books',
+    isBook: true,
+    author: 'Tô Hoài',
+    sampleReadSlug: 'de-men-phieu-luu-ky',
+    imageUrl: 'https://images.unsplash.com/photo-1476275466078-4007374efbbe?w=800&auto=format&fit=crop&q=80',
+    salesCount: 640,
+    rating: 4.8,
+    tags: ['Kinh điển', 'Tô Hoài', 'Đọc thử 3D'],
+    originalPriceVnd: 110000,
+    variants: [
+      { id: 'var-b04-std', sku: 'BOOK-DEMEN', name: 'Bản Minh Họa Màu', priceVnd: 85000, stock: 65 },
+    ],
+  },
+  {
+    id: 'book-005',
+    name: 'Sách: Sổ Tay Phương Pháp Tự Học Dành Cho Gen Z',
+    description: 'Cẩm nang thực chiến kết hợp kỹ thuật Pomodoro, Feynman, Mindmap và ứng dụng công cụ AI để học tập chủ động.',
+    currency: 'VND',
+    category: 'books',
+    isBook: true,
+    author: 'Ban Học Thuật Net108Khai',
+    sampleReadSlug: 'phuong-phap-tu-hoc-gen-z',
+    imageUrl: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&auto=format&fit=crop&q=80',
+    salesCount: 1800,
+    rating: 4.9,
+    tags: ['Gen Z Hot', 'Kèm Template AI', 'Đọc thử 3D'],
+    originalPriceVnd: 120000,
+    isFlashSale: true,
+    variants: [
+      { id: 'var-b05-std', sku: 'BOOK-TUHOC-GENZ', name: 'Sách Kèm Bộ Template', priceVnd: 95000, stock: 22 },
+    ],
+  },
+  {
+    id: 'book-006',
+    name: 'Sách: Tư Duy Thuật Toán & Lập Trình Cơ Bản C#',
+    description: 'Giáo trình thực hành lập trình hiện đại với C# và .NET 10. Hệ thống bài tập từ nhập môn đến giải thuật thực tế.',
+    currency: 'VND',
+    category: 'books',
+    isBook: true,
+    author: 'Ban Chuyên Môn CNTT FPT Polytechnic',
+    sampleReadSlug: 'lap-trinh-tu-duy-thuat-toan',
+    imageUrl: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop&q=80',
+    salesCount: 420,
+    rating: 4.7,
+    tags: ['C# .NET 10', 'Bản quyền FPT', 'Đọc thử 3D'],
+    originalPriceVnd: 190000,
+    variants: [
+      { id: 'var-b06-std', sku: 'BOOK-THUATTOAN-CS', name: 'Bản Bìa Cứng Chuyên Ngành', priceVnd: 150000, stock: 15 },
+    ],
+  },
+
+  // --- NHÓM 2: ĐỒ DÙNG HỌC TẬP & VĂN PHÒNG PHẨM ---
+  {
+    id: 'stat-001',
+    name: 'Balo Học Sinh / Sinh Viên Chống Gù & Chống Nước Net108 Pro',
+    description: 'Đệm lưng công thái học giảm 40% áp lực cột sống. Vải Oxford 900D chống thấm nước, ngăn chống sốc laptop 15.6 inch.',
+    currency: 'VND',
+    category: 'stationery',
     imageUrl: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&auto=format&fit=crop&q=80',
+    salesCount: 950,
+    rating: 4.9,
+    tags: ['Freeship', 'Chống gù 40%', 'Vải Oxford'],
+    originalPriceVnd: 490000,
+    isFlashSale: true,
     variants: [
-      { id: 'var-003-std', sku: 'BALO-PRO-15', name: 'Xám Than Đẳng Cấp', priceVnd: 490000, stock: 18 },
+      { id: 'var-s01-blk', sku: 'BALO-PRO-BLK', name: 'Đen Nhám Học Đường', priceVnd: 380000, stock: 18 },
+      { id: 'var-s01-gry', sku: 'BALO-PRO-GRY', name: 'Xám Khói Thời Trang', priceVnd: 380000, stock: 12 },
     ],
   },
   {
-    id: 'prod-004',
-    name: 'Tai Nghe True Wireless Chống Ồn ANC',
-    description: 'Công nghệ chống ồn chủ động Hybrid ANC 35dB, thời lượng pin 30 giờ, chuẩn kháng nước IPX5.',
+    id: 'stat-002',
+    name: 'Bộ Bút Gel Mực Đen & Bút Dạ Quang Pastel (Hộp 12 Cây)',
+    description: 'Mực gel nhanh khô không lem, đầu ngòi 0.5mm êm ái. Tặng kèm 4 bút dạ quang pastel chống mỏi mắt khi học lâu.',
     currency: 'VND',
-    imageUrl: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&auto=format&fit=crop&q=80',
+    category: 'stationery',
+    imageUrl: 'https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?w=800&auto=format&fit=crop&q=80',
+    salesCount: 3820,
+    rating: 4.9,
+    tags: ['Bán chạy #1', 'Pastel Cute', '12 Cây'],
+    originalPriceVnd: 85000,
+    isFlashSale: true,
     variants: [
-      { id: 'var-004-wht', sku: 'TWS-ANC-WHT', name: 'Trắng Tinh Khôi', priceVnd: 750000, stock: 5 },
+      { id: 'var-s02-set', sku: 'BUT-SET-12', name: 'Hộp 12 Cây (8 Gel + 4 Pastel)', priceVnd: 65000, stock: 85 },
+    ],
+  },
+  {
+    id: 'stat-003',
+    name: 'Sổ Tay Kẻ Ngang Bìa Da Cao Cấp A5 (200 Trang Chống Lóa)',
+    description: 'Bìa da PU mềm mại chống thấm nước. Giấy ngà vàng định lượng 100gsm viết bút mực không thấm mặt sau.',
+    currency: 'VND',
+    category: 'stationery',
+    imageUrl: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=800&auto=format&fit=crop&q=80',
+    salesCount: 1200,
+    rating: 4.8,
+    tags: ['Giấy ngà 100gsm', 'Bìa Da PU'],
+    originalPriceVnd: 99000,
+    variants: [
+      { id: 'var-s03-brn', sku: 'SO-A5-BROWN', name: 'Nâu Cổ Điển', priceVnd: 75000, stock: 45 },
+      { id: 'var-s03-blu', sku: 'SO-A5-BLUE', name: 'Xanh Navy Trầm', priceVnd: 75000, stock: 30 },
+    ],
+  },
+  {
+    id: 'stat-004',
+    name: 'Đèn Bàn LED Chống Cận Thị 3 Chế Độ Sáng Cảm Ứng',
+    description: 'Chỉ số hoàn màu CRI > 95 tái tạo ánh sáng tự nhiên. 3 mức nhiệt độ màu (trắng, trung tính, vàng) bảo vệ thị lực tuyệt đối.',
+    currency: 'VND',
+    category: 'stationery',
+    imageUrl: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=800&auto=format&fit=crop&q=80',
+    salesCount: 530,
+    rating: 4.9,
+    tags: ['CRI > 95', 'Bảo vệ mắt'],
+    originalPriceVnd: 320000,
+    variants: [
+      { id: 'var-s04-wht', sku: 'DEN-LED-WHT', name: 'Trắng Thanh Lịch', priceVnd: 245000, stock: 20 },
+    ],
+  },
+  {
+    id: 'stat-005',
+    name: 'Hộp Bút Canvas Nhiều Ngăn Phân Loại Đồ Dùng Học Tập',
+    description: 'Chất liệu vải canvas dệt dày dặn, khóa kéo kim loại bền bỉ. Thiết kế 3 khoang chứa rộng rãi để bút, thước kẻ, máy tính.',
+    currency: 'VND',
+    category: 'stationery',
+    imageUrl: 'https://images.unsplash.com/photo-1585336261026-77884d5f2f53?w=800&auto=format&fit=crop&q=80',
+    salesCount: 2600,
+    rating: 4.9,
+    tags: ['Canvas pastel', 'Dung tích lớn'],
+    originalPriceVnd: 60000,
+    isFlashSale: true,
+    variants: [
+      { id: 'var-s05-grn', sku: 'HBUT-CANVAS-GRN', name: 'Xanh Bạc Hà', priceVnd: 45000, stock: 60 },
+      { id: 'var-s05-bei', sku: 'HBUT-CANVAS-BEI', name: 'Màu Be Vintage', priceVnd: 45000, stock: 40 },
+    ],
+  },
+  {
+    id: 'stat-006',
+    name: 'Máy Tính Khoa Học Cầm Tay Fx-580 Net108 Chuyên Dụng',
+    description: 'Tốc độ xử lý siêu nhanh 552 tính năng, màn hình LCD độ phân giải cao hiển thị tiếng Việt chuẩn thi THPT quốc gia.',
+    currency: 'VND',
+    category: 'stationery',
+    imageUrl: 'https://images.unsplash.com/photo-1594980596870-8aa52a78d8cd?w=800&auto=format&fit=crop&q=80',
+    salesCount: 780,
+    rating: 5.0,
+    tags: ['Thi THPT Quốc Gia', '552 Tính năng'],
+    originalPriceVnd: 690000,
+    variants: [
+      { id: 'var-s06-std', sku: 'CAS-FX580-NET', name: 'Bản Đen Tiêu Chuẩn', priceVnd: 580000, stock: 15 },
     ],
   },
 ];
@@ -214,20 +383,26 @@ export const api = {
     // Intelligent local response matching quy-luat-content-viet when AI service is offline
     const lower = message.toLowerCase();
     let matched = DEMO_PRODUCTS;
-    let answer = 'Chào bạn! Mình có thể giúp bạn tìm các sản phẩm chất lượng cao trong kho hàng Net108Khai.';
+    let answer = 'Chào bạn! Mình có thể giúp bạn tìm sách giáo khoa, sách văn học và đồ dùng học tập chất lượng cao tại Net108Khai.';
 
-    if (lower.includes('áo') || lower.includes('thun')) {
-      matched = DEMO_PRODUCTS.filter((p) => p.id === 'prod-001');
-      answer = 'Dạ, mình gợi ý mẫu Áo thun Cotton Organic kháng khuẩn giá từ 189.000 ₫, hiện có sẵn size S và M trong kho.';
-    } else if (lower.includes('bình') || lower.includes('nước') || lower.includes('nhiệt')) {
-      matched = DEMO_PRODUCTS.filter((p) => p.id === 'prod-002');
-      answer = 'Bạn có thể xem mẫu Bình giữ nhiệt thép không gỉ 500ml giá 260.000 ₫. Bản đen nhám hiện còn 12 chiếc.';
+    if (lower.includes('sách') || lower.includes('hoa vàng') || lower.includes('nguyễn nhật ánh') || lower.includes('đọc')) {
+      matched = DEMO_PRODUCTS.filter((p) => p.isBook);
+      answer = 'Dạ, Net108Khai hiện có sẵn các tựa sách hay của nhà văn Nguyễn Nhật Ánh, Tô Hoài và sách phương pháp tự học. Bạn có thể nhấn "Xem sách" để đọc thử trực tuyến trước khi mua nhé!';
     } else if (lower.includes('balo') || lower.includes('cặp')) {
-      matched = DEMO_PRODUCTS.filter((p) => p.id === 'prod-003');
-      answer = 'Mẫu Balo chống nước công sở đa năng giá 490.000 ₫ rất phù hợp cho laptop 15.6 inch, hiện còn 18 chiếc.';
-    } else if (lower.includes('tai nghe') || lower.includes('nghe nhạc') || lower.includes('không dây')) {
-      matched = DEMO_PRODUCTS.filter((p) => p.id === 'prod-004');
-      answer = 'Mẫu Tai nghe True Wireless chống ồn ANC giá 750.000 ₫, thời lượng pin 30 giờ, kho còn 5 sản phẩm.';
+      matched = DEMO_PRODUCTS.filter((p) => p.id === 'stat-001');
+      answer = 'Mẫu Balo chống gù Net108 Pro giá 380.000 ₫ rất phù hợp cho học sinh, sinh viên, đệm lưng êm ái và có ngăn laptop 15.6 inch.';
+    } else if (lower.includes('bút') || lower.includes('viết')) {
+      matched = DEMO_PRODUCTS.filter((p) => p.id === 'stat-002');
+      answer = 'Bộ bút gel mực đen kèm dạ quang Pastel 12 cây giá chỉ 65.000 ₫, mực khô nhanh chống lem rất được ưa chuộng.';
+    } else if (lower.includes('sổ') || lower.includes('vở')) {
+      matched = DEMO_PRODUCTS.filter((p) => p.id === 'stat-003');
+      answer = 'Mẫu Sổ tay A5 bìa da cao cấp 200 trang chống lóa giá 75.000 ₫, giấy dầy không thấm mực ra trang sau.';
+    } else if (lower.includes('đèn') || lower.includes('cận')) {
+      matched = DEMO_PRODUCTS.filter((p) => p.id === 'stat-004');
+      answer = 'Đèn bàn LED chống cận thị 3 chế độ sáng cảm ứng giá 245.000 ₫, chỉ số hoàn màu CRI > 95 bảo vệ mắt tối đa.';
+    } else if (lower.includes('máy tính') || lower.includes('fx')) {
+      matched = DEMO_PRODUCTS.filter((p) => p.id === 'stat-006');
+      answer = 'Máy tính khoa học Fx-580 Net108 giá 580.000 ₫ đầy đủ 552 tính năng, chuẩn quy định phòng thi.';
     }
 
     return {
@@ -236,6 +411,35 @@ export const api = {
       products: matched,
       checkedAt: new Date().toISOString(),
     };
+  },
+
+  // Reading API (Hợp đồng C05.5: Sample Reading Service)
+  async getSampleBooks(): Promise<{ items: SampleBook[]; isFixture: boolean }> {
+    try {
+      const res = await fetch(`${API_BASE}/reading/books`, { headers: getHeaders() });
+      if (res.ok) {
+        const data = await res.json();
+        return { items: data.items || data, isFixture: false };
+      }
+    } catch {
+      // In development when backend is offline, serve sample reading fixture
+    }
+    return { items: SAMPLE_BOOKS_FIXTURE, isFixture: true };
+  },
+
+  async getSampleBook(slug: string): Promise<{ book: SampleBook; isFixture: boolean }> {
+    try {
+      const res = await fetch(`${API_BASE}/reading/books/${slug}`, { headers: getHeaders() });
+      if (res.ok) {
+        const data = await res.json();
+        return { book: data, isFixture: false };
+      }
+    } catch {
+      // Fallback to fixture
+    }
+    const found = SAMPLE_BOOKS_FIXTURE.find((b) => b.slug === slug);
+    if (!found) throw new Error(`Không tìm thấy bản đọc mẫu cho tác phẩm "${slug}".`);
+    return { book: found, isFixture: true };
   },
 };
 

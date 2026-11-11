@@ -20,6 +20,8 @@ Khi các nguồn lệch nhau: yêu cầu mới nhất của người dùng quy�
 | Quyết định nghiệp vụ | Chủ dự án — `C01` | Spec/ADR có ngày và phạm vi release |
 | Tích hợp và nghiệm thu | Codex + Antigravity — `C16`, `C18`; chủ dự án duyệt UAT | API/UI thật, bằng chứng test, bảng tick |
 
+Với nhóm 5 người ngoài frontend, xem [bảng phân công thành viên](AI-COMMERCE-PHAN-CONG-5-THANH-VIEN.md) để biết người chịu trách nhiệm từng `Cxx`. Codex vẫn hỗ trợ triển khai backend; Antigravity vẫn sở hữu frontend.
+
 Các thư mục `Trello-Clone-*` thuộc phạm vi Trello; không dùng chúng làm bằng chứng Commerce. Mỗi agent sửa phần mình sở hữu. Đổi API contract cần ghi tác động tới UI và đi lại cổng thiết kế `W02` theo Waterfall.
 
 ## 3. Ảnh chụp trạng thái ngày 09/11/2026
@@ -34,6 +36,7 @@ Các thư mục `Trello-Clone-*` thuộc phạm vi Trello; không dùng chúng l
 ## 4. Việc tiếp theo theo Waterfall
 
 1. **W01 — yêu cầu:** Chủ dự án chốt `C01.1–C01.3`: loại hàng/biến thể/người bán/kho, giá/thuế/giao/hoàn, provider AI, dữ liệu cá nhân, tải và tiêu chí chấp nhận. Nếu thiếu quyết định, ghi `TBD` và owner; không tự đặt quy tắc bán hàng thật.
+   - Quyết định phạm vi ngày 10/11/2026: cửa hàng bán đồ học tập và sách giấy; có thư viện đọc mẫu miễn phí và MP3 do người dùng chọn từ máy. Trang đọc tham chiếu trải nghiệm KhoaVerse. Xem [đặc tả](../03-san-pham/AI-NATIVE-COMMERCE.md) và các mã `C05.4–C05.6`, `F03.4–F03.7`, `C16.4` trong bảng tick. Chưa chốt quyền công bố từng đoạn đọc mẫu, người bán/kho; không tick `C01.1` hoặc `W01`.
 2. **Kiểm chứng baseline độc lập:** Codex chạy lại `C00.2–C00.3` khi Docker sẵn; Antigravity đối chiếu fixture, route và trạng thái F01–F02. Các việc này tạo bằng chứng, không tự duyệt W01/W02.
 3. **W02 — thiết kế:** Codex hoàn thiện domain/state machine, migration/rollback và OpenAPI (`C02`); Antigravity rà dữ liệu cần cho từng màn hình. Chốt contract chung trước khi triển khai phần phụ thuộc.
 4. **W03–W06:** Chọn task nhỏ theo thứ tự phụ thuộc trong bảng tick; kiểm tra, review, tích hợp, UAT và deploy theo tiêu chí của từng cổng. Chỉ tick một dòng khi có bằng chứng đúng điều kiện của dòng đó.

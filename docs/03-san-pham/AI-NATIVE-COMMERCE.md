@@ -10,6 +10,18 @@ Mục tiêu kinh doanh cần đo: tăng tỷ lệ tìm được sản phẩm ph�
 
 **Ranh giới bản chạy đầu tiên:** chỉ có catalog mẫu, giỏ hàng, tạo đơn `pending_payment` và hỏi đáp catalog qua provider AI cấu hình ngoài. Chưa có đăng nhập, thanh toán, vận chuyển, quản trị, RAG hay agent ghi dữ liệu. Không dùng bản này cho giao dịch thật.
 
+### Định hướng danh mục và góc đọc (quyết định phạm vi ngày 10/11/2026)
+
+Net108Khai tập trung vào **đồ dùng học tập và sách giấy**, đồng thời có khu **đọc mẫu miễn phí và nghe nhạc khi đọc**. Danh mục dự kiến gồm văn phòng phẩm, phụ kiện góc học tập và sách giấy. AI tư vấn theo môn học, mục tiêu, độ tuổi và ngân sách; gợi ý sản phẩm hoặc bộ sách có trong catalog, kèm giá/tồn thực tế, không tự tạo tên sách, nội dung hay cam kết hiệu quả học tập.
+
+Tham khảo [KhoaVerse](https://khoaverse.fun/) cho trải nghiệm đọc và nhạc nền; không sao chép nội dung, dữ liệu hoặc coi website tham khảo là giấy phép khai thác thương mại. **Phạm vi bản đầu:** sách giấy đi qua tồn kho, vận chuyển và hoàn hàng; trang đọc mẫu chỉ hiển thị đoạn được phép công bố; trình phát nhạc dùng tệp người dùng tự chọn từ thiết bị. Không bán ebook toàn văn hoặc phát thư viện nhạc từ máy chủ trong bản đầu. Các khả năng này chỉ được đưa vào bản sau khi chốt quyền nội dung và thiết kế quyền truy cập số. Quyền công bố từng đoạn đọc mẫu, danh mục SKU, người bán và kho vẫn cần chốt trong `C01.1/W01`; quyết định phạm vi này chưa đóng toàn bộ cổng Waterfall.
+
+**Luồng hai không gian:** vào `/` thấy cửa hàng Commerce với danh mục đồ học tập, sách, tìm kiếm, giỏ và trợ lý AI. Thanh điều hướng có mục **Đọc sách online** dẫn tới `/read`; trên thẻ/trang chi tiết sách có **Xem sách** dẫn tới `/read/{slug}` nếu sách có bản đọc mẫu được xuất bản. `/read` là thư viện truyện/sách mẫu; `/read/{slug}` mở trải nghiệm đọc riêng, có đường quay về cửa hàng và đường xem/mua sách giấy tương ứng. Nút xem sách không được dẫn tới trang trắng hoặc văn bản mẫu tự bịa khi chưa có nội dung được duyệt.
+
+**Trải nghiệm đọc tham chiếu KhoaVerse:** khu chọn sách có tìm kiếm và thẻ sách; khi mở sách có trang bìa/mở đầu, mục lục chương, vùng chữ đọc tập trung, nút trang trước/sau, điều chỉnh giao diện đọc và nhạc nền. Nhạc MP3 do người dùng chọn từ máy chỉ phát trong phiên trình duyệt, có phát/tạm dừng/chuyển bài và không tải tệp lên máy chủ. Thiết kế frontend cần đối chiếu trực tiếp bố cục, chuyển động và trạng thái mobile/desktop của trang tham chiếu tại `W02`, nhưng dùng nhận diện Net108Khai và nội dung có quyền công bố. Tiêu chí nghiệm thu là luồng và trải nghiệm tương đương; yêu cầu giống từng pixel chỉ có thể xác nhận bằng so sánh ảnh trên cùng viewport sau khi có bản thiết kế và dữ liệu hợp lệ.
+
+**Dữ liệu và quyền:** mỗi sách giấy có thể liên kết tối đa một bản đọc mẫu đã duyệt gồm tiêu đề, tác giả, bìa, thứ tự chương/đoạn, nguồn và trạng thái xuất bản. API công khai chỉ trả phần được phép xem; bản nháp hoặc bị thu hồi trả `404`, không lộ đường dẫn tệp gốc. Nội dung đọc mẫu được nhập/quản trị bởi nhân viên có quyền, ghi nguồn/quyền công bố và thời điểm duyệt. AI chỉ mô tả sách từ metadata và nội dung được phép dùng; không sinh thêm chương hoặc trích toàn văn ngoài bản đọc mẫu. Hợp đồng API và schema Code First được chốt tại `W02` trước khi Codex triển khai và Antigravity nối UI.
+
 ## 2. Nguyên tắc hệ thống
 
 1. Giá, tồn, khuyến mại, phí và trạng thái đơn lấy từ dịch vụ nghiệp vụ tại thời điểm quyết định; không lấy từ văn bản AI sinh ra hoặc vector index.

@@ -107,6 +107,7 @@ Trạng thái tại lúc lập checklist: bản demo có API .NET và Compose; `
 
 - [ ] CRUD quản trị, trạng thái xuất bản, SKU duy nhất và thuộc tính biến thể đúng quy tắc đã chốt.
 - [ ] Search/filter trả sản phẩm đang bán; test sản phẩm ẩn/ngừng bán, SKU trùng và phân trang.
+- [ ] Với sách giấy có đọc mẫu: schema Code First và API chỉ công bố chương/đoạn đã duyệt, có nguồn/quyền công bố, thứ tự chương và liên kết sản phẩm; bản nháp/thu hồi không lộ nội dung.
 
 **C06 — Giá và khuyến mại.** Phụ thuộc: C01–C05.
 
@@ -202,6 +203,8 @@ Các task `Fxx` thuộc Antigravity. Framework và vị trí frontend Commerce �
 
 - [ ] Danh sách/tìm kiếm/lọc và chi tiết sản phẩm dùng trường từ contract; ảnh/giá/tồn thiếu thì hiển thị trạng thái thiếu dữ liệu, không bịa.
 - [ ] Test filter, phân trang, sản phẩm ẩn/hết hàng, lỗi mạng và responsive.
+- [ ] Từ cửa hàng vào `/read` hoặc từ sách giấy vào `/read/{slug}`; trang đọc theo mẫu KhoaVerse có thư viện, tìm kiếm, mục lục, chuyển chương/trang, chỉnh giao diện, quay lại cửa hàng và link mua sách giấy.
+- [ ] Nhạc nền dùng MP3 chọn từ thiết bị, chỉ phát trong trình duyệt; test tệp lỗi, điều khiển bàn phím, mobile và các trạng thái không có nội dung đọc mẫu.
 
 **F04 — Giỏ và checkout.** Phụ thuộc: F03, C04, C06–C08 cho tích hợp thật.
 

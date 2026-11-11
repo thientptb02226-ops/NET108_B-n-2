@@ -11,7 +11,7 @@
 
   /* Taste-skill: Custom Focus Ring */
   :focus-visible {
-    @apply outline-none ring-2 ring-emerald-600 ring-offset-2;
+    @apply outline-none ring-2 ring-[#1F3FB0] ring-offset-2;
   }
 }
 
@@ -53,4 +53,217 @@
     animation: shimmer 1.5s infinite;
     content: '';
   }
+}
+
+/* KhoaVerse Design System Tokens (100% Harmonized) */
+:root {
+  --paper: #EDEBE6;
+  --sheet: #F4F2ED;
+  --ink: #141414;
+  --muted: #6D6A63;
+  --cobalt: #1F3FB0;
+  --forest: #2E6F40;
+  --amber: #B08840;
+  --rule: rgba(20, 20, 20, 0.14);
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --H: min(46vh, 31vw);
+  --sans: "Inter Tight", "Noto Sans JP", system-ui, sans-serif;
+  --serif: "Newsreader", Georgia, serif;
+
+  /* Reader Dimensions */
+  --ph: min(72vh, calc(44vw * 1.4));
+  --pw: calc(var(--ph) * 0.72);
+}
+
+/* Cute Taobao Floating Animation */
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.animate-float {
+  animation: float-gentle 3s ease-in-out infinite;
+}
+
+/* KhoaVerse Store UI Utilities */
+.lbl-khoa {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 10.5px;
+  line-height: 1;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.box-khoa {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 10px;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: var(--sheet);
+  color: var(--ink);
+  transition: all 0.2s var(--ease);
+}
+.box-khoa:hover {
+  border-color: var(--cobalt);
+  color: var(--cobalt);
+}
+
+.khoa-card {
+  background-color: var(--sheet);
+  border: 1px solid var(--rule);
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), border-color 0.35s var(--ease);
+  position: relative;
+}
+.khoa-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -12px rgba(26, 20, 14, 0.14);
+  border-color: rgba(20, 20, 20, 0.3);
+}
+
+/* Subtle vintage noise / paper grain */
+.grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99;
+  opacity: 0.032;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* KhoaVerse Reader Core Styles */
+.rdr {
+  overflow: hidden;
+  overscroll-behavior: contain;
+  transition: opacity 0.45s ease;
+}
+
+.rdr .bk {
+  flex-shrink: 0;
+  position: relative;
+  display: flex;
+  perspective: 2800px;
+  transform: scale(0.96) translateY(10px);
+  transition: transform 0.6s var(--ease);
+}
+
+.rdr.on .bk {
+  transform: none;
+}
+
+.rdr .bk::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 6px;
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+}
+
+.rdr .bk.two {
+  width: calc(var(--pw) * 2);
+  height: var(--ph);
+  flex-wrap: nowrap;
+  align-items: stretch;
+  justify-content: flex-start;
+  max-height: calc(100dvh - 116px);
+}
+
+.rdr .bk.one {
+  width: var(--pw);
+  height: var(--ph);
+  flex-wrap: nowrap;
+  align-items: stretch;
+  max-height: calc(100dvh - 116px);
+}
+
+.rdr .pg {
+  width: var(--pw);
+  height: var(--ph);
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: calc(var(--pw) * 0.09) calc(var(--pw) * 0.08);
+  background: #F6F1E4;
+  color: #141414;
+}
+
+.rdr .pg.l {
+  border-radius: 5px 0 0 5px;
+  background: linear-gradient(90deg, #F6F1E4 0%, #F6F1E4 86%, #d8cdb4 100%);
+}
+
+.rdr .pg.r {
+  border-radius: 0 5px 5px 0;
+  background: linear-gradient(90deg, #d8cdb4 0%, #F6F1E4 14%, #F6F1E4 100%);
+}
+
+.rdr .bk.one .pg {
+  border-radius: 5px;
+  background: #F6F1E4;
+}
+
+.rdr .pg.no {
+  visibility: hidden;
+}
+
+/* Red ribbon bookmark */
+.rdr .pg.has-reader-bookmark::after {
+  content: "";
+  position: absolute;
+  right: 11%;
+  top: 0;
+  width: 18px;
+  height: 38px;
+  background: #bd3f45;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 78%, 0 100%);
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
+  z-index: 10;
+}
+
+/* KhoaVerse Reader Typography Classes */
+.rk {
+  font-family: var(--sans);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.rt {
+  font-family: var(--serif);
+  letter-spacing: -0.01em;
+}
+
+.rtx {
+  font-family: var(--serif);
+  text-align: justify;
+  text-indent: 1.5em;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+
+/* Dark Theme */
+.rdr.theme-dark {
+  background: radial-gradient(ellipse at 50% 35%, #2d3544, #0b0e14 78%) !important;
+}
+
+.rdr.theme-dark .pg {
+  background: #252b35 !important;
+  color: #eee8dc !important;
+}
+
+.rdr.theme-dark .pg.l {
+  background: linear-gradient(90deg, #252b35 0%, #252b35 86%, #161b23 100%) !important;
+}
+
+.rdr.theme-dark .pg.r {
+  background: linear-gradient(90deg, #161b23 0%, #252b35 14%, #252b35 100%) !important;
+}
+
+.rdr.theme-dark .rdtools {
+  background: rgba(35, 40, 50, 0.9) !important;
+  color: #f2eee7 !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
 }

@@ -13,6 +13,55 @@ export interface Product {
   currency: string;
   variants: Variant[];
   imageUrl?: string;
+  category?: 'stationery' | 'books';
+  author?: string;
+  sampleReadSlug?: string;
+  isBook?: boolean;
+  salesCount?: number;
+  rating?: number;
+  tags?: string[];
+  originalPriceVnd?: number;
+  isFlashSale?: boolean;
+}
+
+export interface SampleChapter {
+  id: number;
+  chapterNumber: number;
+  title: string;
+  summary?: string;
+  pages: string[][]; // array of pages, each page has paragraphs
+}
+
+export interface SampleBook {
+  slug: string;
+  title: string;
+  subtitle?: string;
+  author: string;
+  category: string;
+  publishedYear: number;
+  synopsis: string;
+  coverUrl?: string;
+  themeColor: string;
+  bgColor: string;
+  physicalProductId?: string;
+  physicalProductPriceVnd?: number;
+  licenseNote: string;
+  chapters: SampleChapter[];
+}
+
+export interface BookmarkData {
+  pageIndex: number;
+  color?: string; // '#ffe46b' | '#a9e8ac' | '#ffc1d9' | '#b7d9ff'
+  note?: string;
+  createdAt: string;
+}
+
+export interface AudioTrack {
+  id: string;
+  name: string;
+  artist?: string;
+  url: string;
+  isCustom?: boolean;
 }
 
 export interface CartLine {

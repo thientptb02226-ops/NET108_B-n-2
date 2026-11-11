@@ -4,13 +4,14 @@ import { formatVnd } from '../../api';
 import { Modal } from '../common/Modal';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
-import { Check, ShoppingBag, Plus, Minus } from 'lucide-react';
+import { Check, ShoppingBag, Plus, Minus, BookOpen } from 'lucide-react';
 
 interface ProductDetailModalProps {
   product: Product | null;
   isOpen: boolean;
   onClose: () => void;
   onAddToCart: (variant: Variant, quantity: number) => void;
+  onReadSample?: (slug: string) => void;
 }
 
 export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
@@ -18,6 +19,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   isOpen,
   onClose,
   onAddToCart,
+  onReadSample,
 }) => {
   if (!product) return null;
 
@@ -52,10 +54,10 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
             )}
           </div>
           <div className="space-y-1">
-            <h4 className="text-lg font-bold text-zinc-900 leading-snug">{product.name}</h4>
-            <p className="text-xs text-zinc-500 line-clamp-2">{product.description}</p>
+            <h4 className="font-serif text-xl font-bold text-[#141414] leading-snug">{product.name}</h4>
+            <p className="text-xs text-[#6D6A63] line-clamp-2">{product.description}</p>
             <div className="pt-1 flex items-center gap-2">
-              <span className="text-xl font-extrabold text-emerald-700">
+              <span className="font-serif text-2xl font-bold text-[#141414]">
                 {formatVnd(selectedVariant.priceVnd)}
               </span>
               <Badge variant={selectedVariant.stock > 0 ? 'success' : 'danger'} size="sm">
@@ -122,6 +124,29 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
             </button>
           </div>
         </div>
+
+        {/* Sample Read Banner if available */}
+        {product.sampleReadSlug && onReadSample && (
+          <div className="p-3.5 bg-[#1F3FB0]/5 border border-[#1F3FB0]/25 rounded-xl flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <BookOpen className="w-5 h-5 text-[#1F3FB0] shrink-0" />
+              <div>
+                <div className="lbl-khoa text-[#1F3FB0]">Bản đọc thử trực tuyến</div>
+                <div className="text-xs text-[#6D6A63]">Khám phá mục lục và đọc trước trích đoạn miễn phí</div>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                onReadSample(product.sampleReadSlug!);
+              }}
+              className="lbl-khoa h-8 px-3 rounded-lg border border-[#1F3FB0] text-[#1F3FB0] hover:bg-[#1F3FB0] hover:text-white transition-all shrink-0 bg-white shadow-xs"
+            >
+              Đọc thử ngay
+            </button>
+          </div>
+        )}
 
         {/* Action Button */}
         <div className="pt-4 border-t border-zinc-100 flex gap-3">
