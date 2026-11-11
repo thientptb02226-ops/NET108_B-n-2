@@ -105,14 +105,14 @@
       color: var(--ink-headline);
     }
 
-    /* Nav at x = 505 */
+    /* Nav at x = 430 */
     .nav-links {
       position: absolute;
-      left: calc(505 * var(--u));
+      left: calc(430 * var(--u));
       top: calc(38 * var(--u));
       display: flex;
       align-items: center;
-      gap: calc(31 * var(--u));
+      gap: calc(26 * var(--u));
       list-style: none;
     }
 
@@ -373,6 +373,50 @@
       transform: scale(0.98);
     }
 
+    /* --- SCROLL CUE TO NET108KHAI STORE MALL --- */
+    .scroll-cue {
+      position: absolute;
+      bottom: calc(18 * var(--u));
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: calc(7 * var(--u));
+      padding: calc(7 * var(--u)) calc(18 * var(--u));
+      border-radius: 9999px;
+      background: rgba(218, 231, 199, 0.7);
+      border: calc(1 * var(--u)) solid rgba(8, 72, 45, 0.2);
+      color: var(--forest-green);
+      font-family: var(--font-ui);
+      font-weight: 600;
+      font-size: calc(13 * var(--u));
+      cursor: pointer;
+      z-index: 40;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 calc(2 * var(--u)) calc(8 * var(--u)) rgba(8, 72, 45, 0.08);
+      animation: bounceCue 2.2s infinite ease-in-out;
+    }
+
+    .scroll-cue:hover {
+      background: #DAE7C7;
+      transform: translateX(-50%) translateY(calc(-2 * var(--u)));
+      box-shadow: 0 calc(4 * var(--u)) calc(14 * var(--u)) rgba(8, 72, 45, 0.16);
+      color: #053320;
+    }
+
+    .scroll-cue-arrow {
+      width: calc(14 * var(--u));
+      height: calc(14 * var(--u));
+      color: var(--forest-green);
+    }
+
+    @keyframes bounceCue {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(calc(4 * var(--u))); }
+    }
+
     /* --- CURVED CAROUSEL TRACK --- */
     .carousel-stage {
       position: absolute;
@@ -588,8 +632,9 @@
       .top-bar {
         position: relative;
         width: 100%;
+        max-width: 100vw;
         box-sizing: border-box;
-        height: 60px;
+        height: 56px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -597,11 +642,33 @@
         order: 1;
       }
 
+      /* Scroll Cue on Mobile */
+      .scroll-cue {
+        position: relative !important;
+        bottom: auto !important;
+        left: auto !important;
+        transform: none !important;
+        margin: 14px auto 0 auto !important;
+        font-size: 13px !important;
+        padding: 8px 18px !important;
+        animation: none !important;
+        order: 8 !important;
+        display: inline-flex !important;
+      }
+
+      .scroll-cue-arrow {
+        width: 14px !important;
+        height: 14px !important;
+      }
+
       .logo {
         position: static;
+        left: auto;
+        top: auto;
         display: flex;
         align-items: center;
         gap: 8px;
+        margin: 0;
       }
 
       .logo-icon {
@@ -613,16 +680,19 @@
         font-size: 19px;
       }
 
-      .nav-links, .btn-login {
+      .top-bar nav, .nav-links, .btn-login {
         display: none !important;
       }
 
       .btn-signup {
         position: static;
+        left: auto;
+        top: auto;
         width: 86px;
         height: 36px;
         font-size: 13.5px;
         flex-shrink: 0;
+        margin: 0;
       }
 
       /* Mobile Badge */
@@ -646,10 +716,11 @@
         top: auto;
         transform: none;
         width: 100%;
+        max-width: 100vw;
         box-sizing: border-box;
         padding: 0 16px;
-        font-size: clamp(26px, 7.5vw, 38px);
-        line-height: 1.08;
+        font-size: clamp(22px, 6.2vw, 34px);
+        line-height: 1.1;
         letter-spacing: -0.03em;
         text-wrap: balance;
         order: 3;
@@ -738,14 +809,15 @@
           <span class="logo-text">Reelmark</span>
         </a>
 
-        <!-- Nav Links starting at x = 505 with 31u gap -->
+        <!-- Nav Links starting at x = 430 with 26u gap -->
         <nav>
           <ul class="nav-links">
             <li><a href="#brands" class="nav-link">Brands</a></li>
             <li><a href="#creators" class="nav-link">Creators</a></li>
             <li><a href="#pricing" class="nav-link">Pricing</a></li>
             <li><a href="#use-cases" class="nav-link">Use Cases</a></li>
-            <li><a href="#contact" class="nav-link">Contact</a></li>
+            <li><a href="#store-mall" onclick="scrollToStore(); return false;" class="nav-link" style="color: var(--forest-green); font-weight: 700; display: inline-flex; align-items: center; gap: calc(4 * var(--u));">🛍️ Cửa Hàng</a></li>
+            <li><a href="/read" target="_top" class="nav-link">📚 Sách 3D</a></li>
           </ul>
         </nav>
 
@@ -812,6 +884,14 @@
         <div class="cta-ring"></div>
         <a href="#make-reel" class="cta-btn">Make a Reel</a>
       </div>
+
+      <!-- SCROLL CUE TO NET108KHAI STORE MALL -->
+      <button onclick="scrollToStore()" class="scroll-cue" aria-label="Khám phá Cửa Hàng Net108Khai Mall">
+        <span>Khám phá Cửa Hàng & Kệ Sách 3D</span>
+        <svg class="scroll-cue-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </button>
 
       <!-- CURVED VIDEO CAROUSEL -->
       <div class="carousel-stage animate-in-cards" id="carouselStage" aria-label="Curved video reel showcase">
@@ -1147,6 +1227,32 @@
           if (v.paused) v.play().catch(() => {});
         });
       }, { once: true });
+
+      // Forward wheel events to parent window so scrolling works naturally across iframe
+      window.addEventListener('wheel', (e) => {
+        try {
+          if (window.parent && window.parent !== window) {
+            window.parent.scrollBy({ top: e.deltaY, behavior: 'auto' });
+          }
+        } catch (_) {}
+      }, { passive: true });
+
+      function scrollToStore() {
+        try {
+          if (window.parent && window.parent !== window) {
+            const el = window.parent.document.getElementById('store-mall');
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth' });
+              return;
+            }
+            window.parent.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+            return;
+          }
+        } catch (_) {}
+        const el = document.getElementById('store-mall');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }
+      window.scrollToStore = scrollToStore;
 
     })();
   </script>

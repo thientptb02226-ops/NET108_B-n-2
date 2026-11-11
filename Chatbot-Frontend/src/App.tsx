@@ -216,12 +216,23 @@ export const App: React.FC = () => {
 
   // ROUTE 2: COMMERCE STORE (TAOBAO ARCHITECTURE + KHOAVERSE ARCHIVAL HARMONIZED PALETTE)
   return (
-    <div className="min-h-screen flex flex-col bg-[#EDEBE6] text-[#141414] font-sans selection:bg-[#1F3FB0]/20 selection:text-[#1F3FB0] relative">
+    <div className="min-h-screen flex flex-col bg-[#EDEBE6] text-[#141414] font-sans selection:bg-[#1F3FB0]/20 selection:text-[#1F3FB0] relative overflow-x-hidden w-full max-w-full">
       {/* KhoaVerse Paper Grain Texture Overlay */}
       <div className="grain" aria-hidden="true" />
 
+      {/* 0. MẶT TIỀN: REELMARK HERO SHOWCASE SECTION */}
+      <section id="reelmark-facade" className="w-full max-w-full relative bg-[#F5F8EF] border-b border-black/10 overflow-hidden">
+        <div className="w-full max-w-full h-screen min-h-[660px] max-h-[1080px] relative overflow-hidden">
+          <iframe
+            src="/reelmark/index.html"
+            className="w-full h-full border-0 block"
+            title="Reelmark Hero Mặt Tiền"
+          />
+        </div>
+      </section>
+
       {/* 1. TOP UTILITY BAR (Taobao Style with KhoaVerse Archival Tones) */}
-      <div className="bg-[#E5E2DC] border-b border-black/10 text-[11px] text-[#6D6A63] py-1.5 px-4 sm:px-6 lg:px-8 relative z-10">
+      <div id="store-mall" className="bg-[#E5E2DC] border-b border-black/10 text-[11px] text-[#6D6A63] py-1.5 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1 font-medium text-[#141414]">
@@ -234,6 +245,16 @@ export const App: React.FC = () => {
           </div>
           <div className="flex items-center gap-3.5 font-medium">
             <button
+              onClick={() => {
+                const el = document.getElementById('reelmark-facade');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+                else window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="hover:text-[#08482D] flex items-center gap-1 text-[#08482D] font-bold transition-colors"
+            >
+              🎬 Về Mặt Tiền Reelmark
+            </button>
+            <button
               onClick={() => setActiveTab('orders')}
               className="hover:text-[#1F3FB0] flex items-center gap-1 transition-colors"
             >
@@ -244,12 +265,6 @@ export const App: React.FC = () => {
               className="hover:text-[#18328C] flex items-center gap-1 text-[#1F3FB0] font-bold transition-colors"
             >
               <BookOpen className="w-3 h-3" /> Kệ sách 3D
-            </button>
-            <button
-              onClick={() => navigateTo('/reelmark')}
-              className="hover:text-[#08482D] flex items-center gap-1 text-[#08482D] font-bold transition-colors"
-            >
-              🎬 Reelmark Hero
             </button>
             <span className="hidden md:flex items-center gap-1 hover:text-[#1F3FB0] cursor-pointer">
               <Headphones className="w-3 h-3 text-[#6D6A63]" /> CSKH 24/7
