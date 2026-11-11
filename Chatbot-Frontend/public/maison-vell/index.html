@@ -31,106 +31,26 @@ body{
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .wide{font-family:Michroma,sans-serif;text-transform:uppercase}
 
-/* Main Layout: Top Bar + Main Workspace (Stage + Rail) */
+/* Main Layout: Full Stage + Accessories Rail (No header bar) */
 .page{
   height:100vh;
-  display:grid;
-  grid-template-rows:calc(56*var(--u)) 1fr;
+  width:100%;
   background:#fff;
   position:relative;
-}
-
-/* 1. Minimal Top Bar */
-.top-bar{
-  position:relative;
-  z-index:10;
-  background:#fff;
-  border-bottom:1px solid var(--line);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  flex-wrap:nowrap;
-  padding:0 calc(24*var(--u));
-}
-.top-badge{
-  display:inline-flex;
-  align-items:center;
-  gap:calc(8*var(--u));
-  font-size:calc(11.5*var(--u));
-  font-weight:700;
-  letter-spacing:.06em;
-  background:#eef6ee;
-  color:#08482d;
-  padding:calc(6*var(--u)) calc(12*var(--u));
-  border-radius:99px;
-  border:1px solid #cce5cc;
-  white-space:nowrap;
-}
-.badge-short{display:none}
-.badge-dot{
-  width:calc(7*var(--u));
-  height:calc(7*var(--u));
-  border-radius:99px;
-  background:#10b981;
-  box-shadow:0 0 8px rgba(16,185,129,.7);
-}
-.top-info{
-  display:flex;
-  align-items:center;
-  gap:calc(10*var(--u));
   overflow:hidden;
 }
-.look-pill{
-  font-family:Michroma,sans-serif;
-  font-size:calc(11*var(--u));
-  background:var(--ink);
-  color:#fff;
-  padding:calc(4*var(--u)) calc(10*var(--u));
-  border-radius:6px;
-  letter-spacing:.08em;
-  white-space:nowrap;
-}
-.look-title{
-  font-size:calc(13.5*var(--u));
-  font-weight:600;
-  color:var(--ink);
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-.top-close{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:calc(6*var(--u));
-  height:calc(36*var(--u));
-  padding:0 calc(16*var(--u));
-  border-radius:99px;
-  background:#f3f4f6;
-  border:1px solid var(--line);
-  font-size:calc(12*var(--u));
-  font-weight:600;
-  color:var(--ink);
-  transition:all .2s ease;
-  white-space:nowrap;
-  flex-shrink:0;
-}
-.top-close:hover{
-  background:var(--ink);
-  color:#fff;
-  border-color:var(--ink);
-}
 
-/* 2. Main Stage & Product Rail */
 main{
   position:relative;
   display:grid;
   grid-template-columns:1fr calc(340*var(--u));
+  height:100%;
+  width:100%;
   min-height:0;
   overflow:hidden;
 }
 
-/* Stage */
+/* 1. Stage with 3D Runway Models */
 .stage{
   position:relative;
   overflow:hidden;
@@ -176,10 +96,10 @@ main{
 .stage-nav.prev{left:calc(18*var(--u))}
 .stage-nav.next{right:calc(18*var(--u))}
 
-/* 3. Floating Bottom Variant Selector Dock */
+/* 2. Floating Bottom Variant Selector Dock (STABLE & NEVER JUMPS) */
 .dock{
   position:absolute;
-  bottom:calc(18*var(--u));
+  bottom:calc(24*var(--u));
   left:50%;
   transform:translateX(-50%);
   z-index:25;
@@ -187,36 +107,34 @@ main{
   flex-direction:column;
   align-items:center;
   gap:calc(10*var(--u));
-  width:calc(100% - calc(40*var(--u)));
-  max-width:calc(780*var(--u));
+  width:auto;
+  max-width:calc(760*var(--u));
   pointer-events:none;
 }
 .chips-wrap{
   pointer-events:auto;
   display:flex;
   align-items:center;
-  gap:calc(8*var(--u));
-  padding:calc(6*var(--u)) calc(8*var(--u));
+  justify-content:center;
+  gap:calc(6*var(--u));
+  padding:calc(5*var(--u)) calc(8*var(--u));
   background:#ffffff;
   border:1px solid #d1d5db;
   border-radius:99px;
-  box-shadow:0 12px 28px -6px rgba(0,0,0,.18);
-  overflow-x:auto;
+  box-shadow:0 10px 24px -4px rgba(0,0,0,.14);
+  width:fit-content;
   max-width:100%;
-  scrollbar-width:none;
-  -ms-overflow-style:none;
 }
-.chips-wrap::-webkit-scrollbar{display:none}
 .chip{
-  padding:calc(7*var(--u)) calc(14*var(--u));
+  padding:calc(6*var(--u)) calc(12*var(--u));
   border-radius:99px;
-  font-size:calc(12*var(--u));
+  font-size:calc(11.5*var(--u));
   font-weight:600;
   color:var(--mid);
   background:transparent;
   border:1px solid transparent;
   white-space:nowrap;
-  transition:all .2s cubic-bezier(.2,.8,.2,1);
+  transition:background-color .15s ease, color .15s ease;
   display:flex;
   align-items:center;
   gap:calc(6*var(--u));
@@ -227,8 +145,8 @@ main{
   background:var(--ink);
   color:#fff;
   border-color:var(--ink);
-  box-shadow:0 4px 12px rgba(22,25,31,.3);
-  transform:scale(1.03);
+  box-shadow:0 3px 10px rgba(22,25,31,.25);
+  font-weight:700;
 }
 .chip-num{
   font-family:Michroma,sans-serif;
@@ -243,6 +161,7 @@ main{
   align-items:center;
   justify-content:space-between;
   width:100%;
+  min-width:calc(500*var(--u));
   padding:calc(10*var(--u)) calc(18*var(--u));
   background:#ffffff;
   border:1px solid #d1d5db;
@@ -260,11 +179,13 @@ main{
   text-transform:uppercase;
   letter-spacing:.06em;
   font-weight:600;
+  white-space:nowrap;
 }
 .action-pricing{
   display:flex;
   align-items:baseline;
   gap:calc(8*var(--u));
+  white-space:nowrap;
 }
 .action-usd{
   font-size:calc(18*var(--u));
@@ -290,6 +211,8 @@ main{
   box-shadow:0 4px 14px rgba(8,72,45,.3);
   transition:all .2s ease;
   cursor:pointer;
+  white-space:nowrap;
+  flex-shrink:0;
 }
 .action-btn:hover{
   background:#0b5c39;
@@ -298,14 +221,18 @@ main{
 .action-btn:active{transform:scale(.98)}
 .action-btn svg{width:calc(16*var(--u));height:calc(16*var(--u));stroke:currentColor;stroke-width:2;fill:none}
 
-/* 4. Product Rail (Right side pieces) */
+/* 3. Product Accessories Rail (Scrollable & Draggable Up/Down) */
 .rail{
   position:relative;
   overflow:hidden;
   background:#f8fafc;
   border-left:1px solid var(--line);
   min-height:0;
+  cursor:grab;
+  touch-action:pan-y;
+  user-select:none;
 }
+.rail:active{cursor:grabbing}
 .card{
   position:absolute;left:0;top:0;width:100%;
   display:flex;flex-direction:column;
@@ -358,7 +285,7 @@ main{
 
 /* Toast notification */
 .toast{
-  position:fixed;top:calc(70*var(--u));left:50%;transform:translateX(-50%) translateY(-20px);
+  position:fixed;top:calc(24*var(--u));left:50%;transform:translateX(-50%) translateY(-20px);
   z-index:99;background:var(--ink);color:#fff;font-size:calc(12*var(--u));font-weight:600;
   padding:calc(10*var(--u)) calc(20*var(--u));border-radius:99px;box-shadow:0 12px 30px rgba(0,0,0,.25);
   opacity:0;pointer-events:none;transition:all .3s cubic-bezier(.2,.8,.2,1);
@@ -368,52 +295,27 @@ main{
 /* Mobile responsive layout */
 @media (max-width:820px){
   :root{--u:1px}
-  .page{grid-template-rows:48px 1fr}
-  .top-bar{padding:0 12px;gap:8px;flex-wrap:nowrap}
-  .badge-full{display:none}
-  .badge-short{display:inline;font-size:10px;font-weight:700}
-  .top-badge{padding:4px 8px;flex-shrink:0}
-  .top-info{flex:1;display:flex;justify-content:center;overflow:hidden}
-  .look-title{display:none}
-  .look-pill{font-size:10.5px;padding:3px 8px;flex-shrink:0}
-  .top-close{width:32px;height:32px;min-width:32px;padding:0;font-size:15px;border-radius:99px;justify-content:center;flex-shrink:0}
-  .top-close span:last-child{display:none}
   main{grid-template-columns:1fr;grid-template-rows:1fr 165px}
   .rail{border-left:0;border-top:1px solid var(--line)}
   .card{width:135px;height:100%;padding:8px}
-  .dock{bottom:6px;width:calc(100% - 12px);gap:5px}
-  .chips-wrap{padding:3px 6px;gap:5px}
+  .dock{bottom:10px;width:calc(100% - 16px);gap:6px}
+  .chips-wrap{padding:3px 6px;gap:4px;overflow-x:auto;justify-content:flex-start;scrollbar-width:none;-ms-overflow-style:none}
+  .chips-wrap::-webkit-scrollbar{display:none}
   .chip{padding:4px 8px;font-size:10.5px}
-  .action-bar{padding:6px 10px}
+  .action-bar{min-width:0;padding:6px 12px}
   .action-tagline{display:none}
   .action-usd{font-size:15px}
   .action-vnd{display:none}
-  .action-btn{height:32px;padding:0 10px;font-size:11px}
-  .stage-nav{width:32px;height:32px}
-  .stage-nav.prev{left:4px}
-  .stage-nav.next{right:4px}
+  .action-btn{height:34px;padding:0 12px;font-size:11.5px}
+  .stage-nav{width:34px;height:34px}
+  .stage-nav.prev{left:6px}
+  .stage-nav.next{right:6px}
   .ring{display:none}
 }
 </style>
 </head>
 <body>
 <div class="page">
-  <!-- Minimal Top Bar (No foreign header, zero marketing fluff) -->
-  <header class="top-bar">
-    <div class="top-badge">
-      <span class="badge-dot"></span>
-      <span class="badge-full">BỘ CHỌN MẪU MÃ 3D</span>
-      <span class="badge-short">3D FITTING</span>
-    </div>
-    <div class="top-info">
-      <span class="look-pill">LOOK <b id="lookNum">15</b>/20</span>
-      <span class="look-title" id="lookTitle">Feather Jacket & Satin Trousers</span>
-    </div>
-    <button class="top-close" id="closeBtn" aria-label="Đóng và quay lại giỏ hàng">
-      <span>✕</span><span> Đóng</span>
-    </button>
-  </header>
-
   <main>
     <!-- Stage with 3D Runway Models -->
     <section class="stage" id="stage" aria-label="Sàn diễn thời trang 3D. Kéo, vuốt hoặc dùng phím mũi tên để chuyển mẫu mã." tabindex="0">
@@ -435,7 +337,7 @@ main{
 
         <div class="action-bar">
           <div class="action-info">
-            <span class="action-tagline">Mẫu trang phục đang chọn</span>
+            <span class="action-tagline" id="dockTagline">Mẫu trang phục đang chọn</span>
             <div class="action-pricing">
               <span class="action-usd" id="dockPrice">$2,900</span>
               <span class="action-vnd" id="dockPriceVnd">(~73.660.000 ₫)</span>
@@ -451,8 +353,8 @@ main{
       <div class="ring" id="ring"></div>
     </section>
 
-    <!-- Synchronized Product Pieces Rail -->
-    <aside class="rail" id="rail" aria-label="Các món đồ trong mẫu đang chọn"></aside>
+    <!-- Synchronized Product Pieces Rail (Interactive up/down scroll & drag) -->
+    <aside class="rail" id="rail" aria-label="Các món phụ kiện & trang phục trong mẫu đang chọn"></aside>
   </main>
 </div>
 
@@ -552,16 +454,12 @@ function updateLookUI(activeIdx){
   currentLookIndex = activeIdx;
   const meta = LOOK_METAS[activeIdx];
   if(!meta)return;
-  $('lookNum').textContent = meta.num;
-  $('lookTitle').textContent = meta.full;
+  const tagEl = $('dockTagline');
+  if (tagEl) tagEl.textContent = `LOOK ${meta.num} • ${meta.full}`;
   $('dockPrice').textContent = meta.price;
   $('dockPriceVnd').textContent = `(~${meta.priceVnd})`;
   chips.forEach((c, i)=>{
-    const isActive = i === activeIdx;
-    c.classList.toggle('active', isActive);
-    if (isActive) {
-      try { c.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); } catch(_){}
-    }
+    c.classList.toggle('active', i === activeIdx);
   });
 }
 
@@ -600,17 +498,6 @@ $('selectLookBtn').addEventListener('click', ()=>{
   showToast(`✓ Đã thêm Look ${meta.num} (${meta.short}) vào giỏ hàng`);
 });
 
-// Close Runway handler
-$('closeBtn').addEventListener('click', ()=>{
-  try {
-    if(window.parent && window.parent !== window){
-      window.parent.postMessage({ type: 'CLOSE_RUNWAY' }, '*');
-      return;
-    }
-  } catch(_){}
-  window.location.href = '/';
-});
-
 // Arrow Navigation
 $('prevBtn').addEventListener('click', ()=>{
   target = Math.round(target) - 1;
@@ -622,7 +509,7 @@ $('nextBtn').addEventListener('click', ()=>{
 function size(){
   W=stage.clientWidth;H=stage.clientHeight;base=H*1.2;side=innerWidth<=820;
   people.forEach(m=>{m.e.style.width=base*m.r+'px';m.e.style.height=base+'px'});
-  cardS=side?150:rail.clientHeight/2.4;
+  cardS=side?140:rail.clientHeight/2.4;
   cards.forEach(c=>c.style.height=side?'100%':cardS+'px');
   dirty=true;
 }
@@ -663,6 +550,7 @@ function frame(now){
   ring.style.transform=`translate3d(${cx.toFixed(1)}px,${cy.toFixed(1)}px,0)`;
 }
 
+// Stage pointer events
 let mx=0,my=0,cx=0,cy=0,down=false,sx=0,st=0,moved=0,wheelT=0;
 const PULL=()=>Math.max(150,W*.22);
 stage.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse')ring.classList.add('show')});
@@ -688,13 +576,50 @@ stage.addEventListener('wheel',e=>{
   e.preventDefault();target+=clamp(e.deltaY+e.deltaX,-120,120)/420;
   clearTimeout(wheelT);wheelT=setTimeout(()=>{target=Math.round(target)},150);
 },{passive:false});
+
+// Rail (Accessories column) wheel & drag scroll up/down
+rail.addEventListener('wheel',e=>{
+  e.preventDefault();
+  const delta=e.deltaY+e.deltaX;
+  target+=clamp(delta,-100,100)/260;
+  clearTimeout(wheelT);
+  wheelT=setTimeout(()=>{target=Math.round(target)},150);
+},{passive:false});
+
+let railDown=false,railStartPos=0,railStartTarget=0,railMoved=0;
+rail.addEventListener('pointerdown',e=>{
+  if(e.target.closest('button'))return;
+  railDown=true;
+  railStartPos=side?e.clientX:e.clientY;
+  railStartTarget=target;
+  railMoved=0;
+  rail.setPointerCapture(e.pointerId);
+});
+rail.addEventListener('pointermove',e=>{
+  if(!railDown)return;
+  const curPos=side?e.clientX:e.clientY;
+  const delta=curPos-railStartPos;
+  railMoved=Math.max(railMoved,Math.abs(delta));
+  const step=Math.max(cardS,120);
+  target=railStartTarget-delta/(step*2);
+});
+const onRailUp=e=>{
+  if(!railDown)return;
+  railDown=false;
+  try{rail.releasePointerCapture(e.pointerId)}catch(_){}
+  target=Math.round(target);
+};
+rail.addEventListener('pointerup',onRailUp);
+rail.addEventListener('pointercancel',onRailUp);
+
+// Keyboard controls
 addEventListener('keydown',e=>{
   if(['ArrowRight','ArrowDown'].includes(e.key)){e.preventDefault();target=Math.round(target)+1}
   if(['ArrowLeft','ArrowUp'].includes(e.key)){e.preventDefault();target=Math.round(target)-1}
   if(e.key==='Escape'){
-    try {
-      if(window.parent && window.parent !== window){
-        window.parent.postMessage({ type: 'CLOSE_RUNWAY' }, '*');
+    try{
+      if(window.parent&&window.parent!==window){
+        window.parent.postMessage({type:'CLOSE_RUNWAY'},'*');
       }
     }catch(_){}
   }

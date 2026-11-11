@@ -973,11 +973,11 @@ export const App: React.FC = () => {
             <button
               type="button"
               onClick={() => setActiveRunwayLook(null)}
-              className="absolute top-2.5 right-3 z-50 w-8 h-8 rounded-full bg-zinc-900/80 hover:bg-black text-white flex items-center justify-center transition-all shadow-md active:scale-95 cursor-pointer"
-              aria-label="Đóng bộ chọn mẫu mã"
-              title="Đóng (Esc)"
+              className="absolute top-3 right-3 sm:top-4 sm:right-4 z-50 w-10 h-10 rounded-full bg-white/95 hover:bg-white text-zinc-800 hover:text-black flex items-center justify-center transition-all shadow-xl active:scale-95 border border-black/15 cursor-pointer"
+              aria-label="Đóng (Esc)"
+              title="Đóng bộ chọn (Esc)"
             >
-              <span className="text-sm font-bold leading-none">✕</span>
+              <span className="text-lg font-bold leading-none">✕</span>
             </button>
 
             <iframe

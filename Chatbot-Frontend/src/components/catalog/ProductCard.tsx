@@ -22,7 +22,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect, onR
 
   return (
     <article
-      className="bg-[#F4F2ED] rounded-2xl border border-black/10 shadow-[0_2px_12px_-4px_rgba(20,20,20,0.06)] hover:-translate-y-1 hover:border-[#1F3FB0]/40 hover:shadow-[0_16px_32px_-6px_rgba(20,20,20,0.12)] transition-all duration-300 overflow-hidden flex flex-col h-full group select-none relative"
+      onClick={() => onSelect(product)}
+      className="bg-[#F4F2ED] rounded-2xl border border-black/10 shadow-[0_2px_12px_-4px_rgba(20,20,20,0.06)] hover:-translate-y-1 hover:border-[#1F3FB0]/40 hover:shadow-[0_16px_32px_-6px_rgba(20,20,20,0.12)] transition-all duration-300 overflow-hidden flex flex-col h-full group select-none relative cursor-pointer"
       aria-labelledby={`product-title-${product.id}`}
     >
       {/* 1. Square Image Container (Classic Taobao 1:1 Aspect Ratio) */}
@@ -108,7 +109,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect, onR
             {product.sampleReadSlug && onReadSample && (
               <button
                 type="button"
-                onClick={() => onReadSample(product.sampleReadSlug!)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onReadSample(product.sampleReadSlug!);
+                }}
                 className="w-8 h-8 rounded-xl border border-black/15 bg-white text-[#1F3FB0] hover:bg-[#1F3FB0] hover:text-white transition-all duration-200 active:scale-95 flex items-center justify-center shadow-xs"
                 title="Đọc thử sách online 3D KhoaVerse"
                 aria-label={`Đọc thử sách ${product.name}`}
@@ -120,7 +124,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect, onR
             {onOpenRunway && (
               <button
                 type="button"
-                onClick={() => onOpenRunway(product)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOpenRunway(product);
+                }}
                 className="w-8 h-8 rounded-xl border border-black/15 bg-white text-[#16191f] hover:bg-[#16191f] hover:text-white transition-all duration-200 active:scale-95 flex items-center justify-center shadow-xs"
                 title="Xem sàn diễn 3D Runway Lookbook"
                 aria-label={`Xem sàn diễn 3D cho ${product.name}`}
@@ -132,7 +139,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect, onR
             <button
               type="button"
               disabled={isOutOfStock}
-              onClick={() => onSelect(product)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onSelect(product);
+              }}
               className={`h-8 px-3 rounded-xl text-xs font-bold transition-all duration-200 active:scale-95 flex items-center gap-1 shadow-xs ${
                 isOutOfStock
                   ? 'bg-zinc-200 text-zinc-400 cursor-not-allowed border border-zinc-300'
