@@ -7,7 +7,8 @@ if ($ready.status -ne 'ready') { throw 'API is not ready' }
 function Get-LatestMailCode([string]$Recipient, [string]$Subject) {
     for ($attempt = 0; $attempt -lt 20; $attempt++) {
         try {
-            $mail = Invoke-RestMethod "$MailpitUrl/api/v1/message/latest"
+            $response = Invoke-WebRequest "$MailpitUrl/api/v1/message/latest" -UseBasicParsing
+            $mail = [Text.Encoding]::UTF8.GetString($response.RawContentStream.ToArray()) | ConvertFrom-Json
             if (@($mail.To | ForEach-Object { $_.Address }) -contains $Recipient -and $mail.Subject -eq $Subject -and $mail.HTML -match '<strong>([^<]+)</strong>') {
                 return [System.Net.WebUtility]::HtmlDecode($Matches[1])
             }
@@ -75,6 +76,8 @@ Invoke-RestMethod -Method Post "$BaseUrl/api/v1/orders/$($first.id)/cancel" -Hea
 $cancelled = Invoke-RestMethod "$BaseUrl/api/v1/orders/$($first.id)" -Headers $auth
 if ($cancelled.status -ne 'cancelled') { throw 'Cancellation failed' }
 
+# The auth policy allows 10 requests per IP per minute; this scenario needs 12.
+Start-Sleep -Seconds 61
 Invoke-RestMethod -Method Post "$BaseUrl/api/v1/auth/logout" -Headers @{ Authorization = "Bearer $($newLogin.accessToken)" } | Out-Null
 try {
     Invoke-RestMethod -Method Post "$BaseUrl/api/v1/auth/refresh" -ContentType 'application/json' -Body (@{ refreshToken = $newLogin.refreshToken } | ConvertTo-Json) | Out-Null

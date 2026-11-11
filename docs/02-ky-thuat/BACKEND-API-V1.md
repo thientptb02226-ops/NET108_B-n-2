@@ -1,6 +1,6 @@
 # Hợp đồng backend v1 cho Antigravity
 
-**Trạng thái:** các route dưới đây đã có code và build; chưa có kiểm thử tích hợp với PostgreSQL trên máy hiện tại vì Docker Engine không chạy. OpenAPI động ở `/openapi/v1.json` khi chạy Development. Base URL Compose: `http://localhost:8080`. Frontend chỉ xem API trả về là dữ liệu thật sau khi smoke test đi qua.
+**Trạng thái:** các route dưới đây đã có code và build; provider đã chuyển sang SQL Server từ Lab 3 nhưng chưa có kiểm thử tích hợp trên máy hiện tại vì Docker Engine không chạy. OpenAPI động ở `/openapi/v1.json` khi chạy Development. Base URL Compose: `http://localhost:8080`. Frontend chỉ xem API trả về là dữ liệu thật sau khi smoke test đi qua.
 
 ## Xác thực
 

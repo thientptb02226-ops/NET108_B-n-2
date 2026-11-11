@@ -1,13 +1,12 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace Net108Khai.Api.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCommerce : Migration
+    public partial class SqlServerInitial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,10 +19,10 @@ namespace Net108Khai.Api.Data.Migrations
                 schema: "commerce",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -35,21 +34,21 @@ namespace Net108Khai.Api.Data.Migrations
                 schema: "commerce",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    PasswordHash = table.Column<string>(type: "text", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "text", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -61,11 +60,11 @@ namespace Net108Khai.Api.Data.Migrations
                 schema: "commerce",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    Description = table.Column<string>(type: "character varying(4000)", maxLength: 4000, nullable: false),
-                    IsPublished = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: false),
+                    IsPublished = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -77,11 +76,11 @@ namespace Net108Khai.Api.Data.Migrations
                 schema: "commerce",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    RoleId = table.Column<string>(type: "text", nullable: false),
-                    ClaimType = table.Column<string>(type: "text", nullable: true),
-                    ClaimValue = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<string>(type: "nvarchar(128)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -100,11 +99,11 @@ namespace Net108Khai.Api.Data.Migrations
                 schema: "commerce",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<string>(type: "text", nullable: false),
-                    ClaimType = table.Column<string>(type: "text", nullable: true),
-                    ClaimValue = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(128)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -123,10 +122,10 @@ namespace Net108Khai.Api.Data.Migrations
                 schema: "commerce",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "text", nullable: false),
-                    ProviderKey = table.Column<string>(type: "text", nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "text", nullable: true),
-                    UserId = table.Column<string>(type: "text", nullable: false)
+                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(128)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -145,8 +144,8 @@ namespace Net108Khai.Api.Data.Migrations
                 schema: "commerce",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "text", nullable: false),
-                    RoleId = table.Column<string>(type: "text", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(128)", nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(128)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -172,10 +171,10 @@ namespace Net108Khai.Api.Data.Migrations
                 schema: "commerce",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "text", nullable: false),
-                    LoginProvider = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Value = table.Column<string>(type: "text", nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(128)", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -194,10 +193,10 @@ namespace Net108Khai.Api.Data.Migrations
                 schema: "commerce",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<string>(type: "text", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(128)", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -212,23 +211,46 @@ namespace Net108Khai.Api.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ExternalLoginTickets",
+                schema: "commerce",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CodeHash = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(128)", nullable: false),
+                    ExpiresAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    RedeemedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExternalLoginTickets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ExternalLoginTickets_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalSchema: "commerce",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Orders",
                 schema: "commerce",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<string>(type: "text", nullable: false),
-                    CartId = table.Column<Guid>(type: "uuid", nullable: false),
-                    IdempotencyKey = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(128)", nullable: false),
+                    CartId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IdempotencyKey = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     TotalVnd = table.Column<long>(type: "bigint", nullable: false),
-                    Status = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    ExpiresAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                    Status = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    ExpiresAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Orders", x => x.Id);
-                    table.CheckConstraint("CK_Orders_Total", "\"TotalVnd\" >= 0");
+                    table.CheckConstraint("CK_Orders_Total", "[TotalVnd] >= 0");
                     table.ForeignKey(
                         name: "FK_Orders_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -243,19 +265,19 @@ namespace Net108Khai.Api.Data.Migrations
                 schema: "commerce",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Sku = table.Column<string>(type: "character varying(80)", maxLength: 80, nullable: false),
-                    Name = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Sku = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
                     PriceVnd = table.Column<long>(type: "bigint", nullable: false),
-                    Stock = table.Column<int>(type: "integer", nullable: false),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
+                    Stock = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductVariants", x => x.Id);
-                    table.CheckConstraint("CK_ProductVariants_Price", "\"PriceVnd\" BETWEEN 0 AND 1000000000000");
-                    table.CheckConstraint("CK_ProductVariants_Stock", "\"Stock\" >= 0");
+                    table.CheckConstraint("CK_ProductVariants_Price", "[PriceVnd] BETWEEN 0 AND 1000000000000");
+                    table.CheckConstraint("CK_ProductVariants_Stock", "[Stock] >= 0");
                     table.ForeignKey(
                         name: "FK_ProductVariants_Products_ProductId",
                         column: x => x.ProductId,
@@ -270,14 +292,14 @@ namespace Net108Khai.Api.Data.Migrations
                 schema: "commerce",
                 columns: table => new
                 {
-                    CartId = table.Column<Guid>(type: "uuid", nullable: false),
-                    VariantId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Quantity = table.Column<int>(type: "integer", nullable: false)
+                    CartId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    VariantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CartItems", x => new { x.CartId, x.VariantId });
-                    table.CheckConstraint("CK_CartItems_Quantity", "\"Quantity\" BETWEEN 1 AND 99");
+                    table.CheckConstraint("CK_CartItems_Quantity", "[Quantity] BETWEEN 1 AND 99");
                     table.ForeignKey(
                         name: "FK_CartItems_Carts_CartId",
                         column: x => x.CartId,
@@ -299,18 +321,18 @@ namespace Net108Khai.Api.Data.Migrations
                 schema: "commerce",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    VariantId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Delta = table.Column<int>(type: "integer", nullable: false),
-                    Reason = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    ActorUserId = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: true),
-                    OrderId = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    VariantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Delta = table.Column<int>(type: "int", nullable: false),
+                    Reason = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    ActorUserId = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: true),
+                    OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_InventoryMovements", x => x.Id);
-                    table.CheckConstraint("CK_InventoryMovements_Delta", "\"Delta\" <> 0");
+                    table.CheckConstraint("CK_InventoryMovements_Delta", "[Delta] <> 0");
                     table.ForeignKey(
                         name: "FK_InventoryMovements_ProductVariants_VariantId",
                         column: x => x.VariantId,
@@ -325,19 +347,19 @@ namespace Net108Khai.Api.Data.Migrations
                 schema: "commerce",
                 columns: table => new
                 {
-                    OrderId = table.Column<Guid>(type: "uuid", nullable: false),
-                    VariantId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Sku = table.Column<string>(type: "character varying(80)", maxLength: 80, nullable: false),
-                    ProductName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    VariantName = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    VariantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Sku = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: false),
+                    ProductName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    VariantName = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
                     UnitPriceVnd = table.Column<long>(type: "bigint", nullable: false),
-                    Quantity = table.Column<int>(type: "integer", nullable: false)
+                    Quantity = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OrderItems", x => new { x.OrderId, x.VariantId });
-                    table.CheckConstraint("CK_OrderItems_Price", "\"UnitPriceVnd\" >= 0");
-                    table.CheckConstraint("CK_OrderItems_Quantity", "\"Quantity\" > 0");
+                    table.CheckConstraint("CK_OrderItems_Price", "[UnitPriceVnd] >= 0");
+                    table.CheckConstraint("CK_OrderItems_Quantity", "[Quantity] > 0");
                     table.ForeignKey(
                         name: "FK_OrderItems_Orders_OrderId",
                         column: x => x.OrderId,
@@ -365,7 +387,8 @@ namespace Net108Khai.Api.Data.Migrations
                 schema: "commerce",
                 table: "AspNetRoles",
                 column: "NormalizedName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -389,14 +412,17 @@ namespace Net108Khai.Api.Data.Migrations
                 name: "EmailIndex",
                 schema: "commerce",
                 table: "AspNetUsers",
-                column: "NormalizedEmail");
+                column: "NormalizedEmail",
+                unique: true,
+                filter: "[NormalizedEmail] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 schema: "commerce",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CartItems_VariantId",
@@ -408,6 +434,25 @@ namespace Net108Khai.Api.Data.Migrations
                 name: "IX_Carts_UserId",
                 schema: "commerce",
                 table: "Carts",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExternalLoginTickets_CodeHash",
+                schema: "commerce",
+                table: "ExternalLoginTickets",
+                column: "CodeHash",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExternalLoginTickets_ExpiresAt",
+                schema: "commerce",
+                table: "ExternalLoginTickets",
+                column: "ExpiresAt");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExternalLoginTickets_UserId",
+                schema: "commerce",
+                table: "ExternalLoginTickets",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -486,6 +531,10 @@ namespace Net108Khai.Api.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "CartItems",
+                schema: "commerce");
+
+            migrationBuilder.DropTable(
+                name: "ExternalLoginTickets",
                 schema: "commerce");
 
             migrationBuilder.DropTable(

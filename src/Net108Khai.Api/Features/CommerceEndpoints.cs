@@ -1,8 +1,8 @@
 using System.Security.Claims;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Net108Khai.Api.Data;
 using Net108Khai.Api.Domain;
-using Npgsql;
 
 namespace Net108Khai.Api.Features;
 
@@ -41,9 +41,9 @@ public static class CommerceEndpoints
         if (!string.IsNullOrWhiteSpace(q))
         {
             var term = q.Trim();
-            query = query.Where(x => EF.Functions.ILike(x.Name, $"%{term}%") ||
-                EF.Functions.ILike(x.Description, $"%{term}%") ||
-                x.Variants.Any(v => EF.Functions.ILike(v.Sku, $"%{term}%")));
+            query = query.Where(x => EF.Functions.Like(x.Name, $"%{term}%") ||
+                EF.Functions.Like(x.Description, $"%{term}%") ||
+                x.Variants.Any(v => EF.Functions.Like(v.Sku, $"%{term}%")));
         }
         var total = await query.CountAsync(ct);
         var products = await query.OrderBy(x => x.Name).ThenBy(x => x.Id)
@@ -79,7 +79,7 @@ public static class CommerceEndpoints
         foreach (var variant in product.Variants.Where(x => x.Stock > 0))
             db.InventoryMovements.Add(new InventoryMovement { VariantId = variant.Id, Delta = variant.Stock, Reason = "initial_stock" });
         try { await db.SaveChangesAsync(ct); }
-        catch (DbUpdateException ex) when (ex.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation })
+        catch (DbUpdateException ex) when (ex.InnerException is SqlException { Number: 2601 or 2627 })
         { return Error(409, "duplicate_sku", "A SKU already exists."); }
         return Results.Created($"/api/v1/products/{product.Id}", new { product.Id, product.IsPublished });
     }
@@ -119,7 +119,7 @@ public static class CommerceEndpoints
             return Error(400, "invalid_adjustment", "A nonzero delta and reason are required.");
         await using var tx = await db.Database.BeginTransactionAsync(ct);
         var locked = await db.Variants.FromSqlInterpolated(
-            $"SELECT * FROM commerce.\"ProductVariants\" WHERE \"Id\" = {id} FOR UPDATE").ToListAsync(ct);
+            $"SELECT * FROM [commerce].[ProductVariants] WITH (UPDLOCK, HOLDLOCK, ROWLOCK) WHERE [Id] = {id}").ToListAsync(ct);
         var variant = locked.SingleOrDefault();
         if (variant is null) return Results.NotFound();
         var next = (long)variant.Stock + request.Delta;
@@ -217,7 +217,7 @@ public static class CommerceEndpoints
         foreach (var item in items)
         {
             var locked = await db.Variants.FromSqlInterpolated(
-                $"SELECT * FROM commerce.\"ProductVariants\" WHERE \"Id\" = {item.VariantId} FOR UPDATE").ToListAsync(ct);
+                $"SELECT * FROM [commerce].[ProductVariants] WITH (UPDLOCK, HOLDLOCK, ROWLOCK) WHERE [Id] = {item.VariantId}").ToListAsync(ct);
             var variant = locked.SingleOrDefault();
             if (variant is null || !variant.IsActive || variant.Stock < item.Quantity)
                 return Error(409, "insufficient_stock", "A cart item is unavailable or lacks stock.");
@@ -234,7 +234,7 @@ public static class CommerceEndpoints
         db.Orders.Add(order);
         db.CartItems.RemoveRange(await db.CartItems.Where(x => x.CartId == id).ToListAsync(ct));
         try { await db.SaveChangesAsync(ct); }
-        catch (DbUpdateException ex) when (ex.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation })
+        catch (DbUpdateException ex) when (ex.InnerException is SqlException { Number: 2601 or 2627 })
         { return Error(409, "checkout_conflict", "Checkout conflicted with another request. Retry with the same key."); }
         await tx.CommitAsync(ct);
         return Results.Created($"/api/v1/orders/{order.Id}", new { order.Id, order.Status,
@@ -270,7 +270,7 @@ public static class CommerceEndpoints
         if (userId is null) return Results.Unauthorized();
         await using var tx = await db.Database.BeginTransactionAsync(ct);
         var locked = await db.Orders.FromSqlInterpolated(
-            $"SELECT * FROM commerce.\"Orders\" WHERE \"Id\" = {id} FOR UPDATE").ToListAsync(ct);
+            $"SELECT * FROM [commerce].[Orders] WITH (UPDLOCK, HOLDLOCK, ROWLOCK) WHERE [Id] = {id}").ToListAsync(ct);
         var order = locked.SingleOrDefault();
         if (order is null || order.UserId != userId) return Results.NotFound();
         if (order.Status != OrderStatuses.PendingPayment)
@@ -297,7 +297,7 @@ public static class CommerceEndpoints
     internal static async Task<Cart?> LockCart(CommerceDbContext db, Guid id, CancellationToken ct)
     {
         var rows = await db.Carts.FromSqlInterpolated(
-            $"SELECT * FROM commerce.\"Carts\" WHERE \"Id\" = {id} FOR UPDATE").ToListAsync(ct);
+            $"SELECT * FROM [commerce].[Carts] WITH (UPDLOCK, HOLDLOCK, ROWLOCK) WHERE [Id] = {id}").ToListAsync(ct);
         return rows.SingleOrDefault();
     }
 
