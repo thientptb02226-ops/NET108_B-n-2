@@ -13,7 +13,7 @@ export interface Product {
   currency: string;
   variants: Variant[];
   imageUrl?: string;
-  category?: 'stationery' | 'books';
+  category?: 'stationery' | 'books' | 'fashion';
   author?: string;
   sampleReadSlug?: string;
   isBook?: boolean;
@@ -22,6 +22,7 @@ export interface Product {
   tags?: string[];
   originalPriceVnd?: number;
   isFlashSale?: boolean;
+  runwayLookIndex?: number;
 }
 
 export interface SampleChapter {

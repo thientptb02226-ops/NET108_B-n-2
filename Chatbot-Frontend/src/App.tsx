@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Product, Variant, CartLine, Order } from './types';
-import { api } from './api';
+import { api, DEMO_PRODUCTS } from './api';
 import { ProductCard } from './components/catalog/ProductCard';
 import { ProductDetailModal } from './components/catalog/ProductDetailModal';
 import { CartDrawer } from './components/cart/CartDrawer';
@@ -61,18 +61,48 @@ export const App: React.FC = () => {
   const [searchCategory, setSearchCategory] = useState<'all' | 'books' | 'stationery'>('all');
   const [isImageSearchOpen, setIsImageSearchOpen] = useState(false);
 
-  // Products state
-  const [products, setProducts] = useState<Product[]>([]);
-  const [isLoadingProducts, setIsLoadingProducts] = useState(true);
+  // Products state - prefilled with DEMO_PRODUCTS for instantaneous instant render
+  const [products, setProducts] = useState<Product[]>(DEMO_PRODUCTS);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(false);
   const [productError, setProductError] = useState<string | null>(null);
 
   // Cart state
   const [cartLines, setCartLines] = useState<CartLine[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
+  // Runway 3D Lookbook state
+  const [activeRunwayLook, setActiveRunwayLook] = useState<number | null>(null);
+
   // Modals state
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+
+  // Listen to postMessage from Runway Lookbook iframe
+  useEffect(() => {
+    const handleMessage = (e: MessageEvent) => {
+      if (e.data?.type === 'CLOSE_RUNWAY') {
+        setActiveRunwayLook(null);
+      }
+      if (e.data?.type === 'RUNWAY_ADD_TO_CART') {
+        const { name, price } = e.data;
+        const numPrice = parseInt(String(price).replace(/[^0-9]/g, ''), 10) || 1000;
+        const priceVnd = numPrice * 25400; // ~$1 = 25,400 VND
+        setCartLines((prev) => [
+          ...prev,
+          {
+            variantId: `mv-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+            sku: `MV-${String(name).toUpperCase().replace(/\s+/g, '-')}`,
+            name: `Maison Vell — ${name}`,
+            priceVnd,
+            quantity: 1,
+          },
+        ]);
+        setIsCartOpen(true);
+      }
+    };
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
 
   // Gamification state: coins & daily check-in
   const [coins, setCoins] = useState(850);
@@ -96,16 +126,20 @@ export const App: React.FC = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // Fetch products
+  // Fetch products (Stale-while-revalidate: keep initial products displayed without flashing skeleton)
   const fetchProducts = async (q = '') => {
-    setIsLoadingProducts(true);
+    if (!products || products.length === 0) {
+      setIsLoadingProducts(true);
+    }
     setProductError(null);
     try {
       const res = await api.getProducts(q);
       setProducts(res.items);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Lỗi khi tải danh sách sản phẩm.';
-      setProductError(msg);
+      if (!products || products.length === 0) {
+        setProductError(msg);
+      }
     } finally {
       setIsLoadingProducts(false);
     }
@@ -232,6 +266,12 @@ export const App: React.FC = () => {
               className="hover:text-[#18328C] flex items-center gap-1 text-[#1F3FB0] font-bold transition-colors"
             >
               <BookOpen className="w-3 h-3" /> Kệ sách 3D
+            </button>
+            <button
+              onClick={() => setActiveRunwayLook(0)}
+              className="hover:text-black flex items-center gap-1 text-[#16191f] font-bold transition-colors cursor-pointer"
+            >
+              👗 Sàn diễn 3D Runway
             </button>
             <span className="hidden md:flex items-center gap-1 hover:text-[#1F3FB0] cursor-pointer">
               <Headphones className="w-3 h-3 text-[#6D6A63]" /> CSKH 24/7
@@ -735,6 +775,7 @@ export const App: React.FC = () => {
                     product={product}
                     onSelect={(p) => setSelectedProduct(p)}
                     onReadSample={(slug) => navigateTo(`/read/${slug}`)}
+                    onOpenRunway={(p) => setActiveRunwayLook(p.runwayLookIndex ?? 0)}
                   />
                 ))}
               </div>
@@ -888,6 +929,7 @@ export const App: React.FC = () => {
         onClose={() => setSelectedProduct(null)}
         onAddToCart={handleAddToCart}
         onReadSample={(slug) => navigateTo(`/read/${slug}`)}
+        onOpenRunway={(look) => setActiveRunwayLook(look ?? 0)}
       />
 
       <CartDrawer
@@ -907,6 +949,25 @@ export const App: React.FC = () => {
         totalVnd={totalCartVnd}
         onOrderSuccess={handleOrderSuccess}
       />
+
+      {/* 10. MAISON VELL RUNWAY DEPTH LOOKBOOK FULL-VIEWPORT OVERLAY */}
+      {activeRunwayLook !== null && (
+        <div className="fixed inset-0 z-50 w-screen h-screen overflow-hidden bg-white flex flex-col">
+          <div className="absolute top-3.5 right-4 z-50">
+            <button
+              onClick={() => setActiveRunwayLook(null)}
+              className="px-4 py-2 rounded-full bg-[#16191f] hover:bg-black text-white font-['Michroma',sans-serif] text-xs uppercase tracking-wider shadow-xl transition-all active:scale-95 flex items-center gap-1.5 cursor-pointer"
+            >
+              <span>✕ Quay lại Cửa Hàng</span>
+            </button>
+          </div>
+          <iframe
+            src={`/maison-vell/index.html?look=${activeRunwayLook}`}
+            className="w-full h-full border-0 block"
+            title="Maison Vell Runway Depth Lookbook"
+          />
+        </div>
+      )}
     </div>
   );
 };

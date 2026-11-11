@@ -40,8 +40,62 @@ async function handleResponse<T>(res: Response): Promise<T> {
   return res.json();
 }
 
-// Net108Khai Catalog: Đồ dùng học tập và sách giấy có bản đọc thử mẫu
-const DEMO_PRODUCTS: Product[] = [
+// Net108Khai Catalog: Đồ dùng học tập, sách giấy và Bộ sưu tập Maison Vell Runway
+export const DEMO_PRODUCTS: Product[] = [
+  // --- NHÓM 0: MAISON VELL RUNWAY LOOKBOOK (SÀN DIỄN CHIỀU SÂU 3D) ---
+  {
+    id: 'fashion-001',
+    name: 'Maison Vell Look 15: Áo Khoác Lông Vũ & Quần Lụa Satin',
+    description: 'Bộ trang phục Look 15 trong bộ sưu tập Xuân Hè 2027 của Maison Vell: Áo khoác lông vũ blush thanh lịch phối cùng quần lụa satin ống rộng cao cấp.',
+    currency: 'VND',
+    category: 'fashion',
+    runwayLookIndex: 0,
+    imageUrl: 'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261102_042057_080e85b0-b4aa-4072-8eb9-2304c7baf42b.png&w=600&q=80',
+    salesCount: 320,
+    rating: 5.0,
+    tags: ['Runway 2027', 'Maison Vell', 'Sàn diễn 3D'],
+    originalPriceVnd: 75000000,
+    isFlashSale: true,
+    variants: [
+      { id: 'var-mv15-full', sku: 'MV-LOOK15-FULL', name: 'Trọn Bộ Look 15 (Áo khoác + Quần lụa)', priceVnd: 68500000, stock: 8 },
+      { id: 'var-mv15-jacket', sku: 'MV-FEATHER-JACKET', name: 'Áo khoác lông vũ Blush (Feather Jacket)', priceVnd: 45000000, stock: 12 },
+      { id: 'var-mv15-pants', sku: 'MV-SATIN-PANTS', name: 'Quần lụa Satin ống rộng (Satin Trousers)', priceVnd: 23500000, stock: 15 },
+    ],
+  },
+  {
+    id: 'fashion-002',
+    name: 'Maison Vell Look 16: Đầm Xếp Ly Sage & Thắt Lưng Kim Loại',
+    description: 'Tuyệt tác dạ hội Look 16 với chất liệu voan lụa dập ly thủ công màu xanh sage dịu mát, điểm xuyết thắt lưng mạ vàng kim tinh xảo.',
+    currency: 'VND',
+    category: 'fashion',
+    runwayLookIndex: 1,
+    imageUrl: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=800&auto=format&fit=crop&q=80',
+    salesCount: 280,
+    rating: 4.9,
+    tags: ['Runway 2027', 'Haute Couture', 'Sàn diễn 3D'],
+    originalPriceVnd: 55000000,
+    variants: [
+      { id: 'var-mv16-dress', sku: 'MV-PLEATED-DRESS', name: 'Đầm xếp ly Sage (Pleated Dress)', priceVnd: 48000000, stock: 10 },
+      { id: 'var-mv16-belt', sku: 'MV-GOLD-BELT', name: 'Thắt lưng vàng (Gold Waist Belt)', priceVnd: 9500000, stock: 20 },
+    ],
+  },
+  {
+    id: 'fashion-003',
+    name: 'Maison Vell Look 17: Áo Choàng Satin Champagne & Túi Quai Xách',
+    description: 'Look 17 hiện đại với áo choàng satin trench dress màu champagne kiêu kỳ và túi xách da thủ công phong cách Parisian.',
+    currency: 'VND',
+    category: 'fashion',
+    runwayLookIndex: 2,
+    imageUrl: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&auto=format&fit=crop&q=80',
+    salesCount: 410,
+    rating: 5.0,
+    tags: ['Runway 2027', 'Parisian Chic', 'Sàn diễn 3D'],
+    originalPriceVnd: 62000000,
+    variants: [
+      { id: 'var-mv17-trench', sku: 'MV-SATIN-TRENCH', name: 'Áo choàng Satin Trench Dress', priceVnd: 52000000, stock: 9 },
+      { id: 'var-mv17-bag', sku: 'MV-HANDLE-BAG', name: 'Túi quai xách Top Handle Bag', priceVnd: 21500000, stock: 14 },
+    ],
+  },
   // --- NHÓM 1: SÁCH GIẤY (CÓ BẢN ĐỌC THỬ MẪU) ---
   {
     id: 'book-001',
@@ -260,7 +314,7 @@ export const api = {
   async getProducts(q = '', page = 1, pageSize = 20): Promise<{ items: Product[]; total: number; isFixture?: boolean }> {
     try {
       const url = `${API_BASE}/products?q=${encodeURIComponent(q)}&page=${page}&pageSize=${pageSize}`;
-      const res = await fetch(url, { headers: getHeaders() });
+      const res = await fetch(url, { headers: getHeaders(), signal: AbortSignal.timeout(1200) });
       if (res.ok) {
         const data = await res.json();
         return { items: data.items || [], total: data.total || 0, isFixture: false };

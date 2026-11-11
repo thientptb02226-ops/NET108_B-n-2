@@ -7,9 +7,10 @@ interface ProductCardProps {
   product: Product;
   onSelect: (product: Product) => void;
   onReadSample?: (slug: string) => void;
+  onOpenRunway?: (product: Product) => void;
 }
 
-export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect, onReadSample }) => {
+export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect, onReadSample, onOpenRunway }) => {
   const minPrice = Math.min(...product.variants.map((v) => v.priceVnd));
   const totalStock = product.variants.reduce((sum, v) => sum + v.stock, 0);
   const isOutOfStock = totalStock === 0;
@@ -113,6 +114,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect, onR
                 aria-label={`Đọc thử sách ${product.name}`}
               >
                 <BookOpen className="w-4 h-4" />
+              </button>
+            )}
+
+            {onOpenRunway && (
+              <button
+                type="button"
+                onClick={() => onOpenRunway(product)}
+                className="w-8 h-8 rounded-xl border border-black/15 bg-white text-[#16191f] hover:bg-[#16191f] hover:text-white transition-all duration-200 active:scale-95 flex items-center justify-center shadow-xs"
+                title="Xem sàn diễn 3D Runway Lookbook"
+                aria-label={`Xem sàn diễn 3D cho ${product.name}`}
+              >
+                <span className="font-['Michroma',sans-serif] text-[9px] font-bold">3D</span>
               </button>
             )}
 
