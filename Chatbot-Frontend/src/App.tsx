@@ -773,7 +773,13 @@ export const App: React.FC = () => {
                   <ProductCard
                     key={product.id}
                     product={product}
-                    onSelect={(p) => setSelectedProduct(p)}
+                    onSelect={(p) => {
+                      if (p.runwayLookIndex !== undefined) {
+                        setActiveRunwayLook(p.runwayLookIndex);
+                      } else {
+                        setSelectedProduct(p);
+                      }
+                    }}
                     onReadSample={(slug) => navigateTo(`/read/${slug}`)}
                     onOpenRunway={(p) => setActiveRunwayLook(p.runwayLookIndex ?? 0)}
                   />
@@ -950,22 +956,36 @@ export const App: React.FC = () => {
         onOrderSuccess={handleOrderSuccess}
       />
 
-      {/* 10. MAISON VELL RUNWAY DEPTH LOOKBOOK FULL-VIEWPORT OVERLAY */}
+      {/* 10. BỘ CHỌN MẪU MÃ & THỬ ĐỒ 3D RUNWAY (MODAL DIALOG TINH GỌN, TỐI GIẢN) */}
       {activeRunwayLook !== null && (
-        <div className="fixed inset-0 z-50 w-screen h-screen overflow-hidden bg-white flex flex-col">
-          <div className="absolute top-3.5 right-4 z-50">
+        <div
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-0 sm:p-4 md:p-6 animate-fade-in"
+          onClick={() => setActiveRunwayLook(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Bộ chọn mẫu mã và thử đồ 3D"
+        >
+          <div
+            className="relative w-full h-full sm:h-[90vh] max-w-6xl bg-white sm:rounded-3xl shadow-2xl overflow-hidden border border-black/10 flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Quick Close Floating Button */}
             <button
+              type="button"
               onClick={() => setActiveRunwayLook(null)}
-              className="px-4 py-2 rounded-full bg-[#16191f] hover:bg-black text-white font-['Michroma',sans-serif] text-xs uppercase tracking-wider shadow-xl transition-all active:scale-95 flex items-center gap-1.5 cursor-pointer"
+              className="absolute top-2.5 right-3 z-50 w-8 h-8 rounded-full bg-zinc-900/80 hover:bg-black text-white flex items-center justify-center transition-all shadow-md active:scale-95 cursor-pointer"
+              aria-label="Đóng bộ chọn mẫu mã"
+              title="Đóng (Esc)"
             >
-              <span>✕ Quay lại Cửa Hàng</span>
+              <span className="text-sm font-bold leading-none">✕</span>
             </button>
+
+            <iframe
+              src={`/maison-vell/index.html?look=${activeRunwayLook}`}
+              className="w-full h-full border-0 block flex-1"
+              title="Bộ Chọn Mẫu Mã 3D Runway"
+            />
           </div>
-          <iframe
-            src={`/maison-vell/index.html?look=${activeRunwayLook}`}
-            className="w-full h-full border-0 block"
-            title="Maison Vell Runway Depth Lookbook"
-          />
         </div>
       )}
     </div>
