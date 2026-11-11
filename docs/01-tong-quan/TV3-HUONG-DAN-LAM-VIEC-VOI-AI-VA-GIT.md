@@ -2,7 +2,13 @@
 
 Áp dụng cho thành viên **TV3** của Net108Khai, phụ trách `C06` (giá/khuyến mại), `C07` (tồn kho/giữ hàng), `C08` (giỏ/quote/đơn). Đọc cùng [phân công 5 người](AI-COMMERCE-PHAN-CONG-5-THANH-VIEN.md), [Waterfall](AI-COMMERCE-WATERFALL.md), [bảng tick](AI-COMMERCE-TASK-BOARD.md) và [đặc tả Commerce](../03-san-pham/AI-NATIVE-COMMERCE.md). Frontend thuộc Antigravity; TV1 điều phối API, schema và migration chung.
 
-**Trạng thái khi viết hướng dẫn:** `W01`, `W02` và `C06–C08` còn mở trong bảng tick. Branch `docs/tv3-W01-commerce-input` đã được tạo trên GitHub nhưng chưa có commit công việc riêng. Kiểm tra lại bảng tick và `git status` mỗi lần bắt đầu; thông tin trạng thái có thể đổi.
+**Trạng thái ngày 11/11/2026:** `W01`, `W02` và `C06–C08` còn mở trong bảng tick. Kiểm tra lại bảng tick và `git status` mỗi lần bắt đầu; branch TV3 có thể đã có commit mới.
+
+## 0. TV3 giao việc cho AI bằng một câu
+
+Mở AI trong thư mục repo của TV3 và gửi: **“Đọc toàn bộ `docs/01-tong-quan/TV3-HUONG-DAN-LAM-VIEC-VOI-AI-VA-GIT.md`, tự xác định bước hiện tại từ bảng tick và thực hiện phần việc được phép. Báo diff và kết quả kiểm tra, rồi dừng trước khi stage, commit, push, tạo PR hoặc tick.”**
+
+AI phải tự làm theo thứ tự: kiểm branch/working tree ở mục 1 → đọc cổng `W01/W02` và phụ thuộc trong bảng tick → nếu `W01` còn mở, làm mục 2 → nếu `W01` đã duyệt nhưng `W02` còn mở, tổng hợp thiết kế C06–C08 cho TV1 và chờ hợp đồng chung → nếu `W02` đã duyệt, làm **một** mã việc đủ phụ thuộc theo mục 4. Nếu branch sai, có thay đổi lạ, thiếu quyết định hoặc contract, báo rõ để TV3 xử lý. AI chỉ tiếp tục phần khác khi TV3 giao lượt việc mới.
 
 ## 1. Mở đúng bản clone và branch
 
@@ -37,15 +43,7 @@ Mở repo trong VS Code bằng `code .` (hoặc **File → Open Folder**). Nhờ
 
 Ghi **“Chưa chốt”** khi tài liệu không có quyết định của chủ dự án. Phân biệt code đang chạy, đặc tả mục tiêu và đề xuất của AI. TV3 chuyển câu hỏi cho chủ dự án/TV1; AI không tự chọn chính sách giá, thuế, kho hoặc giao hàng. `C01` và `W01` chỉ được tick khi chủ dự án chốt đầy đủ theo cổng Waterfall.
 
-### Prompt TV3 dán cho AI ở W01
-
-```text
-Bạn là TV3 của Net108Khai. Hãy đọc AGENTS.md, docs/01-tong-quan/AI-COMMERCE-WATERFALL.md, docs/01-tong-quan/AI-COMMERCE-TASK-BOARD.md, docs/03-san-pham/AI-NATIVE-COMMERCE.md và code backend liên quan đến giá, tồn, giỏ, quote, đơn.
-
-Nhiệm vụ duy nhất: tạo docs/99-ghi-chu/TV3-W01-COMMERCE-INPUT.md theo mục 2 của docs/01-tong-quan/TV3-HUONG-DAN-LAM-VIEC-VOI-AI-VA-GIT.md. Với mỗi nhận định, dẫn file/code làm nguồn hoặc ghi Chưa chốt. Liệt kê câu hỏi để chủ dự án quyết định và tác động đến C06/C07/C08. Chỉ sửa file ghi chú này. Sau đó chạy git diff --check, git status --short và báo file đã sửa cùng các câu hỏi ưu tiên.
-
-Điểm dừng: để TV3 đọc bản nháp trước. Chưa stage, commit, push, tạo PR, sửa bảng tick, đổi branch, sửa frontend/backend hoặc tự chọn quy tắc kinh doanh.
-```
+Nếu file ghi chú đã tồn tại, AI đọc và chỉ bổ sung điều còn thiếu; khi câu hỏi đã đủ nhưng đang chờ chủ dự án trả lời, AI báo trạng thái chờ và dừng. AI làm mục này chỉ sửa file ghi chú nêu trên. Sau khi viết, AI chạy `git status --short`, kiểm nội dung và báo các câu hỏi ưu tiên cho chủ dự án. TV3 đọc bản nháp trước khi thực hiện mục 3. AI giữ nguyên backend, frontend và bảng tick ở giai đoạn này.
 
 **Hoàn thành bước W01 của TV3** khi file nêu đủ câu hỏi, có nguồn cho điều đã biết và chủ dự án đã trả lời các quyết định liên quan; TV1 đưa quyết định được chốt vào đặc tả chung. File ghi chú **không tự chứng minh** cổng `W01` đã được duyệt.
 
