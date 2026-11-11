@@ -18,7 +18,7 @@ Các mã `Cxx` là luồng backend Codex hỗ trợ và được phân cho 5 th�
 | Nhóm chức năng | Mã | Phụ trách | Việc nhỏ và điều kiện tick | Cần trước | Tick | Ngày | Bằng chứng |
 | --- | --- | --- | --- | --- | :---: | --- | --- |
 | 0. Nền | C00.1 | Codex | Build .NET và kiểm cú pháp Compose; ghi phiên bản/lệnh/kết quả | — | ☑ | 2026-11-09 | `dotnet build Net108Khai.slnx --no-restore`: 0 lỗi; `docker compose config --quiet`: qua; .NET SDK 10.0.402 |
-| 0. Nền | C00.2 | Codex | Khởi động DB/API bằng Docker; health `ready` trả thành công | C00.1 | ☐ | — | — |
+| 0. Nền | C00.2 | Codex | Khởi động DB/API bằng Docker; health `ready` trả thành công | C00.1 | ☑ | 2026-11-11 | `docker compose up --build -d`: SQL Server healthy, migrator thành công, API chạy; `GET /health/ready`: `ready` |
 | 0. Nền | C00.3 | Codex | Smoke đặt đơn/replay và kiểm AI có/không provider; lưu kết quả thật | C00.2 | ☐ | — | — |
 | 0. Nền | C01.1 | Chủ dự án | Chốt loại hàng, biến thể, người bán, kho và kênh ưu tiên bằng quyết định ghi ngày | — | ☐ | — | — |
 | 0. Nền | C01.2 | Chủ dự án | Chốt giá/thuế, thanh toán/COD, giao hàng và hoàn đổi bằng quyết định ghi ngày | — | ☐ | — | — |
@@ -33,8 +33,8 @@ Các mã `Cxx` là luồng backend Codex hỗ trợ và được phân cho 5 th�
 | 0. Nền | F02.2 | Antigravity | Component loading/empty/error/success có thông điệp tiếng Việt | F02.1 | ☑ | 2026-11-09 | `FeedbackStates.tsx` (Skeleton shimmer, EmptyState, ErrorState song hành tiếng Việt) |
 | 0. Nền | F02.3 | Antigravity | Kiểm keyboard, focus, nhãn form và layout mobile/desktop cho component nền | F02.1–F02.2 | ☑ | 2026-11-09 | Skip-link `index.html`, ESC đóng modal, focus ring `ring-2 ring-emerald-600`, 44px tap targets |
 | 1. Mua hàng | C03.1 | Codex | Tách ranh giới module .NET và owner dữ liệu; build vẫn qua | C02.1 | ☐ | — | — |
-| 1. Mua hàng | C03.2 | Codex | Chuyển schema startup sang migration có version | C03.1 | ☐ | — | — |
-| 1. Mua hàng | C03.3 | Codex | Test migration trên DB trống và bản sao DB demo; ghi cách forward/rollback | C03.2 | ☐ | — | — |
+| 1. Mua hàng | C03.2 | Codex | Chuyển provider Commerce sang SQL Server, tạo migration Code First có version và script T-SQL | C03.1 | ☐ | — | — |
+| 1. Mua hàng | C03.3 | Codex | Test migration SQL Server trên DB trống và bản sao dữ liệu; ghi cách forward/rollback, không tự xóa volume PostgreSQL cũ | C03.2 | ☐ | — | — |
 | 1. Mua hàng | C04.1 | Codex | Schema identity và login/logout/session theo phương án chốt; test flow | C01.1, C03 | ☐ | — | — |
 | 1. Mua hàng | C04.2 | Codex | Gắn chủ sở hữu giỏ/đơn, chặn đọc/sửa object của người khác | C04.1 | ☐ | — | — |
 | 1. Mua hàng | C04.3 | Codex | RBAC nhân viên/admin và test quyền từ chối, session hết hạn | C04.2 | ☐ | — | — |

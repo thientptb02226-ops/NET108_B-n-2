@@ -11,7 +11,10 @@ public sealed class SmtpIdentityEmailSender(IConfiguration config) : IEmailSende
 {
     public Task SendConfirmationLinkAsync(CommerceUser user, string email, string confirmationLink)
     {
-        var code = QueryHelpers.ParseQuery(new Uri(confirmationLink).Query)["code"].ToString();
+        var query = QueryHelpers.ParseQuery(new Uri(WebUtility.HtmlDecode(confirmationLink)).Query);
+        if (!query.TryGetValue("code", out var parsedCode))
+            throw new InvalidOperationException("Identity confirmation code is missing.");
+        var code = parsedCode.ToString();
         if (string.IsNullOrWhiteSpace(code)) throw new InvalidOperationException("Identity confirmation code is missing.");
         return SendAsync(email, "Mã xác thực Net108Khai", $"<p>Nhập mã này để xác thực email:</p><p><strong>{WebUtility.HtmlEncode(code)}</strong></p><p>Mã có hiệu lực 15 phút. Nếu bạn không yêu cầu, hãy bỏ qua email này.</p>");
     }

@@ -29,9 +29,9 @@ public sealed class OrderExpiryWorker(IServiceScopeFactory scopes, ILogger<Order
         var db = scope.ServiceProvider.GetRequiredService<CommerceDbContext>();
         await using var tx = await db.Database.BeginTransactionAsync(ct);
         var orders = await db.Orders.FromSqlRaw("""
-            SELECT * FROM commerce."Orders"
-            WHERE "Status" = 'pending_payment' AND "ExpiresAt" <= now()
-            ORDER BY "ExpiresAt" LIMIT 50 FOR UPDATE SKIP LOCKED
+            SELECT TOP (50) * FROM [commerce].[Orders] WITH (UPDLOCK, ROWLOCK)
+            WHERE [Status] = 'pending_payment' AND [ExpiresAt] <= SYSDATETIMEOFFSET()
+            ORDER BY [ExpiresAt]
             """).ToListAsync(ct);
         foreach (var order in orders)
         {

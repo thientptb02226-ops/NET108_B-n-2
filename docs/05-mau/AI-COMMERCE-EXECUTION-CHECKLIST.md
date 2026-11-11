@@ -10,7 +10,7 @@ Trạng thái của từng **mã việc nhỏ** (ví dụ `C08.1`, `F04.2`) đư
 
 | Chủ sở hữu | Công việc | Ranh giới file |
 | --- | --- | --- |
-| **Codex — backend** | C00, C02–C15, C17; chủ trì hợp đồng API, .NET, PostgreSQL, AI/RAG/tool gateway, tích hợp, Docker và kiểm thử backend | `src/`, `compose.yaml`, `Dockerfile`, schema/migration, OpenAPI và tài liệu backend |
+| **Codex — backend** | C00, C02–C15, C17; chủ trì hợp đồng API, .NET, SQL Server, AI/RAG/tool gateway, tích hợp, Docker và kiểm thử backend | `src/`, `compose.yaml`, `Dockerfile`, schema/migration, OpenAPI và tài liệu backend |
 | **Antigravity — frontend** | F01–F08 và phần giao diện của C16; web, chat UI, admin UI, responsive/accessibility và kiểm thử frontend | Thư mục frontend Commerce được thống nhất khi F01 bắt đầu; `Chatbot-Frontend/` nếu dùng làm chat UI. Không sửa logic giao dịch trong `src/` |
 | **Người phụ trách dự án** | C01: chốt quy tắc bán hàng, provider, chính sách và mục tiêu vận hành | Quyết định được ghi trong spec/ADR |
 | **Codex + Antigravity** | C16 tích hợp API/UI và C18 nghiệm thu release | Mỗi bên kiểm phần mình và cùng chạy luồng xuyên hệ thống |
