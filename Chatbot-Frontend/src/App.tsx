@@ -190,6 +190,19 @@ export const App: React.FC = () => {
     );
   }
 
+  // ROUTE: REELMARK HERO (/reelmark)
+  if (currentPath === '/reelmark') {
+    return (
+      <div className="fixed inset-0 z-50 w-screen h-screen overflow-hidden bg-[#F5F8EF]">
+        <iframe
+          src="/reelmark/index.html"
+          className="w-full h-full border-0 block"
+          title="Reelmark Hero"
+        />
+      </div>
+    );
+  }
+
   // Hot Search Keywords (Taobao Trend Tags)
   const hotSearchKeywords = [
     'Bút pastel 12 cây',
@@ -230,7 +243,13 @@ export const App: React.FC = () => {
               onClick={() => navigateTo('/read')}
               className="hover:text-[#18328C] flex items-center gap-1 text-[#1F3FB0] font-bold transition-colors"
             >
-              <BookOpen className="w-3 h-3" /> Kệ sách 3D KhoaVerse
+              <BookOpen className="w-3 h-3" /> Kệ sách 3D
+            </button>
+            <button
+              onClick={() => navigateTo('/reelmark')}
+              className="hover:text-[#08482D] flex items-center gap-1 text-[#08482D] font-bold transition-colors"
+            >
+              🎬 Reelmark Hero
             </button>
             <span className="hidden md:flex items-center gap-1 hover:text-[#1F3FB0] cursor-pointer">
               <Headphones className="w-3 h-3 text-[#6D6A63]" /> CSKH 24/7
