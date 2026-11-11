@@ -277,63 +277,15 @@ export const ReelCarouselHero: React.FC = () => {
   return (
     <section
       ref={containerRef}
-      className="w-full relative bg-[#F5F8EF] border-b border-black/10 overflow-hidden select-none pt-8 sm:pt-10 pb-4"
-      aria-label="Reelmark Video Reel Showcase"
+      className="w-full relative bg-[#F5F8EF] border-b border-black/10 overflow-hidden select-none pt-8 sm:pt-10 pb-6"
+      aria-label="Commerce Video Reel Showcase"
     >
       {/* Central Content Constraint */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 mb-5 sm:mb-7">
         {/* Main Headline */}
-        <h2 className="text-center font-['Inter_Tight',sans-serif] font-bold text-[#101410] tracking-[-0.035em] text-3xl sm:text-5xl lg:text-[56px] leading-[1.08] sm:leading-[1.05]">
-          <span className="block">Captivate Crowds</span>
-          <span className="block tracking-[-0.022em]">with Snackable Reels</span>
+        <h2 className="text-center font-['Inter_Tight',sans-serif] font-bold text-[#101410] tracking-tight text-xl sm:text-3xl md:text-4xl lg:text-[50px] leading-tight px-4">
+          Chào mừng đến với Commerce
         </h2>
-
-        {/* Subline with flanking Doodles */}
-        <div className="relative max-w-2xl mx-auto mt-3 sm:mt-4 mb-2 sm:mb-4 text-center">
-          {/* Left // Doodle */}
-          <div className="absolute -left-8 sm:-left-12 -top-1 pointer-events-none opacity-80" aria-hidden="true">
-            <svg className="w-6 h-6 sm:w-8 sm:h-8 text-[#08482D]" viewBox="0 0 36 36" fill="none">
-              <path stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" d="M7 30 L19 6" />
-              <path stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" d="M17 30 L29 6" />
-            </svg>
-          </div>
-
-          {/* Subline text */}
-          <p className="font-['Inter',sans-serif] text-xs sm:text-sm lg:text-[15px] text-[#5E5E61] leading-relaxed max-w-lg mx-auto">
-            Grow your brand with short, snappy product clips by our handpicked video makers. Our crew is ready to lift your next launch higher.
-          </p>
-
-          {/* Right Handwritten Note: "Be seen with clips" + Curving Arrow */}
-          <div
-            className="hidden md:block absolute -right-24 lg:-right-36 -top-2 pointer-events-none"
-            aria-hidden="true"
-          >
-            <div className="font-['Caveat',cursive] font-semibold text-xl lg:text-2xl text-[#08482D] rotate-[16deg] whitespace-nowrap leading-tight text-left">
-              Be seen<br />with clips
-            </div>
-            {/* Arrow curving down toward the cards */}
-            <svg
-              className="w-16 h-24 lg:w-20 lg:h-28 text-[#08482D] mt-1 ml-4"
-              viewBox="0 0 96 146"
-              fill="none"
-            >
-              <path
-                stroke="currentColor"
-                strokeWidth="2.4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M22 6 C 58 18, 86 52, 78 86 C 72 112, 38 128, 12 138"
-              />
-              <path
-                stroke="currentColor"
-                strokeWidth="2.4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M22 128 L 10 138 L 18 144"
-              />
-            </svg>
-          </div>
-        </div>
       </div>
 
       {/* Curved Video Carousel Track */}
