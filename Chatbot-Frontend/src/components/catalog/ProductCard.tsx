@@ -2,6 +2,7 @@ import React from 'react';
 import { Product } from '../../types';
 import { formatVnd } from '../../api';
 import { ShoppingBag, Star, BookOpen, Flame } from 'lucide-react';
+import { motion } from 'motion/react';
 
 interface ProductCardProps {
   product: Product;
@@ -21,9 +22,20 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect, onR
     : null;
 
   return (
-    <article
+    <motion.article
+      layout
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.96 }}
+      whileHover={{ y: -4 }}
+      whileTap={{ scale: 0.985 }}
+      transition={{
+        type: 'spring',
+        stiffness: 380,
+        damping: 28,
+      }}
       onClick={() => onSelect(product)}
-      className="bg-white rounded-2xl border border-black/8 shadow-[0_4px_16px_-4px_rgba(8,72,45,0.06)] hover:-translate-y-1 hover:border-[#08482D]/40 hover:shadow-[0_16px_36px_-6px_rgba(8,72,45,0.14)] transition-all duration-300 overflow-hidden flex flex-col h-full group select-none relative cursor-pointer"
+      className="bg-white rounded-2xl border border-black/8 shadow-[0_4px_16px_-4px_rgba(8,72,45,0.06)] hover:border-[#08482D]/40 hover:shadow-[0_16px_36px_-6px_rgba(8,72,45,0.14)] overflow-hidden flex flex-col h-full group select-none relative cursor-pointer"
       aria-labelledby={`product-title-${product.id}`}
     >
       {/* 1. Square Image Container */}
@@ -107,54 +119,64 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelect, onR
           {/* Action Buttons */}
           <div className="flex items-center gap-1.5 shrink-0">
             {product.sampleReadSlug && onReadSample && (
-              <button
+              <motion.button
                 type="button"
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.92 }}
+                transition={{ type: 'spring', stiffness: 500, damping: 25 }}
                 onClick={(e) => {
                   e.stopPropagation();
                   onReadSample(product.sampleReadSlug!);
                 }}
-                className="w-8 h-8 rounded-xl border border-black/15 bg-white text-[#08482D] hover:bg-[#08482D] hover:text-white transition-all duration-200 active:scale-95 flex items-center justify-center shadow-xs"
+                className="w-8 h-8 rounded-xl border border-black/15 bg-white text-[#08482D] hover:bg-[#08482D] hover:text-white transition-colors duration-200 flex items-center justify-center shadow-xs"
                 title="Đọc thử sách online 3D KhoaVerse"
                 aria-label={`Đọc thử sách ${product.name}`}
               >
                 <BookOpen className="w-4 h-4" />
-              </button>
+              </motion.button>
             )}
 
             {onOpenRunway && (
-              <button
+              <motion.button
                 type="button"
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.92 }}
+                transition={{ type: 'spring', stiffness: 500, damping: 25 }}
                 onClick={(e) => {
                   e.stopPropagation();
                   onOpenRunway(product);
                 }}
-                className="w-8 h-8 rounded-xl border border-[#08482D]/20 bg-white text-[#08482D] hover:bg-[#08482D] hover:text-white transition-all duration-200 active:scale-95 flex items-center justify-center shadow-xs"
+                className="w-8 h-8 rounded-xl border border-[#08482D]/20 bg-white text-[#08482D] hover:bg-[#08482D] hover:text-white transition-colors duration-200 flex items-center justify-center shadow-xs"
                 title="Xem sàn diễn 3D Runway Lookbook"
                 aria-label={`Xem sàn diễn 3D cho ${product.name}`}
               >
                 <span className="font-['Michroma',sans-serif] text-[9px] font-bold">3D</span>
-              </button>
+              </motion.button>
             )}
 
-            <button
+            <motion.button
               type="button"
               disabled={isOutOfStock}
+              whileHover={!isOutOfStock ? { scale: 1.04 } : undefined}
+              whileTap={!isOutOfStock ? { scale: 0.94 } : undefined}
+              transition={{ type: 'spring', stiffness: 550, damping: 30 }}
               onClick={(e) => {
                 e.stopPropagation();
                 onSelect(product);
               }}
-              className={`h-8 px-3.5 rounded-xl text-xs font-bold transition-all duration-200 active:scale-95 flex items-center gap-1 shadow-xs ${
+              className={`h-8 px-3.5 rounded-xl text-xs font-bold transition-colors duration-200 flex items-center gap-1 shadow-xs ${
                 isOutOfStock
                   ? 'bg-zinc-200 text-zinc-400 cursor-not-allowed border border-zinc-300'
                   : 'bg-[#08482D] hover:bg-[#E84E25] text-white shadow-xs'
               }`}
+              aria-label={`Mua ngay ${product.name}`}
             >
               <ShoppingBag className="w-3.5 h-3.5" />
               <span>{isOutOfStock ? 'Hết' : 'Mua'}</span>
-            </button>
+            </motion.button>
           </div>
         </div>
       </div>
-    </article>
+    </motion.article>
   );
 };
