@@ -118,7 +118,7 @@ public static class AccountEndpoints
         await using var tx = await db.Database.BeginTransactionAsync();
         var hash = Hash(request.Code);
         var ticket = await db.ExternalLoginTickets.FromSqlInterpolated(
-            $"SELECT * FROM commerce.\"ExternalLoginTickets\" WHERE \"CodeHash\" = {hash} FOR UPDATE").SingleOrDefaultAsync();
+            $"SELECT * FROM [commerce].[ExternalLoginTickets] WITH (UPDLOCK, HOLDLOCK, ROWLOCK) WHERE [CodeHash] = {hash}").SingleOrDefaultAsync();
         if (ticket is null || ticket.RedeemedAt is not null || ticket.ExpiresAt <= DateTimeOffset.UtcNow)
             return Results.BadRequest(new { error = "invalid_or_expired_code" });
         var user = await users.FindByIdAsync(ticket.UserId);

@@ -47,7 +47,7 @@ if (!builder.Environment.IsDevelopment())
         throw new InvalidOperationException("Production frontend auth callback must use HTTPS.");
 }
 
-builder.Services.AddDbContext<CommerceDbContext>(options => options.UseNpgsql(connectionString));
+builder.Services.AddDbContext<CommerceDbContext>(options => options.UseSqlServer(connectionString));
 var authentication = builder.Services.AddAuthentication(IdentityConstants.BearerScheme)
     .AddBearerToken(IdentityConstants.BearerScheme)
     .AddCookie("ExternalCookie", options =>

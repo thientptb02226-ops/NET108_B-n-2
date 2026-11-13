@@ -37,6 +37,7 @@ docs/
 - [SYSTEM_ARCHITECTURE.md](02-ky-thuat/SYSTEM_ARCHITECTURE.md): Kiến trúc tổng thể 7 lớp của hệ thống AI-Native Commerce.
 - [BACKEND-API-V1.md](02-ky-thuat/BACKEND-API-V1.md): Đặc tả hợp đồng API v1 (OpenAPI) giữa Frontend và Backend.
 - [BACKEND-AUTH.md](02-ky-thuat/BACKEND-AUTH.md): Kiến trúc xác thực JWT, RBAC, OAuth và Cookie an toàn.
+- [SQLSERVER-TRANSITION-LAB3.md](02-ky-thuat/SQLSERVER-TRANSITION-LAB3.md): Quyết định chuyển provider Commerce, migration Code First, dữ liệu cũ và ranh giới yêu cầu Lab 3.
 - [mcp-reference-architecture.md](02-ky-thuat/mcp-reference-architecture.md): Kiến trúc Model Context Protocol (MCP) Server.
 
 ### 📁 `03-san-pham/` — Sản Phẩm & Nghiệp Vụ
@@ -57,6 +58,7 @@ docs/
 
 ### 📁 `labs/` — Học Tập & Đồ Án NET108
 - [LAB-REPORT-STANDARD.md](labs/LAB-REPORT-STANDARD.md): Quy chuẩn trình bày báo cáo Lab 1 – Lab 8 theo mẫu FPT Polytechnic.
+- [LAB3-RUN.md](labs/LAB3-RUN.md): Cách chạy bài ADO.NET ba lớp và kiểm chứng CRUD trên SQL Server LocalDB.
 
 ---
 

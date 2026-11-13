@@ -8,7 +8,7 @@ public sealed class CommerceDbContextFactory : IDesignTimeDbContextFactory<Comme
     public CommerceDbContext CreateDbContext(string[] args)
     {
         var connection = Environment.GetEnvironmentVariable("ConnectionStrings__Commerce")
-            ?? "Host=localhost;Database=net108khai;Username=net108khai;Password=local-dev-only";
-        return new CommerceDbContext(new DbContextOptionsBuilder<CommerceDbContext>().UseNpgsql(connection).Options);
+            ?? "Server=localhost,1433;Database=net108khai;User Id=sa;Password=Net108Khai!2026Dev;Encrypt=True;TrustServerCertificate=True";
+        return new CommerceDbContext(new DbContextOptionsBuilder<CommerceDbContext>().UseSqlServer(connection).Options);
     }
 }

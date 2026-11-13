@@ -56,7 +56,7 @@ flowchart LR
     G --> K
     A --> R[Retrieval / knowledge]
     A --> M[Model gateway]
-    K --> P[(PostgreSQL)]
+    K --> P[(SQL Server)]
     K --> X[Outbox / event bus]
     R --> V[(Search / vector index)]
     X --> W[Workers / analytics]
@@ -67,7 +67,7 @@ flowchart LR
 
 **Các module .NET mục tiêu:** `Identity`, `Catalog`, `Pricing`, `Inventory`, `Cart`, `Checkout`, `Orders`, `Payments`, `Fulfillment`, `Returns`, `Customer`, `Promotions`, `Knowledge`, `Conversations`, `AgentTools`, `Notifications`, `Analytics`. BFF cung cấp contract theo kênh. Worker tiêu thụ outbox và chạy đồng bộ/tái lập chỉ mục. `Infrastructure` chứa database, provider, queue và các adapter. Lớp domain không gọi model trực tiếp.
 
-**Triển khai:** ASP.NET Core 10 cho API/BFF/orchestrator; PostgreSQL làm transactional store; Redis cho cache và khóa ngắn hạn khi cần; object storage cho ảnh/tài liệu; search index cho tìm kiếm văn bản; vector index cho tri thức đã duyệt; broker khi outbox cần fan-out. Docker Compose dành cho phát triển; môi trường thật cần secret manager, ingress/TLS, backup và rolling deployment. Chỉ thêm thành phần khi module sử dụng nó.
+**Triển khai:** ASP.NET Core 10 cho API/BFF/orchestrator; SQL Server làm transactional store từ Lab 3; Redis cho cache và khóa ngắn hạn khi cần; object storage cho ảnh/tài liệu; search index cho tìm kiếm văn bản; vector index cho tri thức đã duyệt; broker khi outbox cần fan-out. Docker Compose dành cho phát triển; môi trường thật cần secret manager, ingress/TLS, backup và rolling deployment. Chỉ thêm thành phần khi module sử dụng nó.
 
 ## 5. Bounded context và quyền sở hữu dữ liệu
 
@@ -148,7 +148,7 @@ Sự kiện nội bộ: `ProductPublished`, `OfferChanged`, `StockChanged`, `Car
 
 ## 8. Dữ liệu và tích hợp
 
-Transactional PostgreSQL: bảng theo module với khóa chính UUID, ràng buộc DB, index theo truy vấn, audit trail và outbox. Ảnh/tài liệu trong object storage, metadata/ACL trong DB. Search/vector là projection có thể tái tạo. Redis chỉ cache và rate limit, không là nguồn sự thật. Backup theo mục tiêu RPO/RTO được chủ dự án duyệt; thử phục hồi định kỳ.
+Transactional SQL Server: bảng theo module với khóa chính `uniqueidentifier`, thời gian `datetimeoffset`, ràng buộc DB, index theo truy vấn, audit trail và outbox. Ảnh/tài liệu trong object storage, metadata/ACL trong DB. Search/vector là projection có thể tái tạo. Redis chỉ cache và rate limit, không là nguồn sự thật. Backup theo mục tiêu RPO/RTO được chủ dự án duyệt; thử phục hồi định kỳ.
 
 Adapter tách payment, shipping, tax/invoice, CRM, email/SMS và kênh chat. Mỗi adapter có timeout, retry hữu hạn với jitter, circuit breaker, mapping lỗi và reconciliation định kỳ. Webhook yêu cầu chữ ký, timestamp chống replay và inbox idempotent. Không lưu dữ liệu thẻ; dùng trang/token của provider. Các provider cụ thể và yêu cầu pháp lý là **cần chốt**.
 
@@ -182,14 +182,14 @@ Trace xuyên kênh → API → tool → provider → DB với `correlationId`. M
 | 3. AI native | Conversation, retrieval có ACL, tool gateway, confirmation, handoff, eval/trace/cost, rollout guardrails |
 | 4. Tối ưu | Cá nhân hóa có consent, dự báo, A/B, đa kênh và scale theo tải |
 
-**Kiểm tra trong triển khai, nghiệm thu hệ thống tại `W04`:** unit tests cho bất biến được chạy cùng code; integration tests PostgreSQL và adapter giả, contract tests cho webhook, concurrency tests checkout/tồn, end-to-end từ tìm → trả tiền → giao/hoàn, load test theo traffic thực, security review và restore drill là bằng chứng của cổng kiểm thử. Khi đổi yêu cầu/thiết kế, áp dụng kiểm soát thay đổi trước khi tiếp tục.
+**Kiểm tra trong triển khai, nghiệm thu hệ thống tại `W04`:** unit tests cho bất biến được chạy cùng code; integration tests SQL Server và adapter giả, contract tests cho webhook, concurrency tests checkout/tồn, end-to-end từ tìm → trả tiền → giao/hoàn, load test theo traffic thực, security review và restore drill là bằng chứng của cổng kiểm thử. Khi đổi yêu cầu/thiết kế, áp dụng kiểm soát thay đổi trước khi tiếp tục.
 
 ## 12. Đối chiếu bản hiện có
 
 | Mục | Trong repo hiện tại |
 | --- | --- |
-| .NET API, PostgreSQL, Docker Compose | Có; Compose dev chạy migrator trước API, chưa kiểm thử container trên máy hiện tại |
-| EF Core code first và migration versioned | Có; schema `commerce`, tạo script SQL idempotent được; chưa thử áp dụng trên PostgreSQL thật |
+| .NET API, SQL Server, Docker Compose | Có cấu hình và build; Compose dev chạy migrator trước API theo thiết kế, chưa kiểm thử container trên máy hiện tại |
+| EF Core code first và migration versioned | Có migration SQL Server mới cho schema `commerce`, tạo script T-SQL idempotent được; chưa thử áp dụng trên SQL Server thật |
 | Catalog và biến thể | Có model và API đọc/quản trị cơ bản; chưa có offer/khuyến mại hoặc media |
 | Identity bearer, mã email, đặt lại mật khẩu, OAuth Google/Facebook, RBAC và kiểm quyền giỏ/đơn | Có code và hợp đồng trong `BACKEND-AUTH.md`; OAuth chỉ bật khi cấu hình credential, chưa kiểm thử tích hợp với DB/SMTP/provider thật |
 | Giỏ và checkout tạo đơn `pending_payment` | Có code; khóa transaction, trừ tồn và ghi movement, idempotency; chưa kiểm thử đồng thời trên DB thật |
@@ -199,7 +199,7 @@ Trace xuyên kênh → API → tool → provider → DB với `correlationId`. M
 | RAG, tool gateway, confirmation, handoff, eval | Chưa |
 | Admin UI, observability, production hardening | Chưa; backend đã có khóa Data Protection bền vững/mã hóa theo cấu hình, rate limit và lockout, nhưng chưa nghiệm thu bảo mật production |
 
-Các thư mục `Trello-Clone-*` và `Chatbot-Frontend` là khung trống khi bắt đầu; không có logic cũ để tích hợp. Backend mới dùng EF Core migration trong schema `commerce`, không tự thay CSDL lúc API khởi động. Dữ liệu mẫu chỉ được thêm qua migrator ở Development. Trước khi dùng giao dịch thật cần kiểm thử trên PostgreSQL, xác minh auth/stock concurrency, chốt giá/thuế/vận chuyển và tích hợp thanh toán.
+Các thư mục `Trello-Clone-*` và `Chatbot-Frontend` là khung trống khi bắt đầu; không có logic cũ để tích hợp. Backend dùng EF Core migration SQL Server trong schema `commerce`, không tự thay CSDL lúc API khởi động. Dữ liệu mẫu chỉ được thêm qua migrator ở Development. Trước khi dùng giao dịch thật cần kiểm thử trên SQL Server, xác minh auth/stock concurrency, chốt giá/thuế/vận chuyển và tích hợp thanh toán. Xem [quyết định chuyển provider](../02-ky-thuat/SQLSERVER-TRANSITION-LAB3.md) để xử lý dữ liệu PostgreSQL cũ.
 
 ## 13. Quyết định cần chủ dự án chốt
 
