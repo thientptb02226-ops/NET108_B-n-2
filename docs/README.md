@@ -58,6 +58,7 @@ docs/
 
 ### 📁 `labs/` — Học Tập & Đồ Án NET108
 - [LAB-REPORT-STANDARD.md](labs/LAB-REPORT-STANDARD.md): Quy chuẩn trình bày báo cáo Lab 1 – Lab 8 theo mẫu FPT Polytechnic.
+- [LAB3-RUN.md](labs/LAB3-RUN.md): Cách chạy bài ADO.NET ba lớp và kiểm chứng CRUD trên SQL Server LocalDB.
 
 ---
 
