@@ -1,6 +1,6 @@
 # Hợp đồng xác thực Commerce v1
 
-Backend dùng ASP.NET Core Identity, PostgreSQL schema `commerce`, bearer token. Frontend do Antigravity thực hiện; tài liệu này là hợp đồng tích hợp. Các endpoint đã có code và build, nhưng chưa được kiểm thử end to end với PostgreSQL, SMTP và OAuth provider vì Docker Engine trên máy hiện chưa chạy.
+Backend dùng ASP.NET Core Identity, SQL Server schema `commerce`, bearer token. Frontend do Antigravity thực hiện; tài liệu này là hợp đồng tích hợp. Các endpoint đã có code và build, nhưng chưa được kiểm thử end to end với SQL Server, SMTP và OAuth provider vì Docker Engine trên máy hiện chưa chạy.
 
 ## Vai trò và quyền
 
@@ -36,7 +36,7 @@ Facebook có thể không cung cấp email; backend trả `provider_email_requir
 
 ## Cấu hình và bảo mật vận hành
 
-Compose Development: PostgreSQL, Mailpit SMTP `mailpit:1025`, API. `.env` có `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `FACEBOOK_APP_ID`, `FACEBOOK_APP_SECRET`, `AUTH_CALLBACK_URL`; secret không commit. Google/Facebook thực tế chỉ kiểm được sau khi chủ dự án tạo ứng dụng, cấp credential và đăng ký URI callback.
+Compose Development: SQL Server, Mailpit SMTP `mailpit:1025`, API. `.env` có `MSSQL_SA_PASSWORD`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `FACEBOOK_APP_ID`, `FACEBOOK_APP_SECRET`, `AUTH_CALLBACK_URL`; secret không commit. Google/Facebook thực tế chỉ kiểm được sau khi chủ dự án tạo ứng dụng, cấp credential và đăng ký URI callback.
 
 Production yêu cầu SMTP Host/Port/From/User/Password, `Smtp__EnableSsl=true`, HTTPS, `Frontend__AuthCallbackUrl` HTTPS, đường dẫn khóa Data Protection bền vững (`DataProtection__KeyPath`) và chứng chỉ PKCS#12 (`DataProtection__CertificatePath`, `DataProtection__CertificatePassword`) để mã hóa khóa khi lưu. Cần mount key volume riêng, giới hạn quyền file, quản lý chứng chỉ và backup. Không dùng Mailpit hay cấu hình Development khi triển khai công khai.
 

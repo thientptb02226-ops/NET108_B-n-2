@@ -12,6 +12,7 @@ interface ProductDetailModalProps {
   onClose: () => void;
   onAddToCart: (variant: Variant, quantity: number) => void;
   onReadSample?: (slug: string) => void;
+  onOpenRunway?: (lookIndex?: number) => void;
 }
 
 export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
@@ -20,6 +21,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   onClose,
   onAddToCart,
   onReadSample,
+  onOpenRunway,
 }) => {
   if (!product) return null;
 
@@ -144,6 +146,36 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               className="lbl-khoa h-8 px-3 rounded-lg border border-[#1F3FB0] text-[#1F3FB0] hover:bg-[#1F3FB0] hover:text-white transition-all shrink-0 bg-white shadow-xs"
             >
               Đọc thử ngay
+            </button>
+          </div>
+        )}
+
+        {/* Runway 3D Lookbook Showcase Banner */}
+        {onOpenRunway && (
+          <div className="p-3.5 bg-gradient-to-r from-zinc-900/5 via-zinc-800/10 to-zinc-900/5 border border-zinc-900/15 rounded-xl flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-[#16191f] text-white flex items-center justify-center font-['Michroma',sans-serif] text-[10px] font-bold shrink-0 shadow-xs">
+                3D
+              </div>
+              <div>
+                <div className="font-['Michroma',sans-serif] text-xs font-bold text-[#16191f] tracking-wide uppercase">
+                  Sàn Diễn 3D Runway Lookbook
+                </div>
+                <div className="text-[11px] text-[#6D6A63]">
+                  Xem người mẫu trình diễn chiều sâu 3D & phối đồ tương tác
+                </div>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                onOpenRunway(product.runwayLookIndex ?? 0);
+              }}
+              className="h-8 px-3 rounded-lg bg-[#16191f] text-white text-xs font-medium hover:bg-black transition-all shrink-0 shadow-xs flex items-center gap-1.5 active:scale-95 cursor-pointer"
+            >
+              <span>Xem Sàn Diễn</span>
+              <span aria-hidden="true">→</span>
             </button>
           </div>
         )}

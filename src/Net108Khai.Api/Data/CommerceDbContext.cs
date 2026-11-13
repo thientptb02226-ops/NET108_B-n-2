@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Net108Khai.Api.Domain;
@@ -19,6 +20,12 @@ public sealed class CommerceDbContext(DbContextOptions<CommerceDbContext> option
     {
         base.OnModelCreating(model);
         model.HasDefaultSchema("commerce");
+        model.Entity<CommerceUser>().Property(x => x.Id).HasMaxLength(128);
+        model.Entity<IdentityRole>().Property(x => x.Id).HasMaxLength(128);
+        model.Entity<IdentityUserLogin<string>>().Property(x => x.LoginProvider).HasMaxLength(128);
+        model.Entity<IdentityUserLogin<string>>().Property(x => x.ProviderKey).HasMaxLength(128);
+        model.Entity<IdentityUserToken<string>>().Property(x => x.LoginProvider).HasMaxLength(128);
+        model.Entity<IdentityUserToken<string>>().Property(x => x.Name).HasMaxLength(128);
         model.Entity<CommerceUser>().HasIndex(x => x.NormalizedEmail).IsUnique().HasDatabaseName("EmailIndex");
 
         model.Entity<ExternalLoginTicket>(b =>
@@ -45,8 +52,8 @@ public sealed class CommerceDbContext(DbContextOptions<CommerceDbContext> option
         {
             b.ToTable("ProductVariants", t =>
             {
-                t.HasCheckConstraint("CK_ProductVariants_Price", "\"PriceVnd\" BETWEEN 0 AND 1000000000000");
-                t.HasCheckConstraint("CK_ProductVariants_Stock", "\"Stock\" >= 0");
+                t.HasCheckConstraint("CK_ProductVariants_Price", "[PriceVnd] BETWEEN 0 AND 1000000000000");
+                t.HasCheckConstraint("CK_ProductVariants_Stock", "[Stock] >= 0");
             });
             b.HasKey(x => x.Id);
             b.Property(x => x.Sku).HasMaxLength(80).IsRequired();
@@ -65,7 +72,7 @@ public sealed class CommerceDbContext(DbContextOptions<CommerceDbContext> option
         });
         model.Entity<InventoryMovement>(b =>
         {
-            b.ToTable("InventoryMovements", t => t.HasCheckConstraint("CK_InventoryMovements_Delta", "\"Delta\" <> 0"));
+            b.ToTable("InventoryMovements", t => t.HasCheckConstraint("CK_InventoryMovements_Delta", "[Delta] <> 0"));
             b.HasKey(x => x.Id);
             b.Property(x => x.Reason).HasMaxLength(200).IsRequired();
             b.Property(x => x.ActorUserId).HasMaxLength(450);
@@ -74,13 +81,13 @@ public sealed class CommerceDbContext(DbContextOptions<CommerceDbContext> option
         });
         model.Entity<CartItem>(b =>
         {
-            b.ToTable("CartItems", t => t.HasCheckConstraint("CK_CartItems_Quantity", "\"Quantity\" BETWEEN 1 AND 99"));
+            b.ToTable("CartItems", t => t.HasCheckConstraint("CK_CartItems_Quantity", "[Quantity] BETWEEN 1 AND 99"));
             b.HasKey(x => new { x.CartId, x.VariantId });
             b.HasOne(x => x.Variant).WithMany().HasForeignKey(x => x.VariantId).OnDelete(DeleteBehavior.Restrict);
         });
         model.Entity<Order>(b =>
         {
-            b.ToTable("Orders", t => t.HasCheckConstraint("CK_Orders_Total", "\"TotalVnd\" >= 0"));
+            b.ToTable("Orders", t => t.HasCheckConstraint("CK_Orders_Total", "[TotalVnd] >= 0"));
             b.HasKey(x => x.Id);
             b.Property(x => x.UserId).IsRequired();
             b.HasOne<CommerceUser>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Restrict);
@@ -95,8 +102,8 @@ public sealed class CommerceDbContext(DbContextOptions<CommerceDbContext> option
         {
             b.ToTable("OrderItems", t =>
             {
-                t.HasCheckConstraint("CK_OrderItems_Quantity", "\"Quantity\" > 0");
-                t.HasCheckConstraint("CK_OrderItems_Price", "\"UnitPriceVnd\" >= 0");
+                t.HasCheckConstraint("CK_OrderItems_Quantity", "[Quantity] > 0");
+                t.HasCheckConstraint("CK_OrderItems_Price", "[UnitPriceVnd] >= 0");
             });
             b.HasKey(x => new { x.OrderId, x.VariantId });
             b.Property(x => x.Sku).HasMaxLength(80).IsRequired();

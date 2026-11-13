@@ -14,6 +14,8 @@ Chào mừng AI Agent (Claude Code, Codex, Antigravity, Gemini). Đây là tài 
 
 **Waterfall cho Commerce:** Trước khi nhận task Commerce mới hoặc chuyển sang tích hợp/kiểm thử/phát hành, đọc [cổng Waterfall](docs/01-tong-quan/AI-COMMERCE-WATERFALL.md). Đi theo `W01` yêu cầu → `W02` thiết kế → `W03` triển khai → `W04` kiểm thử hệ thống → `W05` nghiệm thu → `W06` triển khai vận hành. Công việc đã có là baseline cần đối chiếu, không tự coi là cổng đã được duyệt. Task nhỏ và review vẫn thực hiện bên trong giai đoạn phù hợp.
 
+**CSDL Commerce từ Lab 3:** Dùng SQL Server với EF Core Code First; đọc [quyết định chuyển provider](docs/02-ky-thuat/SQLSERVER-TRANSITION-LAB3.md). PostgreSQL trong các Lab trước là baseline lịch sử, không phải provider để phát triển Commerce tiếp. Bài Lab 3 còn yêu cầu ADO.NET/DBUtil riêng; không coi việc đổi EF provider là đã hoàn thành toàn bộ Lab 3.
+
 Mọi Agent hoạt động trong repository này **bắt buộc tuân thủ** các nguyên tắc dưới đây.
 
 ---
@@ -45,7 +47,7 @@ Tuyệt đối không áp dụng tư duy "one-prompt làm cả app". Mọi tính
 
 | Module | Vai Trò & Trách Nhiệm | Tech Stack Mục Tiêu |
 |---|---|---|
-| **`src/`** | Core API Commerce, Product Catalog, Carts, Orders, Auth, AI Provider | C# / .NET 10 / PostgreSQL |
+| **`src/`** | Core API Commerce, Product Catalog, Carts, Orders, Auth, AI Provider | C# / .NET 10 / SQL Server |
 | **`Chatbot-Frontend/`** | Web app chính Commerce & Trợ lý mua sắm AI (React, Tailwind, Motion) | React 19 / TypeScript / Vite / TailwindCSS |
 | **`trello-clone/Backend`** | (Dự phòng) Core API Kanban, Boards/Lists/Cards, Realtime WebSockets | Node.js / NestJS / ASP.NET Core / PostgreSQL |
 | **`trello-clone/Frontend`** | (Dự phòng) Web app Kanban, trải nghiệm kéo thả trực quan | React / Next.js / TailwindCSS / Motion |

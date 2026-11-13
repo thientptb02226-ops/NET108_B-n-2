@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Product, Variant, CartLine, Order } from './types';
-import { api } from './api';
+import { api, DEMO_PRODUCTS } from './api';
 import { ProductCard } from './components/catalog/ProductCard';
 import { ProductDetailModal } from './components/catalog/ProductDetailModal';
 import { CartDrawer } from './components/cart/CartDrawer';
@@ -32,6 +32,9 @@ import {
 } from 'lucide-react';
 import { KhoaverseLibraryView } from './components/reader/KhoaverseLibraryView';
 import { ReelCarouselHero } from './components/hero/ReelCarouselHero';
+import { motion } from 'motion/react';
+import { CountingNumber } from '@animate-ui/react/primitives/texts/counting-number';
+import { Shine } from '@animate-ui/react/primitives/effects/shine';
 
 export const App: React.FC = () => {
   // Path-based routing: '/' (Commerce) vs '/read' or '/read/:slug' (Reading Space)
@@ -61,18 +64,76 @@ export const App: React.FC = () => {
   const [searchCategory, setSearchCategory] = useState<'all' | 'books' | 'stationery'>('all');
   const [isImageSearchOpen, setIsImageSearchOpen] = useState(false);
 
-  // Products state
-  const [products, setProducts] = useState<Product[]>([]);
-  const [isLoadingProducts, setIsLoadingProducts] = useState(true);
+  // Products state - prefilled with DEMO_PRODUCTS for instantaneous instant render
+  const [products, setProducts] = useState<Product[]>(DEMO_PRODUCTS);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(false);
   const [productError, setProductError] = useState<string | null>(null);
 
   // Cart state
   const [cartLines, setCartLines] = useState<CartLine[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
+  // Runway 3D Lookbook state (supports query param ?look=0..5 or ?runway=0..5)
+  const [activeRunwayLook, setActiveRunwayLook] = useState<number | null>(() => {
+    try {
+      const pms = new URLSearchParams(window.location.search);
+      const look = pms.get('look') ?? pms.get('runway');
+      if (look !== null) {
+        const parsed = parseInt(look, 10);
+        return isNaN(parsed) ? 0 : parsed;
+      }
+    } catch (_) {}
+    return null;
+  });
+
   // Modals state
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+
+  // Listen to postMessage from Runway Lookbook iframe
+  useEffect(() => {
+    const handleMessage = (e: MessageEvent) => {
+      if (e.data?.type === 'CLOSE_RUNWAY') {
+        setActiveRunwayLook(null);
+      }
+      if (e.data?.type === 'RUNWAY_ADD_TO_CART') {
+        const { name, option, size, price, quantity = 1, buyNow } = e.data;
+        const numPrice = parseInt(String(price).replace(/[^0-9]/g, ''), 10) || 1000;
+        const priceVnd = numPrice * 25400; // ~$1 = 25,400 VND
+        const titleSuffix = [option, size ? `Size ${size}` : null].filter(Boolean).join(' • ');
+        const fullTitle = titleSuffix ? `${name} (${titleSuffix})` : `Maison Vell — ${name}`;
+        const qty = Math.max(1, parseInt(String(quantity), 10) || 1);
+        const sku = `MV-${String(name).toUpperCase().replace(/\s+/g, '-')}-${String(option || 'DEFAULT').toUpperCase().replace(/\s+/g, '-')}-${String(size || 'S')}`;
+
+        setCartLines((prev) => {
+          const existing = prev.find((l) => l.sku === sku);
+          if (existing) {
+            return prev.map((l) =>
+              l.sku === sku ? { ...l, quantity: l.quantity + qty } : l
+            );
+          }
+          return [
+            ...prev,
+            {
+              variantId: `mv-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+              sku,
+              name: fullTitle,
+              priceVnd,
+              quantity: qty,
+            },
+          ];
+        });
+
+        if (buyNow) {
+          setIsCheckoutOpen(true);
+        } else {
+          setIsCartOpen(true);
+        }
+      }
+    };
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
 
   // Gamification state: coins & daily check-in
   const [coins, setCoins] = useState(850);
@@ -96,16 +157,20 @@ export const App: React.FC = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // Fetch products
+  // Fetch products (Stale-while-revalidate: keep initial products displayed without flashing skeleton)
   const fetchProducts = async (q = '') => {
-    setIsLoadingProducts(true);
+    if (!products || products.length === 0) {
+      setIsLoadingProducts(true);
+    }
     setProductError(null);
     try {
       const res = await api.getProducts(q);
       setProducts(res.items);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Lỗi khi tải danh sách sản phẩm.';
-      setProductError(msg);
+      if (!products || products.length === 0) {
+        setProductError(msg);
+      }
     } finally {
       setIsLoadingProducts(false);
     }
@@ -202,14 +267,14 @@ export const App: React.FC = () => {
     'Hộp bút canvas',
   ];
 
-  // ROUTE 2: COMMERCE STORE (TAOBAO ARCHITECTURE + KHOAVERSE ARCHIVAL HARMONIZED PALETTE)
+  // ROUTE 2: COMMERCE STORE (TAOBAO ARCHITECTURE + SOFT MINT STUDIO PALETTE #F8FAF4)
   return (
-    <div className="min-h-screen flex flex-col bg-[#EDEBE6] text-[#141414] font-sans selection:bg-[#1F3FB0]/20 selection:text-[#1F3FB0] relative overflow-x-hidden w-full max-w-full">
-      {/* KhoaVerse Paper Grain Texture Overlay */}
+    <div className="min-h-screen flex flex-col bg-[#F8FAF4] text-[#141414] font-sans selection:bg-[#08482D]/20 selection:text-[#08482D] relative overflow-x-hidden w-full max-w-full">
+      {/* Paper Grain Texture Overlay */}
       <div className="grain" aria-hidden="true" />
 
-      {/* 1. TOP UTILITY BAR (Taobao Style with KhoaVerse Archival Tones) */}
-      <div className="bg-[#E5E2DC] border-b border-black/10 text-[11px] text-[#6D6A63] py-1.5 px-4 sm:px-6 lg:px-8 relative z-10">
+      {/* 1. TOP UTILITY BAR (Soft Mint Harmonized Palette) */}
+      <div className="bg-[#EFF3EA] border-b border-black/10 text-[11px] text-[#6D6A63] py-1.5 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1 font-medium text-[#141414]">
@@ -233,6 +298,12 @@ export const App: React.FC = () => {
             >
               <BookOpen className="w-3 h-3" /> Kệ sách 3D
             </button>
+            <button
+              onClick={() => setActiveRunwayLook(0)}
+              className="hover:text-black flex items-center gap-1 text-[#16191f] font-bold transition-colors cursor-pointer"
+            >
+              👗 Sàn diễn 3D Runway
+            </button>
             <span className="hidden md:flex items-center gap-1 hover:text-[#1F3FB0] cursor-pointer">
               <Headphones className="w-3 h-3 text-[#6D6A63]" /> CSKH 24/7
             </span>
@@ -240,8 +311,8 @@ export const App: React.FC = () => {
         </div>
       </div>
 
-      {/* 2. MEGA SEARCH BAND (Taobao Style with KhoaVerse Deep Ink & Cobalt Accents) */}
-      <header className="bg-[#F4F2ED]/95 backdrop-blur-md sticky top-0 z-40 border-b border-black/10 shadow-[0_4px_20px_-8px_rgba(20,20,20,0.06)]">
+      {/* 2. MEGA SEARCH BAND */}
+      <header className="bg-[#F8FAF4]/95 backdrop-blur-md sticky top-0 z-40 border-b border-black/10 shadow-[0_4px_20px_-8px_rgba(20,20,20,0.06)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col md:flex-row items-center justify-between gap-4">
           {/* Logo & Branding */}
           <div className="flex items-center justify-between w-full md:w-auto">
@@ -253,13 +324,13 @@ export const App: React.FC = () => {
               }}
               className="flex items-center gap-3 group text-left"
             >
-              <div className="w-11 h-11 rounded-2xl bg-[#141414] text-white flex items-center justify-center font-serif shadow-sm group-hover:bg-[#1F3FB0] transition-colors">
+              <div className="w-11 h-11 rounded-2xl bg-[#08482D] text-white flex items-center justify-center font-serif shadow-sm group-hover:bg-[#E84E25] transition-colors">
                 <BookOpen className="w-5 h-5" />
               </div>
               <div>
-                <span className="font-serif text-2xl font-bold tracking-tight text-[#141414] group-hover:text-[#1F3FB0] transition-colors leading-none flex items-center gap-1.5">
+                <span className="font-serif text-2xl font-bold tracking-tight text-[#141414] group-hover:text-[#08482D] transition-colors leading-none flex items-center gap-1.5">
                   Net108Khai
-                  <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-white text-[#1F3FB0] border border-[#1F3FB0]/25">
+                  <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[#E5EFE3] text-[#08482D] border border-[#08482D]/20">
                     Mall
                   </span>
                 </span>
@@ -271,10 +342,11 @@ export const App: React.FC = () => {
 
             {/* Mobile Cart Button (Icon only) */}
             <div className="md:hidden flex items-center gap-2">
-              <button
+              <motion.button
                 type="button"
+                whileTap={{ scale: 0.92 }}
                 onClick={() => setIsCartOpen(true)}
-                className="relative w-10 h-10 rounded-xl bg-white text-[#141414] flex items-center justify-center border border-black/15 shadow-xs active:scale-95"
+                className="relative w-10 h-10 rounded-xl bg-white text-[#141414] flex items-center justify-center border border-black/15 shadow-xs"
                 aria-label="Giỏ hàng"
               >
                 <ShoppingBag className="w-5 h-5" />
@@ -283,32 +355,39 @@ export const App: React.FC = () => {
                     {totalCartItems}
                   </span>
                 )}
-              </button>
+              </motion.button>
             </div>
           </div>
 
           {/* Central Mega Search Bar (Taobao Style with Snap-to-Search Camera) */}
           <div className="w-full md:max-w-2xl flex flex-col gap-1.5">
-            {/* Search Category Tabs */}
-            <div className="flex items-center gap-3 px-1 text-xs font-bold text-[#6D6A63]">
-              <button
-                onClick={() => setSearchCategory('all')}
-                className={`pb-0.5 transition-colors ${searchCategory === 'all' ? 'text-[#1F3FB0] border-b-2 border-[#1F3FB0]' : 'hover:text-[#141414]'}`}
-              >
-                Tất cả sản phẩm
-              </button>
-              <button
-                onClick={() => setSearchCategory('books')}
-                className={`pb-0.5 transition-colors ${searchCategory === 'books' ? 'text-[#1F3FB0] border-b-2 border-[#1F3FB0]' : 'hover:text-[#141414]'}`}
-              >
-                Sách & Truyện
-              </button>
-              <button
-                onClick={() => setSearchCategory('stationery')}
-                className={`pb-0.5 transition-colors ${searchCategory === 'stationery' ? 'text-[#1F3FB0] border-b-2 border-[#1F3FB0]' : 'hover:text-[#141414]'}`}
-              >
-                Văn phòng phẩm
-              </button>
+            {/* Search Category Tabs with Animate UI Gliding Indicator */}
+            <div className="relative flex items-center gap-1 px-1 text-xs font-bold text-[#6D6A63]">
+              {[
+                { id: 'all', label: 'Tất cả sản phẩm' },
+                { id: 'books', label: 'Sách & Truyện' },
+                { id: 'stationery', label: 'Văn phòng phẩm' },
+              ].map((cat) => {
+                const isActive = searchCategory === cat.id;
+                return (
+                  <button
+                    key={cat.id}
+                    onClick={() => setSearchCategory(cat.id as any)}
+                    className={`relative px-3 py-1 rounded-full transition-colors ${
+                      isActive ? 'text-[#08482D]' : 'hover:text-[#141414]'
+                    }`}
+                  >
+                    {isActive && (
+                      <motion.div
+                        layoutId="active-search-category-pill"
+                        className="absolute inset-0 bg-[#E5EFE3] rounded-full -z-10 border border-[#08482D]/20 shadow-xs"
+                        transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                      />
+                    )}
+                    <span>{cat.label}</span>
+                  </button>
+                );
+              })}
             </div>
 
             {/* Big Search Input Box */}
@@ -319,40 +398,46 @@ export const App: React.FC = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Tìm bút pastel, balo chống gù, truyện Nguyễn Nhật Ánh..."
-                  className="w-full bg-white border-2 border-black/15 focus:border-[#1F3FB0] focus:bg-white rounded-full pl-5 pr-20 py-2.5 text-sm text-[#141414] focus:outline-none transition-all placeholder-[#6D6A63]/60 shadow-xs"
+                  className="w-full bg-white border-2 border-black/12 focus:border-[#08482D] focus:bg-white rounded-full pl-5 pr-20 py-2.5 text-sm text-[#141414] focus:outline-none transition-all placeholder-[#6D6A63]/60 shadow-xs"
                 />
                 {/* Camera Snap-to-Search (拍立淘 Taobao Feature) */}
-                <button
+                <motion.button
                   type="button"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                   onClick={() => setIsImageSearchOpen(true)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#6D6A63] hover:text-[#1F3FB0] transition-colors p-1"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#6D6A63] hover:text-[#08482D] transition-colors p-1"
                   title="Tìm kiếm bằng hình ảnh (Snap to search)"
                 >
                   <Camera className="w-4 h-4" />
-                </button>
+                </motion.button>
               </div>
 
-              {/* Main Search Button */}
-              <button
+              {/* Main Search Button (Exciting Sunset Coral Accent with Animate UI Spring Press) */}
+              <motion.button
                 type="button"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: 'spring', stiffness: 550, damping: 30 }}
                 onClick={() => fetchProducts(searchQuery)}
-                className="ml-2 px-6 py-2.5 rounded-full bg-[#1F3FB0] hover:bg-[#18328C] text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-[#1F3FB0]/20 transition-all active:scale-95 flex items-center gap-1.5 shrink-0"
+                className="ml-2 px-6 py-2.5 rounded-full bg-[#E84E25] hover:bg-[#D03E17] text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-[#E84E25]/25 transition-colors flex items-center gap-1.5 shrink-0"
               >
                 <Search className="w-4 h-4" />
                 <span className="hidden sm:inline">Tìm kiếm</span>
-              </button>
+              </motion.button>
             </div>
 
             {/* Hot Trend Search Keywords below search bar */}
             <div className="hidden sm:flex items-center gap-2 overflow-x-auto text-[11px] text-[#6D6A63] pt-0.5">
-              <span className="text-[#1F3FB0] font-bold flex items-center gap-0.5 shrink-0">
+              <span className="text-[#E84E25] font-bold flex items-center gap-0.5 shrink-0">
                 <Flame className="w-3 h-3 fill-current" /> Hot:
               </span>
               {hotSearchKeywords.map((kw) => (
                 <button
                   key={kw}
                   onClick={() => setSearchQuery(kw)}
-                  className="hover:text-[#1F3FB0] hover:underline whitespace-nowrap transition-colors"
+                  className="hover:text-[#08482D] hover:underline whitespace-nowrap transition-colors"
                 >
                   {kw}
                 </button>
@@ -360,22 +445,25 @@ export const App: React.FC = () => {
             </div>
           </div>
 
-          {/* Desktop Cart Button (Icon only with counter badge, exactly as requested) */}
+          {/* Desktop Cart Button */}
           <div className="hidden md:flex items-center gap-3">
-            <button
+            <motion.button
               type="button"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.94 }}
+              transition={{ type: 'spring', stiffness: 500, damping: 28 }}
               onClick={() => setIsCartOpen(true)}
-              className="relative inline-flex items-center justify-center w-11 h-11 rounded-2xl bg-white border border-black/15 text-[#141414] hover:border-[#1F3FB0] hover:text-[#1F3FB0] transition-all duration-200 shadow-xs active:scale-95 select-none"
+              className="relative inline-flex items-center justify-center w-11 h-11 rounded-2xl bg-white border border-black/12 text-[#141414] hover:border-[#08482D] hover:text-[#08482D] transition-colors shadow-xs select-none"
               title={`Giỏ hàng (${totalCartItems} món)`}
               aria-label="Giỏ hàng"
             >
               <ShoppingBag className="w-5 h-5" />
               {totalCartItems > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 rounded-full bg-[#1F3FB0] text-white font-bold text-[10px] flex items-center justify-center shadow-xs">
+                <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 rounded-full bg-[#E84E25] text-white font-bold text-[10px] flex items-center justify-center shadow-xs">
                   {totalCartItems}
                 </span>
               )}
-            </button>
+            </motion.button>
           </div>
         </div>
       </header>
@@ -383,15 +471,15 @@ export const App: React.FC = () => {
       {/* 2.5. REEL CAROUSEL HERO SHOWCASE (NẰM DƯỚI MENU HEADER) */}
       <ReelCarouselHero />
 
-      {/* 3. CORE TRIANGLE HERO SECTION (Taobao 3-Column Standard Layout with KhoaVerse Style) */}
+      {/* 3. BENTO GRID (Category Nav + Promotion Banner + Profile Hub) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-6 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
-          {/* CỘT 1: MEGA CATEGORY MENU (Trái: 3/12 ~ 25%) */}
-          <div className="lg:col-span-3 bg-[#F4F2ED] rounded-3xl p-4 border border-black/10 shadow-[0_10px_30px_-5px_rgba(20,20,20,0.04)] flex flex-col justify-between">
+          {/* CỘT 1: MEGA CATEGORY MENU */}
+          <div className="lg:col-span-3 bg-white rounded-3xl p-4 border border-black/8 shadow-[0_4px_20px_-4px_rgba(8,72,45,0.06)] flex flex-col justify-between">
             <div className="space-y-1">
-              <div className="flex items-center justify-between pb-3 mb-2 border-b border-black/10">
-                <span className="lbl-khoa text-[#1F3FB0] flex items-center gap-1.5 font-bold">
-                  <Palette className="w-4 h-4" /> Danh mục ngành hàng
+              <div className="flex items-center justify-between pb-3 mb-2 border-b border-black/8">
+                <span className="lbl-khoa text-[#08482D] flex items-center gap-1.5 font-bold">
+                  <Palette className="w-4 h-4 text-[#08482D]" /> Danh mục ngành hàng
                 </span>
               </div>
               {[
@@ -409,42 +497,42 @@ export const App: React.FC = () => {
                     const target = document.getElementById('waterfall-feed');
                     if (target) target.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="w-full text-left p-2.5 rounded-2xl hover:bg-white border border-transparent hover:border-black/10 transition-all group flex items-center justify-between"
+                  className="w-full text-left p-2.5 rounded-2xl hover:bg-[#F8FAF4] border border-transparent hover:border-[#08482D]/15 transition-all group flex items-center justify-between"
                 >
                   <div>
-                    <div className="text-xs font-bold text-[#141414] group-hover:text-[#1F3FB0] transition-colors">
+                    <div className="text-xs font-bold text-[#141414] group-hover:text-[#08482D] transition-colors">
                       {item.label}
                     </div>
                     <div className="text-[10px] text-[#6D6A63] line-clamp-1">
                       {item.desc}
                     </div>
                   </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-black/25 group-hover:text-[#1F3FB0] group-hover:translate-x-0.5 transition-all" />
+                  <ChevronRight className="w-3.5 h-3.5 text-black/25 group-hover:text-[#08482D] group-hover:translate-x-0.5 transition-all" />
                 </button>
               ))}
             </div>
 
             {/* Quick Promo Tag */}
-            <div className="mt-3 p-3 rounded-2xl bg-[#E5E2DC] border border-black/10 flex items-center gap-2.5">
-              <Truck className="w-5 h-5 text-[#2E6F40] shrink-0" />
+            <div className="mt-3 p-3 rounded-2xl bg-[#F0F5EE] border border-[#08482D]/10 flex items-center gap-2.5">
+              <Truck className="w-5 h-5 text-[#08482D] shrink-0" />
               <div className="text-[11px] leading-tight">
-                <span className="font-bold text-[#141414] block">Freeship Extra 0Đ</span>
+                <span className="font-bold text-[#08482D] block">Freeship Extra 0Đ</span>
                 <span className="text-[#6D6A63]">Cho mọi đơn sách & văn phòng phẩm</span>
               </div>
             </div>
           </div>
 
-          {/* CỘT 2: HERO CAROUSEL BANNER & FLASH SALE (Giữa: 6/12 ~ 50%) */}
+          {/* CỘT 2: HERO CAROUSEL BANNER & FLASH SALE */}
           <div className="lg:col-span-6 flex flex-col gap-4">
-            {/* Top Carousel Banner (KhoaVerse Archival Meadow Aesthetic) */}
-            <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#D9E3D8] via-[#E6EDE4] to-[#F4F2ED] border border-black/10 p-6 sm:p-8 shadow-sm flex flex-col justify-between min-h-[220px]">
+            {/* Top Carousel Banner */}
+            <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#E8F2E6] via-[#F3F8F2] to-white border border-[#08482D]/15 p-6 sm:p-8 shadow-sm flex flex-col justify-between min-h-[220px]">
               <div className="relative z-10 max-w-md space-y-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-white/90 text-[#1F3FB0] shadow-xs border border-black/10">
-                  <Sparkles className="w-3.5 h-3.5 text-[#1F3FB0]" /> KHÔNG GIAN TRI THỨC NET108KHAI
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-white/95 text-[#08482D] shadow-xs border border-[#08482D]/20">
+                  <Sparkles className="w-3.5 h-3.5 text-[#E84E25]" /> KHÔNG GIAN TRI THỨC NET108KHAI
                 </span>
                 <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#141414] leading-tight">
                   Sắm đồ học tập chất lượng.<br />
-                  <span className="italic font-normal text-[#1F3FB0]">Đọc thử sách online 3D miễn phí!</span>
+                  <span className="italic font-normal text-[#E84E25]">Đọc thử sách online 3D miễn phí!</span>
                 </h2>
                 <p className="text-xs text-[#6D6A63] max-w-sm">
                   Ưu đãi tới 35% bộ bút pastel, sổ tay bìa cứng và tuyển tập trọn bộ tác phẩm của Nguyễn Nhật Ánh.
@@ -452,59 +540,81 @@ export const App: React.FC = () => {
               </div>
 
               <div className="relative z-10 pt-4 flex flex-wrap items-center gap-2.5">
-                <button
-                  onClick={() => {
-                    setCatalogFilter('flash');
-                    const target = document.getElementById('waterfall-feed');
-                    if (target) target.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                  className="px-4 py-2 rounded-xl bg-[#1F3FB0] hover:bg-[#18328C] text-white font-bold text-xs shadow-md shadow-[#1F3FB0]/20 transition-all active:scale-95 flex items-center gap-1.5"
+                <Shine
+                  loop
+                  loopDelay={2500}
+                  duration={1.2}
+                  color="rgba(255,255,255,0.4)"
+                  className="rounded-xl overflow-hidden inline-block"
                 >
-                  <Zap className="w-3.5 h-3.5" /> Săn Deal Ngay
-                </button>
-                <button
+                  <motion.button
+                    whileHover={{ scale: 1.04 }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ type: 'spring', stiffness: 500, damping: 28 }}
+                    onClick={() => {
+                      setCatalogFilter('flash');
+                      const target = document.getElementById('waterfall-feed');
+                      if (target) target.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className="px-4 py-2 rounded-xl bg-[#E84E25] hover:bg-[#D03E17] text-white font-bold text-xs shadow-md shadow-[#E84E25]/25 transition-colors flex items-center gap-1.5"
+                  >
+                    <Zap className="w-3.5 h-3.5 fill-current" /> Săn Deal Ngay
+                  </motion.button>
+                </Shine>
+                <motion.button
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: 'spring', stiffness: 500, damping: 28 }}
                   onClick={() => navigateTo('/read')}
-                  className="px-4 py-2 rounded-xl bg-white hover:bg-[#EDEBE6] text-[#141414] border border-black/15 font-bold text-xs shadow-xs transition-all active:scale-95 flex items-center gap-1.5"
+                  className="px-4 py-2 rounded-xl bg-white hover:bg-[#F0F5EE] text-[#08482D] border border-[#08482D]/20 font-bold text-xs shadow-xs transition-colors flex items-center gap-1.5"
                 >
-                  <BookOpen className="w-3.5 h-3.5 text-[#1F3FB0]" /> Vào Kệ Sách 3D
-                </button>
+                  <BookOpen className="w-3.5 h-3.5 text-[#08482D]" /> Vào Kệ Sách 3D
+                </motion.button>
               </div>
 
               {/* Decorative floating book illustration */}
               <div className="absolute right-6 bottom-4 select-none pointer-events-none opacity-20">
-                <BookOpen className="w-24 h-24 text-[#141414]" />
+                <BookOpen className="w-24 h-24 text-[#08482D]" />
               </div>
             </div>
 
-            {/* Bottom: FLASH SALE / GIỜ VÀNG GIÁ SỐC (Taobao Flash Sale with KhoaVerse Styling) */}
-            <div className="bg-[#F4F2ED] rounded-3xl p-4 sm:p-5 border border-black/10 shadow-[0_10px_30px_-5px_rgba(20,20,20,0.04)]">
+            {/* Bottom: FLASH SALE */}
+            <div className="bg-white rounded-3xl p-4 sm:p-5 border border-black/8 shadow-[0_4px_20px_-4px_rgba(8,72,45,0.06)]">
               {/* Flash Sale Header with Live Countdown */}
-              <div className="flex items-center justify-between pb-3 border-b border-black/10">
+              <div className="flex items-center justify-between pb-3 border-b border-black/8">
                 <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-xl bg-[#1F3FB0] text-white flex items-center justify-center font-black shadow-xs">
+                  <div className="w-7 h-7 rounded-xl bg-[#E84E25] text-white flex items-center justify-center font-black shadow-xs">
                     <Zap className="w-4 h-4 fill-current" />
                   </div>
                   <span className="font-serif font-bold text-sm text-[#141414] tracking-tight">
                     GIỜ VÀNG GIÁ SỐC
                   </span>
-                  <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-white text-[#1F3FB0] border border-[#1F3FB0]/30">
-                    Flash Sale
-                  </span>
+                  <Shine
+                    loop
+                    loopDelay={3000}
+                    duration={1}
+                    color="rgba(232,78,37,0.3)"
+                    className="rounded-full inline-block"
+                  >
+                    <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-[#FFF0EB] text-[#E84E25] border border-[#E84E25]/30 block">
+                      Flash Sale
+                    </span>
+                  </Shine>
                 </div>
 
                 {/* Countdown Timer */}
                 <div className="flex items-center gap-1 text-xs font-bold">
-                  <Clock className="w-3.5 h-3.5 text-[#1F3FB0]" />
+                  <Clock className="w-3.5 h-3.5 text-[#E84E25]" />
                   <span className="text-[#6D6A63] font-normal">Kết thúc sau:</span>
-                  <span className="px-1.5 py-0.5 rounded-md bg-[#141414] text-white font-mono text-xs">
+                  <span className="px-1.5 py-0.5 rounded-md bg-[#08482D] text-white font-mono text-xs">
                     {String(timeLeft.hours).padStart(2, '0')}
                   </span>
                   <span className="text-[#6D6A63]">:</span>
-                  <span className="px-1.5 py-0.5 rounded-md bg-[#141414] text-white font-mono text-xs">
+                  <span className="px-1.5 py-0.5 rounded-md bg-[#08482D] text-white font-mono text-xs">
                     {String(timeLeft.minutes).padStart(2, '0')}
                   </span>
                   <span className="text-[#6D6A63]">:</span>
-                  <span className="px-1.5 py-0.5 rounded-md bg-[#1F3FB0] text-white font-mono text-xs">
+                  <span className="px-1.5 py-0.5 rounded-md bg-[#E84E25] text-white font-mono text-xs">
                     {String(timeLeft.seconds).padStart(2, '0')}
                   </span>
                 </div>
@@ -517,32 +627,37 @@ export const App: React.FC = () => {
                   return (
                     <div
                       key={p.id}
-                      onClick={() => setSelectedProduct(p)}
-                      className="cursor-pointer group flex flex-col justify-between p-2 rounded-2xl bg-white hover:bg-white border border-black/10 hover:border-[#1F3FB0]/50 transition-all shadow-xs"
+                      onClick={() => {
+                        const lookIdx = p.runwayLookIndex !== undefined
+                          ? p.runwayLookIndex
+                          : (flashSaleProducts.indexOf(p) % 6);
+                        setActiveRunwayLook(lookIdx >= 0 ? lookIdx : 0);
+                      }}
+                      className="cursor-pointer group flex flex-col justify-between p-2 rounded-2xl bg-white hover:bg-white border border-black/8 hover:border-[#E84E25]/50 transition-all shadow-xs"
                     >
-                      <div className="relative aspect-square rounded-xl overflow-hidden bg-[#E8E6E1] mb-2">
+                      <div className="relative aspect-square rounded-xl overflow-hidden bg-[#F4F7F2] mb-2">
                         <img
                           src={p.imageUrl}
                           alt={p.name}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                         />
-                        <span className="absolute top-1 left-1 px-1.5 py-0.5 rounded-md bg-[#B08840] text-white text-[9px] font-black">
+                        <span className="absolute top-1 left-1 px-1.5 py-0.5 rounded-md bg-[#E84E25] text-white text-[9px] font-black">
                           -30%
                         </span>
                       </div>
                       <div className="space-y-1">
-                        <div className="text-[11px] font-bold text-[#141414] line-clamp-1 group-hover:text-[#1F3FB0]">
+                        <div className="text-[11px] font-bold text-[#141414] line-clamp-1 group-hover:text-[#08482D]">
                           {p.name}
                         </div>
                         <div className="flex items-baseline gap-1">
-                          <span className="text-[10px] font-bold text-[#1F3FB0]">₫</span>
+                          <span className="text-[10px] font-bold text-[#E84E25]">₫</span>
                           <span className="text-xs font-black text-[#141414] font-serif">
                             {minP.toLocaleString()}
                           </span>
                         </div>
                         {/* Progress Bar (Đã bán X%) */}
-                        <div className="w-full bg-[#E5E2DC] rounded-full h-1.5 overflow-hidden">
-                          <div className="bg-[#1F3FB0] h-full w-[78%]" />
+                        <div className="w-full bg-[#EBF2EA] rounded-full h-1.5 overflow-hidden">
+                          <div className="bg-[#E84E25] h-full w-[78%]" />
                         </div>
                         <div className="text-[9px] text-[#6D6A63] text-right">Đã bán 78%</div>
                       </div>
@@ -553,43 +668,52 @@ export const App: React.FC = () => {
             </div>
           </div>
 
-          {/* CỘT 3: USER DASHBOARD & GAMIFICATION HUB (Phải: 3/12 ~ 25%) */}
-          <div className="lg:col-span-3 bg-[#F4F2ED] rounded-3xl p-5 border border-black/10 shadow-[0_10px_30px_-5px_rgba(20,20,20,0.04)] flex flex-col justify-between gap-4">
+          {/* CỘT 3: USER DASHBOARD & GAMIFICATION HUB */}
+          <div className="lg:col-span-3 bg-white rounded-3xl p-5 border border-black/8 shadow-[0_4px_20px_-4px_rgba(8,72,45,0.06)] flex flex-col justify-between gap-4">
             {/* User Profile Summary */}
             <div className="text-center space-y-2">
-              <div className="w-16 h-16 mx-auto rounded-full bg-white border-2 border-black/10 p-1 shadow-sm flex items-center justify-center">
-                <div className="w-full h-full rounded-full bg-[#E5E2DC] flex items-center justify-center">
-                  <User className="w-7 h-7 text-[#141414]" />
+              <div className="w-16 h-16 mx-auto rounded-full bg-white border-2 border-[#08482D]/15 p-1 shadow-sm flex items-center justify-center">
+                <div className="w-full h-full rounded-full bg-[#F0F5EE] flex items-center justify-center">
+                  <User className="w-7 h-7 text-[#08482D]" />
                 </div>
               </div>
               <div>
                 <div className="font-serif font-bold text-base text-[#141414] flex items-center justify-center gap-1">
                   Độc Giả Net108Khai
                 </div>
-                <div className="text-[10px] text-[#1F3FB0] font-bold bg-white px-2 py-0.5 rounded-full inline-block mt-1 border border-[#1F3FB0]/25">
+                <div className="text-[10px] text-[#08482D] font-bold bg-[#E5EFE3] px-2 py-0.5 rounded-full inline-block mt-1 border border-[#08482D]/20">
                   Hội Viên Thân Thiết
                 </div>
               </div>
             </div>
 
-            {/* Micro Wallet & Vouchers (Taobao Asset Dashboard) */}
-            <div className="grid grid-cols-3 gap-1.5 p-2 rounded-2xl bg-white border border-black/10 text-center text-xs">
+            {/* Micro Wallet & Vouchers */}
+            <div className="grid grid-cols-3 gap-1.5 p-2 rounded-2xl bg-[#F8FAF4] border border-black/8 text-center text-xs">
               <div className="p-1">
-                <div className="font-black text-[#1F3FB0] text-sm">3</div>
+                <div className="font-black text-[#08482D] text-sm">
+                  <CountingNumber number={3} />
+                </div>
                 <div className="text-[10px] text-[#6D6A63]">Voucher</div>
               </div>
-              <div className="p-1 border-x border-black/10">
-                <div className="font-black text-[#B08840] text-sm">{coins}</div>
+              <div className="p-1 border-x border-black/8">
+                <div className="font-black text-[#E84E25] text-sm">
+                  <CountingNumber number={coins} thousandSeparator="." />
+                </div>
                 <div className="text-[10px] text-[#6D6A63]">Xu tích lũy</div>
               </div>
               <div className="p-1">
-                <div className="font-black text-[#141414] text-sm">{orders.length}</div>
+                <div className="font-black text-[#141414] text-sm">
+                  <CountingNumber number={orders.length} />
+                </div>
                 <div className="text-[10px] text-[#6D6A63]">Đơn hàng</div>
               </div>
             </div>
 
             {/* Gamification: Daily Check-in Button */}
-            <button
+            <motion.button
+              whileHover={!hasCheckedIn ? { scale: 1.02 } : undefined}
+              whileTap={!hasCheckedIn ? { scale: 0.95 } : undefined}
+              transition={{ type: 'spring', stiffness: 500, damping: 30 }}
               onClick={() => {
                 if (!hasCheckedIn) {
                   setCoins((c) => c + 50);
@@ -600,7 +724,7 @@ export const App: React.FC = () => {
               className={`w-full py-2.5 px-3 rounded-2xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-xs ${
                 hasCheckedIn
                   ? 'bg-emerald-50 text-emerald-800 border border-emerald-300 cursor-default'
-                  : 'bg-[#141414] hover:bg-[#1F3FB0] text-white active:scale-95'
+                  : 'bg-[#08482D] hover:bg-[#E84E25] text-white shadow-md shadow-[#08482D]/15'
               }`}
             >
               {hasCheckedIn ? (
@@ -612,27 +736,27 @@ export const App: React.FC = () => {
                   <Gift className="w-3.5 h-3.5" /> Điểm danh nhận 50 xu!
                 </>
               )}
-            </button>
+            </motion.button>
 
             {/* Quick Navigation Gateways */}
-            <div className="space-y-2 pt-2 border-t border-black/10">
+            <div className="space-y-2 pt-2 border-t border-black/8">
               <button
                 onClick={() => navigateTo('/read')}
-                className="w-full p-2.5 rounded-2xl bg-white hover:bg-[#EDEBE6] border border-black/10 text-left flex items-center justify-between text-xs font-bold text-[#1F3FB0] transition-all group"
+                className="w-full p-2.5 rounded-2xl bg-[#F8FAF4] hover:bg-[#F0F5EE] border border-black/8 text-left flex items-center justify-between text-xs font-bold text-[#08482D] transition-all group"
               >
                 <div className="flex items-center gap-2">
-                  <BookOpen className="w-4 h-4 text-[#1F3FB0]" />
+                  <BookOpen className="w-4 h-4 text-[#08482D]" />
                   <span>Kệ Sách 3D KhoaVerse</span>
                 </div>
-                <ChevronRight className="w-3.5 h-3.5 text-[#1F3FB0] group-hover:translate-x-0.5 transition-transform" />
+                <ChevronRight className="w-3.5 h-3.5 text-[#08482D] group-hover:translate-x-0.5 transition-transform" />
               </button>
 
               <button
                 onClick={() => setActiveTab('assistant')}
-                className="w-full p-2.5 rounded-2xl bg-white hover:bg-[#EDEBE6] border border-black/10 text-left flex items-center justify-between text-xs font-bold text-[#141414] transition-all group"
+                className="w-full p-2.5 rounded-2xl bg-[#F8FAF4] hover:bg-[#F0F5EE] border border-black/8 text-left flex items-center justify-between text-xs font-bold text-[#141414] transition-all group"
               >
                 <div className="flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-[#B08840]" />
+                  <Sparkles className="w-4 h-4 text-[#E84E25]" />
                   <span>Trợ Lý Mua Sắm AI</span>
                 </div>
                 <ChevronRight className="w-3.5 h-3.5 text-[#6D6A63] group-hover:translate-x-0.5 transition-transform" />
@@ -642,69 +766,80 @@ export const App: React.FC = () => {
         </div>
       </section>
 
-      {/* 4. SUB-SERVICES / QUICK CHANNELS ICONS (Taobao Channel Matrix with KhoaVerse Accents) */}
+      {/* 4. SUB-SERVICES / QUICK CHANNELS ICONS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-5 w-full">
         <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
           {[
-            { icon: <Zap className="w-5 h-5 text-[#1F3FB0]" />, title: 'Siêu Sale', filter: 'flash' },
-            { icon: <BookOpen className="w-5 h-5 text-[#1F3FB0]" />, title: 'Đọc Sách 3D', action: () => navigateTo('/read') },
-            { icon: <Truck className="w-5 h-5 text-[#2E6F40]" />, title: 'Freeship Extra', filter: 'all' },
-            { icon: <Flame className="w-5 h-5 text-[#B08840]" />, title: 'Bán Chạy Nhất', filter: 'bestseller' },
+            { icon: <Zap className="w-5 h-5 text-[#E84E25]" />, title: 'Siêu Sale', filter: 'flash' },
+            { icon: <BookOpen className="w-5 h-5 text-[#08482D]" />, title: 'Đọc Sách 3D', action: () => navigateTo('/read') },
+            { icon: <Truck className="w-5 h-5 text-[#08482D]" />, title: 'Freeship Extra', filter: 'all' },
+            { icon: <Flame className="w-5 h-5 text-[#E84E25]" />, title: 'Bán Chạy Nhất', filter: 'bestseller' },
             { icon: <Palette className="w-5 h-5 text-[#141414]" />, title: 'Văn Phòng Phẩm', filter: 'stationery' },
-            { icon: <Sparkles className="w-5 h-5 text-[#1F3FB0]" />, title: 'Trợ Lý AI', action: () => setActiveTab('assistant') },
+            { icon: <Sparkles className="w-5 h-5 text-[#E84E25]" />, title: 'Trợ Lý AI', action: () => setActiveTab('assistant') },
           ].map((ch, idx) => (
-            <button
+            <motion.button
               key={idx}
+              whileHover={{ y: -4, scale: 1.02 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: 'spring', stiffness: 500, damping: 28 }}
               onClick={() => {
                 if (ch.action) ch.action();
                 else if (ch.filter) setCatalogFilter(ch.filter as any);
               }}
-              className="p-3 rounded-2xl bg-[#F4F2ED] border border-black/10 hover:border-[#1F3FB0]/40 hover:bg-white flex flex-col items-center justify-center gap-1.5 transition-transform hover:-translate-y-1 active:scale-95 shadow-xs"
+              className="p-3 rounded-2xl bg-white border border-black/8 hover:border-[#08482D]/40 hover:shadow-md flex flex-col items-center justify-center gap-1.5 transition-colors shadow-xs"
             >
-              <div className="w-9 h-9 rounded-xl bg-white border border-black/5 flex items-center justify-center shadow-xs">
+              <div className="w-9 h-9 rounded-xl bg-[#F8FAF4] border border-black/5 flex items-center justify-center shadow-xs">
                 {ch.icon}
               </div>
               <span className="text-[11px] font-bold text-[#141414]">{ch.title}</span>
-            </button>
+            </motion.button>
           ))}
         </div>
       </section>
 
-      {/* 5. WATERFALL FEED — "GỢI Ý CHO BẠN" (Taobao Recommendation Feed with KhoaVerse Style) */}
+      {/* 5. WATERFALL FEED — "GỢI Ý CHO BẠN" */}
       <main id="waterfall-feed" className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-4">
         {/* TAB 1: CATALOG / WATERFALL FEED */}
         {activeTab === 'catalog' && (
           <div className="space-y-6">
             {/* Feed Header with Recommendation Segmented Tabs */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-b border-black/10 pb-3">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-b border-black/8 pb-3">
               <div className="flex items-center gap-2">
-                <Heart className="w-5 h-5 text-[#1F3FB0] fill-current" />
+                <Heart className="w-5 h-5 text-[#E84E25] fill-current" />
                 <h3 className="font-serif text-lg font-bold text-[#141414] tracking-tight">
                   CÓ THỂ BẠN THÍCH <span className="font-sans text-xs font-normal text-[#6D6A63]">(Gợi ý cho bạn)</span>
                 </h3>
               </div>
 
-              {/* Feed Filter Tabs */}
-              <div className="flex items-center gap-1.5 p-1 bg-[#E5E2DC] rounded-2xl border border-black/10 shadow-xs overflow-x-auto w-full sm:w-auto">
+              {/* Feed Filter Tabs with Animate UI Gliding Highlight */}
+              <div className="relative flex items-center gap-1 p-1 bg-white rounded-2xl border border-black/8 shadow-xs overflow-x-auto w-full sm:w-auto">
                 {[
                   { id: 'all', label: 'Tất cả sản phẩm' },
                   { id: 'stationery', label: 'Đồ dùng học tập' },
                   { id: 'books', label: 'Sách & Truyện' },
                   { id: 'flash', label: 'Flash Sale' },
                   { id: 'bestseller', label: 'Bán chạy nhất' },
-                ].map((t) => (
-                  <button
-                    key={t.id}
-                    onClick={() => setCatalogFilter(t.id as any)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
-                      catalogFilter === t.id
-                        ? 'bg-[#1F3FB0] text-white shadow-xs'
-                        : 'text-[#6D6A63] hover:text-[#141414]'
-                    }`}
-                  >
-                    {t.label}
-                  </button>
-                ))}
+                ].map((t) => {
+                  const isActive = catalogFilter === t.id;
+                  return (
+                    <button
+                      key={t.id}
+                      onClick={() => setCatalogFilter(t.id as any)}
+                      className={`relative px-3.5 py-1.5 rounded-xl text-xs font-bold transition-colors whitespace-nowrap ${
+                        isActive ? 'text-white' : 'text-[#6D6A63] hover:text-[#08482D]'
+                      }`}
+                    >
+                      {isActive && (
+                        <motion.div
+                          layoutId="active-feed-filter-pill"
+                          className="absolute inset-0 bg-[#08482D] rounded-xl -z-10 shadow-xs"
+                          transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                        />
+                      )}
+                      <span>{t.label}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
@@ -733,8 +868,14 @@ export const App: React.FC = () => {
                   <ProductCard
                     key={product.id}
                     product={product}
-                    onSelect={(p) => setSelectedProduct(p)}
+                    onSelect={(p) => {
+                      const lookIdx = p.runwayLookIndex !== undefined
+                        ? p.runwayLookIndex
+                        : (filteredProducts.indexOf(p) % 6);
+                      setActiveRunwayLook(lookIdx >= 0 ? lookIdx : 0);
+                    }}
                     onReadSample={(slug) => navigateTo(`/read/${slug}`)}
+                    onOpenRunway={(p) => setActiveRunwayLook(p.runwayLookIndex ?? 0)}
                   />
                 ))}
               </div>
@@ -770,52 +911,64 @@ export const App: React.FC = () => {
         )}
       </main>
 
-      {/* 6. FLOATING STICKY ACTION BAR (Thanh công cụ nổi bên phải màn hình kiểu Taobao) */}
+      {/* 6. FLOATING STICKY ACTION BAR */}
       <aside className="fixed right-3 bottom-6 z-30 flex flex-col gap-2 select-none" aria-label="Công cụ nhanh">
-        {/* AI Chat Bubble */}
-        <button
+        {/* AI Chat Bubble (Botanical Green + Glow) */}
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          transition={{ type: 'spring', stiffness: 500, damping: 28 }}
           onClick={() => setActiveTab('assistant')}
-          className="w-11 h-11 rounded-2xl bg-[#1F3FB0] text-white flex items-center justify-center shadow-lg shadow-[#1F3FB0]/20 hover:scale-110 active:scale-95 transition-all"
+          className="w-11 h-11 rounded-2xl bg-[#08482D] text-white flex items-center justify-center shadow-lg shadow-[#08482D]/25 hover:bg-[#E84E25] transition-colors"
           title="Trò chuyện cùng Trợ lý AI"
           aria-label="Trợ lý AI"
         >
           <Sparkles className="w-5 h-5" />
-        </button>
+        </motion.button>
 
         {/* Floating Cart */}
-        <button
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          transition={{ type: 'spring', stiffness: 500, damping: 28 }}
           onClick={() => setIsCartOpen(true)}
-          className="relative w-11 h-11 rounded-2xl bg-white text-[#141414] border border-black/15 flex items-center justify-center shadow-lg shadow-black/5 hover:border-[#1F3FB0] hover:text-[#1F3FB0] hover:scale-110 active:scale-95 transition-all"
-          title="Xem giỏ hàng"
+          className="relative w-11 h-11 rounded-2xl bg-white text-[#141414] border border-black/12 flex items-center justify-center shadow-lg shadow-black/5 hover:border-[#08482D] hover:text-[#08482D] transition-colors"
+          title={`Xem giỏ hàng (${totalCartItems} món)`}
           aria-label="Giỏ hàng"
         >
           <ShoppingBag className="w-5 h-5" />
           {totalCartItems > 0 && (
-            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-[#1F3FB0] text-white font-bold text-[10px] flex items-center justify-center">
+            <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 rounded-full bg-[#E84E25] text-white font-bold text-[10px] flex items-center justify-center shadow-xs">
               {totalCartItems}
             </span>
           )}
-        </button>
+        </motion.button>
 
         {/* 3D KhoaVerse Book Shelf Gateway */}
-        <button
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          transition={{ type: 'spring', stiffness: 500, damping: 28 }}
           onClick={() => navigateTo('/read')}
-          className="w-11 h-11 rounded-2xl bg-[#141414] text-white flex items-center justify-center shadow-lg shadow-black/10 hover:bg-[#1F3FB0] hover:scale-110 active:scale-95 transition-all"
+          className="w-11 h-11 rounded-2xl bg-[#141414] text-white flex items-center justify-center shadow-lg shadow-black/10 hover:bg-[#08482D] transition-colors"
           title="Không gian đọc sách 3D KhoaVerse"
           aria-label="Đọc sách 3D"
         >
           <BookOpen className="w-5 h-5" />
-        </button>
+        </motion.button>
 
         {/* Scroll To Top */}
-        <button
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          transition={{ type: 'spring', stiffness: 500, damping: 28 }}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="w-11 h-11 rounded-2xl bg-white text-[#6D6A63] border border-black/15 flex items-center justify-center shadow-md hover:text-[#141414] hover:scale-110 active:scale-95 transition-all"
+          className="w-11 h-11 rounded-2xl bg-white text-[#6D6A63] border border-black/15 flex items-center justify-center shadow-md hover:text-[#141414] transition-colors"
           title="Lên đầu trang"
           aria-label="Lên đầu trang"
         >
           <ArrowUp className="w-4 h-4" />
-        </button>
+        </motion.button>
       </aside>
 
       {/* 7. MODAL TÌM KIẾM BẰNG HÌNH ẢNH (Snap-to-Search / 拍立淘 Modal) */}
@@ -866,8 +1019,8 @@ export const App: React.FC = () => {
         </div>
       )}
 
-      {/* 8. FOOTER (KhoaVerse Harmonized E-Commerce Style) */}
-      <footer className="border-t border-black/10 bg-[#E5E2DC] py-10 mt-auto">
+      {/* 8. FOOTER (Soft Mint Harmonized E-Commerce Style) */}
+      <footer className="border-t border-black/10 bg-[#EFF3EA] py-10 mt-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#6D6A63] font-medium">
           <div className="flex items-center gap-2">
             <span className="font-serif font-bold text-[#141414]">Net108Khai Mall</span>
@@ -888,6 +1041,7 @@ export const App: React.FC = () => {
         onClose={() => setSelectedProduct(null)}
         onAddToCart={handleAddToCart}
         onReadSample={(slug) => navigateTo(`/read/${slug}`)}
+        onOpenRunway={(look) => setActiveRunwayLook(look ?? 0)}
       />
 
       <CartDrawer
@@ -907,6 +1061,39 @@ export const App: React.FC = () => {
         totalVnd={totalCartVnd}
         onOrderSuccess={handleOrderSuccess}
       />
+
+      {/* 10. BỘ CHỌN MẪU MÃ & THỬ ĐỒ 3D RUNWAY (MODAL DIALOG TINH GỌN, TỐI GIẢN) */}
+      {activeRunwayLook !== null && (
+        <div
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-0 sm:p-4 md:p-6 animate-fade-in"
+          onClick={() => setActiveRunwayLook(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Bộ chọn mẫu mã và thử đồ 3D"
+        >
+          <div
+            className="relative w-full h-full sm:h-[90vh] max-w-6xl bg-white sm:rounded-3xl shadow-2xl overflow-hidden border border-black/10 flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Quick Close Floating Button */}
+            <button
+              type="button"
+              onClick={() => setActiveRunwayLook(null)}
+              className="absolute top-3 right-3 sm:top-4 sm:right-4 z-50 w-10 h-10 rounded-full bg-white/95 hover:bg-white text-zinc-800 hover:text-black flex items-center justify-center transition-all shadow-xl active:scale-95 border border-black/15 cursor-pointer"
+              aria-label="Đóng (Esc)"
+              title="Đóng bộ chọn (Esc)"
+            >
+              <span className="text-lg font-bold leading-none">✕</span>
+            </button>
+
+            <iframe
+              src={`/maison-vell/index.html?look=${activeRunwayLook}`}
+              className="w-full h-full border-0 block flex-1"
+              title="Bộ Chọn Mẫu Mã 3D Runway"
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

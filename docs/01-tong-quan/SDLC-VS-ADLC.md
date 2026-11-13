@@ -117,5 +117,5 @@ Tại dự án **Net108Khai**, chúng ta đã triển khai nguyên vẹn quy tr�
 1. **Con người**: Đóng vai trò Chủ dự án, giữ quyền quyết định tại các cổng Waterfall `W01` (Yêu cầu), `W02` (Thiết kế), `W05` (Nghiệm thu UAT).
 2. **AI Agents**:
    - **Antigravity**: Đóng vai trò Frontend Lead & UI Designer (`F01`–`F08`), hiện thực hóa giao diện React 19, Design Tokens và trải nghiệm mua sắm tiếng Việt.
-   - **Codex**: Đóng vai trò Backend Lead & DevOps (`C00`, `C02`–`C18`), thiết kế DB PostgreSQL, OpenAPI v1, Transactional Outbox, và Docker Compose.
+   - **Codex**: Đóng vai trò Backend Lead & DevOps (`C00`, `C02`–`C18`), thiết kế DB SQL Server từ Lab 3, OpenAPI v1, Transactional Outbox, và Docker Compose.
 3. **Mỗi bước đều để lại Artifact**: Mã việc nhỏ được ghi nhận minh bạch tại `docs/01-tong-quan/AI-COMMERCE-TASK-BOARD.md` và đồng bộ tự động lên Jira Cloud.
