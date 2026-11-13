@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Lab3.Console/Lab3.Console.csproj" />
+  <Project Path="Lab3.Data/Lab3.Data.csproj" />
+  <Project Path="Lab3.Entities/Lab3.Entities.csproj" />
+</Solution>
