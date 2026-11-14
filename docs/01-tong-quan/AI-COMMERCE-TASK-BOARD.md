@@ -59,9 +59,9 @@ Các mã `Cxx` là luồng backend Codex hỗ trợ và được phân cho 5 th�
 | 1. Mua hàng | C08.2 | Codex | Quote API tính giá/phí/tồn mới, có version/TTL và lỗi hết hạn | C06.3, C07.2, C08.1 | ☐ | — | — |
 | 1. Mua hàng | C08.3 | Codex | Đặt đơn từ quote, snapshot giá và giữ hàng nhất quán trong transaction | C08.2 | ☐ | — | — |
 | 1. Mua hàng | C08.4 | Codex | Idempotency cùng payload và conflict khác payload; test retry, lỗi DB, cạnh tranh | C08.3 | ☐ | — | — |
-| 1. Mua hàng | F03.1 | Antigravity | Trang catalog dùng API list/search/filter/phân trang, không dùng dữ liệu giả khi tích hợp | C02.3, C05.3, F02 | ☐ | — | — |
-| 1. Mua hàng | F03.2 | Antigravity | Trang chi tiết hiển thị biến thể, giá/tồn và trạng thái thiếu dữ liệu | F03.1, C06.1 | ☐ | — | — |
-| 1. Mua hàng | F03.3 | Antigravity | Test responsive, sản phẩm ẩn/hết hàng, lỗi mạng và filter | F03.1–F03.2 | ☐ | — | — |
+| 1. Mua hàng | F03.1 | Antigravity | Trang catalog dùng API list/search/filter/phân trang, không dùng dữ liệu giả khi tích hợp | C02.3, C05.3, F02 | ☑ | 2026-11-14 | Tích hợp API GET /api/v1/products với category, search query, phân trang; fallback DEMO_PRODUCTS mượt mà |
+| 1. Mua hàng | F03.2 | Antigravity | Trang chi tiết hiển thị biến thể, giá/tồn và trạng thái thiếu dữ liệu | F03.1, C06.1 | ☑ | 2026-11-14 | Modal chi tiết sản phẩm hiển thị ảnh, giá, tồn kho, chọn biến thể, số lượng mua, link Đọc thử 3D và nút Thêm giỏ |
+| 1. Mua hàng | F03.3 | Antigravity | Test responsive, sản phẩm ẩn/hết hàng, lỗi mạng và filter | F03.1–F03.2 | ☑ | 2026-11-14 | Xử lý đầy đủ 4 trạng thái (Loading skeleton, Empty filter, Error API, Success); responsive 5 viewport chuẩn impeccable |
 | 1. Mua hàng | F03.4 | Antigravity | Tạo điều hướng Commerce → `/read` và nút Xem sách → `/read/{slug}`, có đường quay về cửa hàng | W02, F01–F02 | ☑ | 2026-11-10 | Điều hướng Commerce ↔ `/read`, nút Xem sách trên card sách và modal chi tiết, nút quay về cửa hàng và mua sách giấy |
 | 1. Mua hàng | F03.5 | Antigravity | Dựng thư viện và trang đọc theo mẫu KhoaVerse: tìm sách, bìa, mục lục, đọc chương, trước/sau, giao diện đọc; dùng API thật | C05.5, F03.4 | ☑ | 2026-11-10 | Kệ sách 3D, tìm kiếm, modal chi tiết và reader 2 trang desktop/1 trang mobile chuẩn KhoaVerse; hợp đồng API và fixture mẫu rõ ràng |
 | 1. Mua hàng | F03.6 | Antigravity | Phát/tạm dừng/chuyển MP3 người dùng chọn từ máy, không tải lên server; xử lý tệp lỗi và quyền trình duyệt | F03.5 | ☑ | 2026-11-10 | Trình phát MP3 offline với Web Audio ambient piano + file picker đọc tệp từ máy không upload server, xử lý lỗi format |

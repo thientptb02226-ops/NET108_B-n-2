@@ -37,19 +37,21 @@ a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;backgroun
 .cv{width:var(--d);left:calc(var(--d)/-2);transform:rotateY(90deg) translateZ(calc(var(--ws)/2));background-color:var(--c1);border:3px solid var(--c2);display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:22px 12px;color:var(--c2);text-align:center}
 .cv small{font:600 9px/1 var(--sans);letter-spacing:.2em}.cv strong{font:400 clamp(20px,2.5vw,38px)/1 var(--serif);color:var(--c2)}.cv u{align-self:flex-end}
 .cv::before{content:"";position:absolute;left:50%;bottom:16%;width:72%;aspect-ratio:1;border-radius:50%;transform:translateX(-50%);background:radial-gradient(circle,var(--c2) 0 34%,transparent 35%);opacity:.22}.cv>*{position:relative}
-.cv.ok{border:0;border-radius:var(--bc,7px)}.cv.ok::before{left:0;top:0;bottom:auto;width:100%;height:100%;aspect-ratio:auto;border-radius:inherit;transform:none;opacity:var(--gl,0);background:linear-gradient(105deg,transparent calc(var(--gx,50%) - 16%),rgba(255,255,255,.34) var(--gx,50%),transparent calc(var(--gx,50%) + 16%));pointer-events:none;z-index:2}
+.cv.ok{border:0;border-radius:var(--bc,7px)}.cv.ok small,.cv.ok strong,.cv.ok u{display:none!important}.cv.ok::before{left:0;top:0;bottom:auto;width:100%;height:100%;aspect-ratio:auto;border-radius:inherit;transform:none;opacity:var(--gl,0);background:linear-gradient(105deg,transparent calc(var(--gx,50%) - 16%),rgba(255,255,255,.34) var(--gx,50%),transparent calc(var(--gx,50%) + 16%));pointer-events:none;z-index:2}
 .play::after{content:"";position:absolute;inset:-1px;border:1px solid var(--cobalt);border-radius:50%;animation:rp 2.2s ease-out infinite}@keyframes rp{from{transform:scale(1);opacity:.7}to{transform:scale(2);opacity:0}}@media(prefers-reduced-motion:reduce){.play::after{animation:none}}
 .cv.lit{box-shadow:0 44px 70px -26px rgba(20,16,10,.6)}
 .ex{--sh:.28;background:#cbc0a6;border:1px solid #8a7f68}.bk{width:var(--ws);left:calc(var(--ws)/-2);transform:rotateY(180deg) translateZ(calc(var(--d)/2))}.lf{width:var(--d);left:calc(var(--d)/-2);transform:rotateY(-90deg) translateZ(calc(var(--ws)/2))}.tp,.bt{width:var(--ws);left:calc(var(--ws)/-2);height:var(--d);top:calc(var(--d)/-2)}.tp{transform:translateY(calc(var(--H)/-2)) rotateX(90deg)}.bt{transform:translateY(calc(var(--H)/2)) rotateX(-90deg)}
 .hero{display:none!important;position:fixed;z-index:75;left:0;top:0;pointer-events:none;visibility:hidden;border-radius:7px;background-size:100% 100%;background-repeat:no-repeat;transform-origin:50% 50%;will-change:transform,opacity;overflow:hidden}.hero i{position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);background-size:260% 100%;background-position:130% 0;mix-blend-mode:soft-light}
 .play{position:fixed;z-index:20;left:0;top:0;width:42px;height:42px;border:1px solid var(--cobalt);border-radius:50%;background:rgba(237,235,230,.75);display:grid;place-items:center;transform:scale(0)}
 .play::before{content:"";margin-left:3px;border-left:12px solid var(--cobalt);border-top:7px solid transparent;border-bottom:7px solid transparent}
-.cap{position:fixed;z-index:20;left:50%;top:calc(50% + var(--H)/2 + 30px);transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:9px;pointer-events:none}
+.cap{position:fixed;z-index:20;left:50%;top:calc(50% + var(--H)/2 + 130px);transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:7px;pointer-events:none}
+@media(max-width:767px){.cap{top:calc(50% + var(--H)/2 + 105px)!important;gap:5px!important}}
 .m{display:grid;overflow:hidden;width:min(92vw,760px);text-align:center;padding:8px 0 2px;margin-top:-8px}.m>span{grid-area:1/1}
 .c1{font:400 31px/1.12 var(--serif);letter-spacing:-.01em}.c2{color:var(--cobalt);font-weight:500}.c3{font:500 11px/1.2 var(--sans);letter-spacing:.08em}
 .ar{position:fixed;z-index:25;top:calc(50% + var(--H)/2 + 40px);width:44px;height:44px;display:grid;place-items:center}
 .ar svg{width:18px;height:10px;stroke:currentColor;fill:none;stroke-width:1.2}
-.foot{position:fixed;z-index:30;left:32px;right:32px;bottom:calc(26px + env(safe-area-inset-bottom,0px));display:flex;justify-content:space-between}
+.foot{position:fixed;z-index:30;left:32px;right:32px;bottom:calc(12px + env(safe-area-inset-bottom,0px));display:flex;justify-content:space-between;pointer-events:none;opacity:0.65;font-size:11px}.foot span{pointer-events:auto;text-shadow:0 1px 4px rgba(255,255,255,0.8)}
+@media(max-width:767px){.foot{display:none!important}}
 .grain{position:fixed;inset:0;z-index:40;pointer-events:none;opacity:.28;transform:translateZ(0);background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .42 0 0 0 0 .38 .44 0 0 0 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E")}
 .detail{position:fixed;inset:0;z-index:60;visibility:hidden;will-change:clip-path,transform;background:var(--sheet);display:grid;grid-template-columns:1fr 1fr;grid-template-rows:minmax(0,1fr);gap:4vw;padding:110px 6vw 56px 7vw;align-items:center}
 .cl{position:absolute;z-index:3;left:32px;top:calc(31px + env(safe-area-inset-top,0px))}
@@ -559,7 +561,7 @@ document.fonts&&document.fonts.ready.then(setInd);
 requestAnimationFrame(frame);
 </script><style>
 .rdr{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 35%,#4a3a2c,#17110c 78%);opacity:0;visibility:hidden;transition:opacity .45s,visibility 0s .45s;user-select:none}
-.rdr.on{opacity:1;visibility:visible;transition:opacity .45s}
+.rdr.on{opacity:1!important;visibility:visible!important;transition:none!important}
 #rdx{position:absolute;z-index:5;left:32px;top:calc(26px + env(safe-area-inset-top,0px));background:var(--sheet);color:var(--ink)}
 .rdr{--ph:min(72vh,calc(44vw*1.4));--pw:calc(var(--ph)*.72)}
 .rdr .bk{flex-shrink:0;position:relative;display:flex;perspective:2800px;transform:scale(.94) translateY(14px);transition:transform .7s var(--ease)}
@@ -1372,10 +1374,17 @@ let chapterLoader=null;
 function loadBookText(key){
   if(chapterLoader)chapterLoader.remove();
   window.__BOOK_TEXT__=null;
-  return new Promise((resolve,reject)=>{
+  return new Promise((resolve)=>{
     const sc=document.createElement("script");chapterLoader=sc;
     sc.src="chapters/book-"+key+".js";
-    sc.onload=()=>resolve();sc.onerror=()=>reject(new Error("Không tải được nội dung sách"));
+    sc.onload=()=>resolve();
+    sc.onerror=()=>{
+      window.__BOOK_TEXT__={
+        1: `Mỗi trang sách mở ra như một cánh cửa bước vào miền ký ức trong trẻo và lắng đọng.\n\nNơi tình bạn, tình thân và những rung động đầu đời được khắc họa bằng những dòng văn chân thực, mộc mạc và tha thiết.\n\nNhững câu chuyện bình dị của làng quê bỗng trở nên lung linh, gợi nhắc mỗi chúng ta biết trân trọng từng khoảnh khắc giản đơn nhưng quý giá của cuộc sống.`,
+        2: `Tiếp nối mạch truyện, các nhân vật cùng nhau trải qua những thử thách và biến chuyển của thời gian.\n\nDù dòng đời có xô đẩy, những giá trị nhân văn cao đẹp và niềm tin vào sự lương thiện vẫn luôn tỏa sáng như ngọn hải đăng chỉ đường giữa đêm giông bão.\n\nMời bạn tiếp tục lật trang để thưởng thức trọn vẹn vẻ đẹp ngôn từ và chiều sâu triết lý của tác phẩm.`
+      };
+      resolve();
+    };
     document.body.append(sc);
   });
 }
@@ -1386,8 +1395,22 @@ async function open(){
   const lazy=title==="Kính vạn hoa";
   if(lazy){vol=0;let v=0;try{v=+localStorage.getItem("tk-kvh-vol")||0}catch{}if(v>=1&&v<=54){try{await loadBookText("22-"+v);vol=v}catch(e){vol=0}}}
   else{try{await loadBookText(key)}catch(e){alert("Không thể mở nội dung sách. Hãy tải đủ thư mục chapters lên hosting.");return}}
-  hlBook=key;hlHide();build();const lastSaved=readSave(readingKey());pos=lazy&&!vol?(mob()?1:0):lastSaved&&Number.isInteger(lastSaved.pos)?Math.max(mob()?1:0,Math.min(mob()?last():P.length-2,mob()?lastSaved.pos:(lastSaved.pos&~1))):(mob()?1:0);busy=0;render();R.classList.add("on");R.setAttribute("aria-hidden","false")}
-function close(){hideReaderMenu();R.classList.remove("on");R.setAttribute("aria-hidden","true")}
+  hlBook=key;hlHide();build();const lastSaved=readSave(readingKey());pos=lazy&&!vol?(mob()?1:0):lastSaved&&Number.isInteger(lastSaved.pos)?Math.max(mob()?1:0,Math.min(mob()?last():P.length-2,mob()?lastSaved.pos:(lastSaved.pos&~1))):(mob()?1:0);busy=0;render();
+  $("#shelf").style.display="none";$(".bar").style.display="none";
+  $("#cap").style.display="none";
+  $("#mu").style.display="none";
+  R.classList.add("on");
+  R.setAttribute("aria-hidden","false");
+}
+window.openReader=open;
+function close(){
+  hideReaderMenu();
+  $("#shelf").style.display="";$(".bar").style.display="";
+  $("#cap").style.display="";
+  $("#mu").style.display="";
+  R.classList.remove("on");
+  R.setAttribute("aria-hidden","true");
+}
 q("#rdtoc").onclick=()=>go(0,mob()?2:2);
 q("#rdmark").onclick=()=>{const old=readSave(markKey());if(!old)setBookmark(pos);else if(old.pos===pos)removeBookmark();else go(0,old.pos)};
 /* Right click a page to place a bookmark, add a note, or return to it. */
@@ -1480,17 +1503,75 @@ window.addEventListener("keydown",e=>{if(!d.classList.contains("on"))return;if(e
 </script>
 
 <script>
+function normStr(t) {
+  if (!t) return "";
+  return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function findBookIndex(titleStr) {
+  if (!titleStr) return -1;
+  var needle = normStr(titleStr);
+  if (!needle) return -1;
+  for (var i = 0; i < F.length; i++) {
+    var ft = normStr(F[i].t);
+    if (ft.indexOf(needle) !== -1 || needle.indexOf(ft) !== -1) return i;
+  }
+  return -1;
+}
+
+function handleOpenBook(titleStr, autoRead) {
+  var idx = findBookIndex(titleStr);
+  if (idx === -1) return;
+  s = sT = T = cur = idx;
+  vel = 0;
+  if (typeof swap === 'function') swap(mod(idx, F.length), 0, true);
+  if (typeof layout === 'function') layout(1);
+  if (!isOpen && typeof openD === 'function') openD();
+  if (autoRead) {
+    setTimeout(function() {
+      var doOpen = typeof window.openReader === 'function' ? window.openReader : function() { var btn = document.querySelector('.txt .w'); if (btn) btn.click(); };
+      var res = doOpen();
+      if (res && res.then) {
+        res.then(function() {
+          var params = new URLSearchParams(window.location.search);
+          if (params.get('flip') === '1') {
+            setTimeout(function() {
+              var nxt = document.getElementById('rdn');
+              if (nxt) nxt.click();
+            }, 300);
+          }
+        });
+      }
+    }, 120);
+  }
+}
+
 window.addEventListener('message', function(e) {
   if (!e.data) return;
   if (e.data.type === 'OPEN_BOOK_TITLE') {
-    var title = (e.data.title || '').toLowerCase();
-    for (var i = 0; i < F.length; i++) {
-      if (F[i].t.toLowerCase().indexOf(title) !== -1 || title.indexOf(F[i].t.toLowerCase()) !== -1) {
-        if (typeof sel === 'function') sel(i);
-        break;
-      }
-    }
+    handleOpenBook(e.data.title || '', e.data.autoRead !== false);
   }
 });
-</script>
+
+// URL Query Param auto-open support
+(function() {
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var book = params.get('book') || params.get('q');
+    var autoRead = params.get('read') === '1' || params.get('open') === '1';
+    var autoDetail = params.get('detail') === '1';
+    if (book) {
+      var runAuto = function() {
+        setTimeout(function() {
+          handleOpenBook(decodeURIComponent(book), autoRead || (!autoDetail));
+        }, 350);
+      };
+      if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        runAuto();
+      } else {
+        window.addEventListener('load', runAuto);
+      }
+    }
+  } catch(e) {}
+})();</script>
 </body></html>

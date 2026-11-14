@@ -42,7 +42,7 @@ export const KhoaverseLibraryView: React.FC<KhoaverseLibraryViewProps> = ({
     <div className="fixed inset-0 z-50 w-screen h-screen overflow-hidden bg-[#EDEBE6]">
       <iframe
         ref={iframeRef}
-        src="/sach3d/index.html"
+        src={initialSlug ? `/sach3d/index.html?book=${encodeURIComponent(initialSlug)}&read=1` : "/sach3d/index.html"}
         onLoad={handleIframeLoad}
         className="w-full h-full border-0 block"
         title="KhoaVerse Reading Space"
