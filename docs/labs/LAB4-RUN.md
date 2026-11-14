@@ -51,6 +51,8 @@ Script kiểm thử HTTP tự tạo tài khoản thử có email `example.invali
 ./scripts/lab4-smoke.ps1
 ```
 
+Để lưu lại HTML thật của các màn hình trong lượt kiểm thử, dùng `./scripts/lab4-smoke.ps1 -EvidenceDirectory '.artifacts/lab4-evidence-html'`. Các ảnh chụp từ HTML này để đối chiếu báo cáo nằm trong `File Lab và Dự Án cuối/Lab 1 - 8/Lab 4/Evidence/`.
+
 Script để lại hai tài khoản thử có mật khẩu hash trong LocalDB để có thể truy vết. Nó xóa danh mục thử. `FileUtil` được kiểm riêng và chưa nối với form danh mục vì bảng `categories` của đề không có cột ảnh.
 
 ## Phạm vi và kết quả đã kiểm

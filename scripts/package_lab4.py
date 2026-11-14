@@ -9,7 +9,7 @@ labs = root / "File Lab và Dự Án cuối/Lab 1 - 8"
 lab4 = labs / "Lab 4"
 output = lab4 / "Lab4_NET108_Submission.zip"
 files = [lab4 / "Lab4_NET108_AI_Native_Commerce.docx"]
-for folder in (lab4 / "Source", labs / "Lab 3/Source", labs / "Lab 3/Database"):
+for folder in (lab4 / "Source", lab4 / "Evidence", labs / "Lab 3/Source", labs / "Lab 3/Database"):
     files.extend(
         file for file in folder.rglob("*")
         if file.is_file() and not any(part in {"bin", "obj", ".vs", ".git"} for part in file.parts)

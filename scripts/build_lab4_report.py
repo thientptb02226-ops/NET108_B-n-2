@@ -15,6 +15,7 @@ from docx.shared import Cm, Pt, RGBColor
 ROOT = Path(__file__).resolve().parents[1]
 REFERENCE = ROOT / "docs/labs/reference/Lab1_NET108_AI_Native_Commerce.docx"
 OUT = ROOT / "File Lab và Dự Án cuối/Lab 1 - 8/Lab 4/Lab4_NET108_AI_Native_Commerce.docx"
+EVIDENCE = OUT.parent / "Evidence"
 BLUE = RGBColor(31, 78, 121)
 
 
@@ -32,8 +33,8 @@ def paragraph(doc, value="", *, bold=False, align=None, after=4):
 
 def heading(doc, value, level):
     p = doc.add_paragraph(style=f"Heading {level}")
-    p.paragraph_format.space_before = Pt(8 if level == 2 else 5)
-    p.paragraph_format.space_after = Pt(4)
+    p.paragraph_format.space_before = Pt(12 if level == 2 else 8)
+    p.paragraph_format.space_after = Pt(6)
     p.paragraph_format.keep_with_next = True
     r = p.add_run(value)
     r.bold = True
@@ -76,6 +77,20 @@ def code(doc, *lines):
         p.paragraph_format.line_spacing = 1
         p.runs[0].font.name = "Consolas"
         p.runs[0].font.size = Pt(9)
+
+
+def figure(doc, filename, caption):
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p.paragraph_format.space_before = Pt(5)
+    p.paragraph_format.space_after = Pt(2)
+    p.paragraph_format.keep_with_next = True
+    p.add_run().add_picture(str(EVIDENCE / filename), width=Cm(15.5))
+    cp = paragraph(doc, caption, align=WD_ALIGN_PARAGRAPH.CENTER, after=7)
+    cp.paragraph_format.keep_together = True
+    cp.runs[0].italic = True
+    cp.runs[0].font.size = Pt(11)
+    cp.runs[0].font.color.rgb = RGBColor(100, 100, 100)
 
 
 def page_number(p):
@@ -170,6 +185,13 @@ table(doc, "Bảng 1. Kế hoạch và bằng chứng Lab 4", ["Bước", "Đầ
     ("4. FileUtil", "Lưu PNG/JPEG với tên ngẫu nhiên", "Self-check: PNG hợp lệ, PNG giả bị từ chối"),
 ])
 paragraph(doc, "Giới hạn: kiểm thử với SQL Server LocalDB và HTTP localhost; chưa kiểm thử Docker hoặc công bố ứng dụng ra Internet. Tài khoản thử được tạo riêng bằng biến môi trường và không ghi mật khẩu trong báo cáo.")
+table(doc, "Bảng 2. Đối chiếu từng yêu cầu của đề LAB 4", ["Yêu cầu trong đề", "Vị trí thực hiện", "Cách kiểm tra"], [
+    ("Phần I, Bài 1 (4 điểm): cookie và policy", "Lab4.Web/Program.cs", "Build; truy cập ẩn danh và hai role"),
+    ("Phần I, Bài 2 (3 điểm): đăng nhập", "LoginController, LoginViewModel, Login.cshtml", "Login đúng/sai, logout, cookie"),
+    ("Phần II, Bài 2 (3 điểm): CRUD", "CategoriesController, Views/Categories", "HTTP GET/POST và dữ liệu SQL Server"),
+    ("Mục tiêu: FileUtil", "Utilities/FileUtil.cs", "--verify-file-util"),
+])
+paragraph(doc, "Đề dùng lại số 'Bài 2' ở Phần II. Báo cáo giữ tên phần và điểm số như đề để tránh nhầm với Bài 2 của Phần I.")
 
 doc.add_page_break()
 heading(doc, "MỤC LỤC", 1)
@@ -179,8 +201,8 @@ toc = [
     ("PHẦN NỘI DUNG", "5"), ("CHƯƠNG 1: CẤU HÌNH ỨNG DỤNG MVC", "5"),
     ("CHƯƠNG 2: ĐĂNG NHẬP VÀ PHÂN QUYỀN", "5"),
     ("CHƯƠNG 3: QUẢN LÝ DANH MỤC", "6"),
-    ("CHƯƠNG 4: FILEUTIL VÀ KIỂM THỬ", "6"),
-    ("TÀI LIỆU THAM KHẢO", "6"),
+    ("CHƯƠNG 4: FILEUTIL VÀ KIỂM THỬ", "8"),
+    ("TÀI LIỆU THAM KHẢO", "9"),
 ]
 for label, page in toc:
     p = doc.add_paragraph()
@@ -206,29 +228,44 @@ doc.add_page_break()
 heading(doc, "PHẦN NỘI DUNG", 1)
 heading(doc, "CHƯƠNG 1: CẤU HÌNH ỨNG DỤNG MVC", 2)
 heading(doc, "1.1. Cấu trúc và nguồn dữ liệu", 3)
-paragraph(doc, "Lab4.Net108Khai.slnx chứa Lab4.Web, Lab3.Data và Lab3.Entities. Connection string lấy từ LAB3_SQL_CONNECTION; Program.cs đăng ký DBUtil, UserDal, CategoryDal và AddControllersWithViews. Source bài Lab 3 đi kèm gói nộp để solution biên dịch độc lập.")
+paragraph(doc, "Lab4.Net108Khai.slnx chứa Lab4.Web; project này tham chiếu Lab3.Data và Lab3.Entities. Connection string lấy từ LAB3_SQL_CONNECTION; Program.cs đăng ký DBUtil, UserDal, CategoryDal và AddControllersWithViews. Source bài Lab 3 đi kèm gói nộp để solution biên dịch độc lập.")
+table(doc, "Bảng 3. Thành phần và trách nhiệm", ["Thành phần", "Vai trò trong Lab 4"], [
+    ("Lab4.Web", "Controller, Razor View, cookie authentication, policy, FileUtil"),
+    ("Lab3.Data", "DBUtil dùng SqlConnection/SqlCommand; UserDal và CategoryDal"),
+    ("Lab3.Entities", "Bản ghi User và Category ánh xạ bảng SQL Server"),
+    ("Net108KhaiLab3", "Bảng users và categories của bài thực hành Lab 3"),
+])
 heading(doc, "1.2. Cookie và middleware", 3)
 paragraph(doc, "Cookie có LoginPath /Login/Login, AccessDeniedPath /Home/AccessDenied, thời hạn 24 giờ, HttpOnly, SameSite=Lax. Ở môi trường triển khai cookie chỉ đi qua HTTPS; local Development cho phép HTTP để thực hành. Middleware gọi UseAuthentication trước UseAuthorization, sau đó MapControllerRoute.")
 code(doc, 'options.AddPolicy("EmployeeOrManager", p => p.RequireRole("Employee", "Manager"));',
      'options.AddPolicy("ManagerOnly", p => p.RequireRole("Manager"));',
      'app.UseAuthentication(); app.UseAuthorization();')
+paragraph(doc, "Thứ tự pipeline là UseStaticFiles → UseRouting → UseAuthentication → UseRateLimiter → UseAuthorization → MapControllerRoute. Nếu bỏ UseAuthentication hoặc đặt sau UseAuthorization, request không có danh tính để đánh giá policy. Đường dẫn mặc định là Home/Index/{id?}; Login và AccessDenied có view riêng.")
 
 heading(doc, "CHƯƠNG 2: ĐĂNG NHẬP VÀ PHÂN QUYỀN", 2)
 heading(doc, "2.1. Kiểm tra tài khoản và tạo claims", 3)
 paragraph(doc, "LoginController có GET hiển thị form và POST kiểm tra antiforgery, email, trạng thái active, mật khẩu hash. UserDal.GetByEmail dùng tham số SQL thay vì nối chuỗi. Khi hợp lệ, controller tạo NameIdentifier, Name, Email, Role claim và SignInAsync; ReturnUrl chỉ chấp nhận đường dẫn nội bộ. Logout chỉ có POST và kiểm tra antiforgery.")
+paragraph(doc, "Lệnh --seed-users tạo một Manager và một Employee từ biến môi trường. Mật khẩu được băm bằng PasswordHasher<User>; không có tài khoản mặc định hoặc mật khẩu cố định trong source. Form có Email, Mật khẩu, Ghi nhớ đăng nhập và ReturnUrl ẩn. Nếu đăng nhập sai, người dùng nhận thông báo chung để không lộ email nào tồn tại.")
+figure(doc, "01-login.png", "Hình 1. Form đăng nhập Lab 4 được ứng dụng trả về khi chạy HTTP localhost.")
 heading(doc, "2.2. Ma trận quyền", 3)
-table(doc, "Bảng 2. Quyền thao tác trên danh mục", ["Chức năng", "Chưa đăng nhập", "Employee", "Manager"], [
+table(doc, "Bảng 4. Quyền thao tác trên danh mục", ["Chức năng", "Chưa đăng nhập", "Employee", "Manager"], [
     ("Index, Details", "Chuyển đến Login", "Được", "Được"),
     ("Create, Edit, Delete", "Chuyển đến Login", "Từ chối", "Được"),
 ])
 paragraph(doc, "Quyền được chặn trên action GET và POST, không dựa vào việc ẩn nút trên giao diện. POST đăng nhập còn được giới hạn 10 lần/phút theo địa chỉ IP để giảm thử mật khẩu liên tục.")
+paragraph(doc, "Cookie được ký và bảo vệ bởi ASP.NET Core Data Protection. Nếu chọn Ghi nhớ đăng nhập, IsPersistent=true; nếu bỏ chọn, cookie hết khi đóng phiên trình duyệt. Trong cả hai trường hợp, thời hạn xác thực của ticket là 24 giờ và có SlidingExpiration. Ở Production cookie đặt Secure, cần HTTPS.")
 
 heading(doc, "CHƯƠNG 3: QUẢN LÝ DANH MỤC", 2)
 heading(doc, "3.1. Hiển thị và xem chi tiết", 3)
 paragraph(doc, "CategoriesController gắn EmployeeOrManager ở cấp lớp. Index gọi CategoryDal.GetAll; Details gọi GetById và trả 404 nếu mã không tồn tại. Razor view hiển thị tên và trạng thái danh mục.")
+paragraph(doc, "Manager nhìn thấy nút Thêm và liên kết Xem/Sửa/Xóa. Employee chỉ thấy liên kết Xem. Đây là phản hồi giao diện cho người dùng; policy trên controller mới là nơi quyết định quyền truy cập.")
+figure(doc, "02-manager-categories.png", "Hình 2. Manager xem danh mục và các thao tác quản trị trong phiên kiểm thử.")
+figure(doc, "04-employee-categories.png", "Hình 3. Employee chỉ thấy thao tác Xem trong cùng dữ liệu thử.")
 heading(doc, "3.2. Thêm, sửa, xóa", 3)
 paragraph(doc, "Create và Edit kiểm tra tên không trống, bỏ khoảng trắng hai đầu, gọi DAL và điều hướng tới Details. Delete yêu cầu xác nhận qua POST; nếu danh mục đang được sản phẩm tham chiếu, ứng dụng báo lỗi khóa ngoại thay vì xóa dữ liệu liên quan. Cả ba nhóm action dùng ManagerOnly và POST có antiforgery token.")
-table(doc, "Bảng 3. Kết quả chạy luồng CRUD", ["Yêu cầu HTTP", "Kết quả đã quan sát"], [
+paragraph(doc, "POST Create trả về mã danh mục mới rồi chuyển tới Details. POST Edit cập nhật đúng ID lấy từ route và trả 404 khi ID không còn tồn tại. POST Delete trả 404 nếu không tìm thấy bản ghi; lỗi ràng buộc khóa ngoại SQL Server 547 được hiển thị bằng thông báo tiếng Việt, không xóa dây chuyền dữ liệu sản phẩm.")
+figure(doc, "03-manager-details.png", "Hình 4. Trang Details hiển thị bản ghi do Manager vừa tạo qua POST.")
+table(doc, "Bảng 5. Kết quả chạy luồng CRUD", ["Yêu cầu HTTP", "Kết quả đã quan sát"], [
     ("Manager tạo danh mục", "302 đến Details; Details hiển thị tên mới"),
     ("Manager sửa danh mục", "302; Details hiển thị tên sau sửa"),
     ("Employee mở Create/Edit/Delete", "302 đến AccessDenied"),
@@ -238,18 +275,33 @@ table(doc, "Bảng 3. Kết quả chạy luồng CRUD", ["Yêu cầu HTTP", "K�
 heading(doc, "CHƯƠNG 4: FILEUTIL VÀ KIỂM THỬ", 2)
 heading(doc, "4.1. FileUtil", 3)
 paragraph(doc, "FileUtil.SaveImageAsync nhận IFormFile và thư mục đích, chỉ chấp nhận PNG/JPEG tối đa 2 MB, kiểm tra signature đầu tệp, đặt tên ngẫu nhiên và lưu bằng FileMode.CreateNew. Tên file do người dùng gửi không được ghép vào đường dẫn đích. Đây là utility phục vụ bài học; màn hình danh mục hiện không có trường ảnh.")
+paragraph(doc, "Utility kiểm MIME cùng chữ ký đầu tệp trước khi tạo file. Test tự động gửi một ảnh PNG hợp lệ có tên đầu vào '../unsafe.png' và xác nhận tên lưu khác tên người dùng cung cấp; một tệp giả PNG bị từ chối. Phần này đáp ứng mục tiêu FileUtil của đề, nhưng chưa có chức năng upload vì bảng categories Lab 3 không có cột ảnh.")
 heading(doc, "4.2. Bằng chứng kiểm thử", 3)
-table(doc, "Bảng 4. Kiểm chứng thực tế ngày 14/11/2026", ["Kiểm tra", "Kết quả"], [
+table(doc, "Bảng 6. Kiểm chứng thực tế ngày 14/11/2026", ["Kiểm tra", "Kết quả"], [
     ("dotnet build Lab4.Net108Khai.slnx", "Thành công; 0 lỗi, 0 cảnh báo"),
     ("dotnet Lab4.Web.dll --verify-file-util", "PASS: PNG hợp lệ, tên ngẫu nhiên, PNG giả bị từ chối"),
     ("scripts/lab4-smoke.ps1", "PASS: login, logout, role policy, CRUD qua HTTP"),
 ])
 paragraph(doc, "Kiểm thử HTTP dùng SQL Server LocalDB trên máy phát triển. Script tạo tài khoản thử riêng, đăng nhập qua form thật với antiforgery token và làm sạch danh mục thử sau khi xác minh. Các tài khoản thử vẫn còn trong CSDL LocalDB để truy vết, không thuộc source nộp bài.")
+table(doc, "Bảng 7. Các tình huống HTTP đã chạy", ["Tình huống", "Kết quả quan sát"], [
+    ("Chưa đăng nhập mở Categories", "302 về Login"),
+    ("Mật khẩu Manager sai", "200 tại form; vẫn chưa có quyền"),
+    ("Manager đăng nhập, tạo/sửa/xóa", "302 sau POST; đọc lại đúng; sau xóa 404"),
+    ("Tên danh mục chỉ gồm khoảng trắng", "200 tại form và hiện lỗi validation"),
+    ("Employee xem danh sách và Details", "200 cho cả hai GET"),
+    ("Employee mở Create/Edit/Delete hoặc POST Create", "302 tới AccessDenied"),
+    ("Manager POST Create không có antiforgery token", "400"),
+    ("Manager logout rồi mở Categories", "302 về Login"),
+])
+paragraph(doc, "Bốn hình trong báo cáo được Chrome headless chụp từ HTML ứng dụng trả về trong cùng lượt kiểm thử HTTP. Dữ liệu 'Lab4 smoke ...' là bản ghi thử, đã xóa ở cuối lượt kiểm; danh mục seed 'Đồ dùng học tập' vẫn được giữ.")
 heading(doc, "4.3. Cách chạy và giới hạn", 3)
+paragraph(doc, "Trước khi mở web, chạy script SQL của Lab 3 để có Net108KhaiLab3; đặt LAB3_SQL_CONNECTION. Đặt LAB4_MANAGER_EMAIL/PASSWORD và LAB4_EMPLOYEE_EMAIL/PASSWORD rồi chạy --seed-users. Mật khẩu tối thiểu 12 ký tự có chữ hoa, chữ thường, chữ số. Cuối cùng build và chạy web:")
 code(doc, "dotnet build '.../Lab 4/Source/Lab4.Net108Khai.slnx'",
-     "# Đặt LAB3_SQL_CONNECTION và 4 biến môi trường tài khoản; chạy --seed-users",
+     "dotnet run --project '.../Lab 4/Source/Lab4.Web' -- --seed-users",
      "dotnet run --project '.../Lab 4/Source/Lab4.Web'")
-paragraph(doc, "Hướng dẫn đầy đủ ở docs/labs/LAB4-RUN.md. Chưa kiểm thử trên Docker, chưa đo tải hoặc kiểm thử bảo mật chuyên sâu. Chính sách cookie HTTPS cần reverse proxy/TLS khi triển khai thật.")
+paragraph(doc, "Truy cập đường dẫn /Login/Login; dùng Manager để CRUD, Employee để kiểm quyền xem. Hướng dẫn lệnh đầy đủ ở docs/labs/LAB4-RUN.md. ZIP nộp bài kèm source Lab 3, source Lab 4, script SQL, báo cáo, ảnh bằng chứng và script kiểm thử; đã thử giải nén và build độc lập.")
+heading(doc, "4.4. Giới hạn thực nghiệm", 3)
+paragraph(doc, "Bài được chạy trên Windows với SQL Server LocalDB và HTTP Development. Chưa kiểm thử Docker, tải lớn hoặc triển khai HTTPS công khai. Cookie Production yêu cầu HTTPS/TLS. FileUtil là lớp tiện ích độc lập và chưa nối với form danh mục; phần đăng ký, xác minh email và khôi phục mật khẩu thuộc sản phẩm Commerce, ngoài yêu cầu Lab 4.")
 
 heading(doc, "TÀI LIỆU THAM KHẢO", 1)
 paragraph(doc, "[1] FPT Polytechnic, LAB 4, Dự án .NET 1, đề bài do nhóm cung cấp.")
