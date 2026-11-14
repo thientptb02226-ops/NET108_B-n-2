@@ -97,6 +97,14 @@ Các kỹ năng đã được tích hợp sẵn tại `.agent/skills/`, `.claude
    - Thao tác trực tiếp 1:1, bám con trỏ (`grabOffset`), phản hồi ngay tại `pointerdown`.
    - Chuyển động lò xo vật lý (`damping: 1.0`, `response: 0.35s`), hỗ trợ ngắt quãng và đổi hướng (interruptible).
 
+5. **`astryx` (Meta Design System & Agent Fluent Architecture)**:
+   - Hệ thống thiết kế chuẩn hóa của Meta dành cho AI Agents (`@astryxdesign/cli`).
+   - Workflow 3 bước: `astryx build "<idea>"` ➔ `astryx template <name> <path>` ➔ `astryx component <Name>`.
+   - Nguyên tắc: Frame-first layout, Semantic tokens (thay thế hoàn toàn magic hex/px), Controlled form inputs, hỗ trợ song hành cả Tailwind CSS và StyleX.
+
+6. **`animate-ui` (Motion Primitives)**:
+   - Thư viện hiệu ứng chuyển động mượt mà cho React primitives (Radix UI / Tailwind), tích hợp Motion và AnimateIcon.
+
 ### C. Ngôn Ngữ & Trải Nghiệm Tiếng Việt (Quy Luật Content Việt)
 - Áp dụng kỹ năng **`quy-luat-content-viet`** cho `Chatbot-Frontend`, UI Microcopy, Error Messages & Notifications:
   - **Nói chuyện với 1 người**: Dùng từ ngữ tự nhiên, gần gũi ("bạn - mình" hoặc danh xưng ngữ cảnh), tuyệt đối không mở đầu sáo rỗng ("Xin chào tất cả các bạn", "Cả nhà ơi").

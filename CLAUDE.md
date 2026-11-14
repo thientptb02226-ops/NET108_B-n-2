@@ -15,6 +15,8 @@ Các kỹ năng nòng cốt khi làm việc:
 - `/taste-skill`: Tiêu chuẩn chống AI-slop, section cadence 1 màn hình, micro-animations, không màu tím generic.
 - `/ui-ux-pro-max`: Hệ thống design tokens, 4 trạng thái UI (loading/empty/error/success), form UX chuẩn.
 - `/apple-design`: Thiết kế giao diện phản hồi tức thì, chuyển động vật lý lò xo (spring physics) và tương tác kéo thả.
+- `/astryx`: Hệ thống thiết kế chuẩn hóa của Meta dành cho AI Agents (`@astryxdesign/cli`), quy trình template-first và semantic tokens.
+- `/animate-ui`: Thư viện chuyển động mượt mà cho React primitives và icons.
 - `/quy-luat-content-viet`: Viết nội dung, chatbot prompts, UX copy và thông báo tiếng Việt tự nhiên, trực diện.
 - `/codebase-design`: Thiết kế deep modules, giảm độ phức tạp interface, phân tách seam rõ ràng.
 - `/domain-modeling`: Thiết kế các model Kanban (Board, List, Card, Member, Activity).
