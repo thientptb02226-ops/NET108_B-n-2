@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - Net108Khai Lab 4</title>
+    <style>
+        body { font: 16px/1.5 system-ui, sans-serif; color: #172733; max-width: 850px; margin: 2rem auto; padding: 0 1rem; }
+        header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #c9d8e0; margin-bottom: 2rem; }
+        h1, h2 { color: #1f4e79; }
+        a { color: #14517f; }
+        input[type=email], input[type=password], input[type=text] { display: block; width: 100%; max-width: 420px; padding: .6rem; margin: .2rem 0 1rem; }
+        button, .button { display: inline-block; border: 0; background: #1f4e79; color: white; padding: .65rem 1rem; cursor: pointer; text-decoration: none; }
+        table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+        th, td { border: 1px solid #c9d8e0; padding: .5rem; text-align: left; }
+        th { background: #e5f0f7; }
+        .error, .validation-summary-errors { color: #a11919; }
+        .links a { margin-right: .8rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <p><strong>Net108Khai · Lab 4</strong></p>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <div>
+                @User.Identity.Name (@(User.IsInRole("Manager") ? "Manager" : "Employee"))
+                <form asp-controller="Login" asp-action="Logout" method="post" style="display:inline;margin-left:1rem">
+                    @Html.AntiForgeryToken()
+                    <button type="submit">Đăng xuất</button>
+                </form>
+            </div>
+        }
+    </header>
+    <main>@RenderBody()</main>
+</body>
+</html>

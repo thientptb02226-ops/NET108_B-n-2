@@ -1,0 +1,12 @@
+@model Lab3.Entities.Category
+@{
+    ViewData["Title"] = "Xóa danh mục";
+}
+<h1>Xóa danh mục</h1>
+<p>Bạn muốn xóa <strong>@Model.Name</strong>?</p>
+<div asp-validation-summary="All" class="error"></div>
+<form method="post">
+    @Html.AntiForgeryToken()
+    <button type="submit">Xác nhận xóa</button>
+    <a asp-action="Index">Hủy</a>
+</form>

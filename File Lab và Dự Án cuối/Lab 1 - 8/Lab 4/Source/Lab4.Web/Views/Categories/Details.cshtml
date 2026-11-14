@@ -1,0 +1,12 @@
+@model Lab3.Entities.Category
+@{
+    ViewData["Title"] = "Chi tiết danh mục";
+}
+<h1>Chi tiết danh mục</h1>
+<dl>
+    <dt>ID</dt><dd>@Model.Id</dd>
+    <dt>Tên</dt><dd>@Model.Name</dd>
+    <dt>Trạng thái</dt><dd>@(Model.Active ? "Hoạt động" : "Ẩn")</dd>
+</dl>
+<p class="links"><a asp-action="Index">Quay lại</a>
+@if (User.IsInRole("Manager")) { <a asp-action="Edit" asp-route-id="@Model.Id">Sửa</a> }</p>

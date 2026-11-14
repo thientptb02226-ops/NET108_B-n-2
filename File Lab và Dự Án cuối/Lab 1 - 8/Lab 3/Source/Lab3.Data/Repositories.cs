@@ -41,6 +41,7 @@ public sealed class UserDal(DBUtil db)
         row.Field<bool>("role"), row.Field<bool>("active"));
     public List<User> GetAll() => db.QueryDataTable($"SELECT {Columns} FROM users ORDER BY id", []).Rows.Cast<DataRow>().Select(Map).ToList();
     public User? GetById(int id) => db.QueryDataTable($"SELECT {Columns} FROM users WHERE id = @1", [id]).Rows.Cast<DataRow>().Select(Map).SingleOrDefault();
+    public User? GetByEmail(string email) => db.QueryDataTable($"SELECT {Columns} FROM users WHERE email = @1", [email]).Rows.Cast<DataRow>().Select(Map).SingleOrDefault();
     public int Insert(User item) => Convert.ToInt32(db.ExecuteScalar(
         "INSERT INTO users(email, password, full_name, phone, role, active) VALUES (@1, @2, @3, @4, @5, @6); SELECT CAST(SCOPE_IDENTITY() AS int)",
         [item.Email, item.Password, item.FullName, item.Phone, item.Role, item.Active]));

@@ -1,0 +1,17 @@
+@model Lab4.Web.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Đăng nhập";
+}
+<h1>Đăng nhập</h1>
+<p>Dùng tài khoản Employee hoặc Manager được tạo bằng lệnh seed nội bộ.</p>
+<form asp-action="Login" method="post">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="All" class="error"></div>
+    <input type="hidden" asp-for="ReturnUrl" />
+    <label asp-for="Email">Email</label>
+    <input asp-for="Email" autocomplete="username" />
+    <label asp-for="Password">Mật khẩu</label>
+    <input asp-for="Password" autocomplete="current-password" />
+    <label><input asp-for="RememberMe" /> Ghi nhớ đăng nhập</label>
+    <p><button type="submit">Đăng nhập</button></p>
+</form>

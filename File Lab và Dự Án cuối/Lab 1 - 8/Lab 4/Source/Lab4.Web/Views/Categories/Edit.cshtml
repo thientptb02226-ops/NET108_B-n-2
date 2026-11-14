@@ -1,0 +1,13 @@
+@model Lab4.Web.Models.CategoryForm
+@{
+    ViewData["Title"] = "Sửa danh mục";
+}
+<h1>Sửa danh mục</h1>
+<form method="post">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="All" class="error"></div>
+    <label asp-for="Name">Tên danh mục</label>
+    <input asp-for="Name" />
+    <label><input asp-for="Active" /> Hoạt động</label>
+    <p><button type="submit">Lưu</button> <a asp-action="Index">Hủy</a></p>
+</form>
